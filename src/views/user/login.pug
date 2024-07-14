@@ -26,24 +26,24 @@ html(lang="en")
               .col-md-8
                 .mb-4
                   
-                h2.text Hệ thống thực hành học phần Cơ sở dữ liệu CNTT - PTIT
+                h1.text Quizz App
                 form(action="checkLoginUser", method="post")
                   .form-group.first
                     
-                    input(type="text", class="form-control", id="username", name = "msv", placeholder="Tài khoản" Required)
+                    input(type="text", class="form-control", id="username", name = "msv", placeholder="Mã sinh viên" Required)
 
                   .form-group.last.mb-4
                     
                     input(type="password", class="form-control", id="password", name ="password", placeholder="Mật khẩu" Required)
 
-                  //.d-flex.mb-5.align-items-center
-                    //- label.control.control--checkbox.mb-0
-                    //-   //span.caption Ghi nhớ
-                    //-   //input(type="checkbox", checked="checked")
-                    //-   .control__indicator
+                  .d-flex.mb-5.align-items-center
+                    label.control.control--checkbox.mb-0
+                      span.caption Ghi nhớ
+                      input(type="checkbox", checked="checked")
+                      .control__indicator
 
-                   // span.ml-auto
-                   //   a.forgot-pass(href="forgotPassword") Quên mật khẩu
+                    span.ml-auto
+                      a.forgot-pass(href="forgotPassword") Quên mật khẩu
                   
                   input(type="submit", value="Đăng Nhập", class="btn btn-block", style="background-color: #c32b2b; color:white;")
                   p.register Chưa có tài khoản, 

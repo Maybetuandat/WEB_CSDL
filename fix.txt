@@ -1,0 +1,2 @@
+fix loi nhap vao
+fix loi url

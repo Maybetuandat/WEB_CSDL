@@ -1,1 +1,0 @@
-test xem co deploy lien tuc khong

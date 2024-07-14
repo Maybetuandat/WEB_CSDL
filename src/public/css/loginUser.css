@@ -24,22 +24,28 @@ h6,
 }
 
 a {
-  -webkit-transition: .3s all ease;
-  -o-transition: .3s all ease;
-  transition: .3s all ease;
+  -webkit-transition: 0.3s all ease;
+  -o-transition: 0.3s all ease;
+  transition: 0.3s all ease;
 }
 
 a:hover {
   text-decoration: none !important;
 }
-
-.aler {
+.error {
   color: red;
   text-align: center;
   font-weight: bold;
   font-style: italic;
+  display: block;
 }
-
+.success {
+  color: green;
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+  display: block;
+}
 .digit-group {
   display: flex;
   justify-content: center;
@@ -58,10 +64,7 @@ a:hover {
   color: black;
   margin: 0 2px;
   border-radius: 10px;
-
-
 }
-
 
 .prompt {
   margin-bottom: 20px;
@@ -108,7 +111,6 @@ h2 {
 }
 
 @media (max-width: 1199.98px) {
-
   .content .contents,
   .content .bg {
     width: 100%;
@@ -133,9 +135,9 @@ h2 {
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  -webkit-transition: .3s all ease;
-  -o-transition: .3s all ease;
-  transition: .3s all ease;
+  -webkit-transition: 0.3s all ease;
+  -o-transition: 0.3s all ease;
+  transition: 0.3s all ease;
 }
 
 .content .contents .form-group input,
@@ -272,7 +274,7 @@ h2 {
 
 .control .caption {
   position: relative;
-  top: .2rem;
+  top: 0.2rem;
   color: #888;
 }
 
@@ -296,38 +298,38 @@ h2 {
   border-radius: 50%;
 }
 
-.control:hover input~.control__indicator,
-.control input:focus~.control__indicator {
+.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
   background: #ccc;
 }
 
-.control input:checked~.control__indicator {
+.control input:checked ~ .control__indicator {
   background: #c32b2b;
 }
 
-.control:hover input:not([disabled]):checked~.control__indicator,
-.control input:checked:focus~.control__indicator {
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
   background: #c32b2b;
 }
 
-.control input:disabled~.control__indicator {
+.control input:disabled ~ .control__indicator {
   background: #e6e6e6;
   opacity: 0.9;
   pointer-events: none;
 }
 
 .control__indicator:after {
-  font-family: 'icomoon';
-  content: '\e5ca';
+  font-family: "icomoon";
+  content: "\e5ca";
   position: absolute;
   display: none;
   font-size: 16px;
-  -webkit-transition: .3s all ease;
-  -o-transition: .3s all ease;
-  transition: .3s all ease;
+  -webkit-transition: 0.3s all ease;
+  -o-transition: 0.3s all ease;
+  transition: 0.3s all ease;
 }
 
-.control input:checked~.control__indicator:after {
+.control input:checked ~ .control__indicator:after {
   display: block;
   color: #fff;
 }
@@ -341,11 +343,11 @@ h2 {
   transform: translate(-50%, -50%);
 }
 
-.control--checkbox input:disabled~.control__indicator:after {
+.control--checkbox input:disabled ~ .control__indicator:after {
   border-color: #7b7b7b;
 }
 
-.control--checkbox input:disabled:checked~.control__indicator {
+.control--checkbox input:disabled:checked ~ .control__indicator {
   background-color: #7e0cf5;
-  opacity: .2;
+  opacity: 0.2;
 }

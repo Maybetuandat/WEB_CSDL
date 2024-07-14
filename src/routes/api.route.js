@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { checkLoginUser } = require("../controllers/auth.controllers");
+const  auth = require("../controllers/auth.controllers");
 
 const {
   getTestList,
@@ -57,7 +57,7 @@ const {
 
 //Guest
 
-router.post("/login/:role", checkLoginUser);
+router.post("/login/:role", auth.checkLoginUser);
 router.post("/createNewstudent", createNewStudentHandler);
 router.post("/new-test", isAuth, postTestHandler);
 router.delete("/delete-test/:id", deleteTestHandler);

@@ -89,7 +89,7 @@ const updatePassword = async (email, newPassword) => {
 const createNewStudent = async (student) => {
   try {
     studentData = await db.Student.findAll({
-      where: { MSV: student.msv },
+      where: { MSV: student.msv, Email: student.email },
     });
 
     if (studentData.length > 0) {
@@ -130,7 +130,7 @@ const deleteStudentById = async (data) => {
       return false;
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return false;
   }
 };
@@ -178,7 +178,7 @@ const updateStudentById2 = async (id, data) => {
     student.Lop = data.Lop;
     student.Email = data.Email;
     student.TaiKhoan = data.TaiKhoan;
-    student.MatKhau = student.MatKhau
+    student.MatKhau = student.MatKhau;
     await student.save();
     console.log("Student updated successfully");
     return 1;
