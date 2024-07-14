@@ -1,0 +1,47 @@
+include ./pagination.pug
+mixin test-table(tests, pagination)
+    .container-fluid
+        .card.mb-4
+            .card-header.pb-0.ptit-color.c-white
+                h5 Danh sách bài thi
+            .card-body
+                .align-items-center.justify-content-between
+                    .d-flex.align-items-center.mb-3.search-colum
+                        .search-wrapper.d-flex.align-items-center
+                            input(type="text" class="form-control search-box" tim-kiem placeholder="--- Tìm kiếm ---" value=keyword)
+                            button.btn.cur-p.ptit-color.btn-color(btn-loc).ml-2.btn-responsive Lọc
+                        button.btn.cur-p.ptit-color.btn-color.ml-5.search-btn-new.btn-responsive
+                            a.submit-btn(href="./test/new-test")  Tạo mới 
+                table.table.table-test-admin
+                    thead
+                        tr.th-round-test
+                            th ID
+                            th Tên bài thi
+                            th Bắt đầu
+                            th Thời lượng
+                            th Trạng thái
+                            th Chỉnh sửa
+                            th Xóa
+                            th(style = "display: none;") Action
+                    tbody 
+                        each test in tests
+                            tr.tb-round-test(id=test.MaBaiThi)
+                                td.fw-600=test.MaBaiThi
+                                td=test.TenBaithi
+                                td=test.ThoiGianBatDau
+                                td=test.ThoiGianThi + ' phút'
+                                td=test.TrangThai
+                                td
+                                    a.mb-0(href="./test/edit-test/" + test.MaBaiThi)
+                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive Chỉnh sửa
+                                td
+                                    a.mb-0(onclick=`confirmDelete('${test.MaBaiThi}')`)
+                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive Xóa 
+                                td(style = "display: none;")
+                                    a.mb-0(href="./test/edit-test/" + test.MaBaiThi)
+                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
+                                    a.mb-0(onclick=`confirmDelete('${test.MaBaiThi}')`)
+                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete Xóa         
+                +pagination(pagination)
+                    
+            

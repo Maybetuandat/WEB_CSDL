@@ -1,0 +1,77 @@
+extends ../../layout/default
+
+
+
+
+
+block main
+    .box-detail-comment
+        .card.box-detail
+            .card-body.info-test
+                .subject-test #title
+                .title-test Name of Test 
+                .title-page Thông tin bài thi 
+                div.desc.time-of-test 
+                    p <i class="fa-regular fa-clock"></i>
+                    p.info 
+                div.desc.numerous-of-question
+                    p <i class="fa-regular fa-circle-question"></i>
+                    p.info 
+                div.desc.numerous-of-people 
+                    p <i class="fa-solid fa-user"></i>
+                    p.info 120 peoples was tested
+                
+                        
+                div.option
+                    select.select-option-time
+                        option(value="0") 0 minutes
+                        option(value="5") 5 minutes
+                        option(value="10") 10 minutes 
+                        option(value="15") 15 minutes 
+                        option(value="20") 20 minutes 
+                        option(value="45") 45 minutes 
+                div.button-start
+                    a(href="#" id="start-test-link").
+                        Start Test
+                
+        .card.comment-test
+            .card-body.info-test
+                .title-comment Comments 
+                div.box-input-comment 
+                    .input-comment 
+                        input(type="text" placeholder="Enter comment....")
+                    .button-send Send
+                div.box-comment
+                    .item 
+                        .profilePic
+                            img(src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png", alt="")
+                        .nameUser Join Smith 
+                        .timeComment 5 minutes ago 
+                        .commentContent The test is the best for me
+                    .item 
+                        .profilePic
+                            img(src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png", alt="")
+                        .nameUser Join Smith 
+                        .timeComment 5 minutes ago 
+                        .commentContent The test is the best for me
+                    .item 
+                        .profilePic
+                            img(src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png", alt="")
+                        .nameUser Join Smith 
+                        .timeComment 5 minutes ago 
+                        .commentContent The test is the best for me
+                    .item 
+                        .profilePic
+                            img(src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png", alt="")
+                        .nameUser Join Smith 
+                        .timeComment 5 minutes ago 
+                        .commentContent The test is the best for me
+                    .item 
+                        .profilePic
+                            img(src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png", alt="")
+                        .nameUser Join Smith 
+                        .timeComment 5 minutes ago 
+                        .commentContent The test is the best for me
+    script(src="/js/detailTest.js") 
+                    
+

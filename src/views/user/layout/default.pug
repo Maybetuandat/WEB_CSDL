@@ -1,0 +1,104 @@
+//- include ../mixins/floatingChat.pug
+doctype html
+html(lang="vi")
+  head
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    title #{titlePage}
+    link(rel="icon", href="/static/images/logo.ico", type="image/x-icon")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css")
+    link(rel="stylesheet", href="/css/index.css")
+    link(rel="stylesheet", href="/css/new.css")
+    link(rel="stylesheet", href="/css/edit-test.css")
+    link(rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700")
+    //- link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.css')
+    link(rel="stylesheet", href="/css/detailTest.css")
+    
+    link(rel='stylesheet', href='/css/loading.css')
+    link(rel='stylesheet', href='/css/dialog.css')
+    link(rel='stylesheet', href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js')
+    
+    script(src='/js/loading.js')
+
+    
+    style.
+      #clickEffect {
+        margin: -30px;
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        background-color: pink;
+        border-radius: 100%;
+        pointer-events: none;
+        transform: scale(0);
+        opacity: 1;
+        z-index: 9999;
+      }
+      .hiep {
+        transition: transform 0.3s, opacity 0.3s;
+
+      }
+  body.app
+    #loading
+      img(src="/static/images/loading.gif", alt="Loading...")
+    include ../partials/header.pug
+    .page-container
+      include ../partials/nav-header.pug
+      main(class='main-content bgc-grey-100')
+        .main-container
+          .alert.alert-danger.alert-dismissible.fade.show#myAlert(role="alert")
+              button.close(data-dismiss="alert" aria-label="Close")
+                span(aria-hidden="true") &times;
+              span#alertContent
+          block main
+          #clickEffect.hiep
+   
+    include ../partials/setting.pug
+    script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
+    //- script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js")
+    
+    script(src="/js/side-bar/index.js")
+    script(src="/js/pagination.js")
+    script(src="/js/user/practice.js")
+    script(src="/js/result.js")
+    script(src="/js/profile.js")
+    script(src="/js/close-sidebar.user.js")
+    
+    script.
+      document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("mousedown", function (e) {
+          //console.log('click')
+          createClickEffect(e.pageX, e.pageY);
+        });
+      });
+
+      function createClickEffect(x, y) {
+        //console.log(x + ' ' + y)
+        var clickEffect = document.getElementById("clickEffect");
+        clickEffect.style.left = x + "px";
+        clickEffect.style.top = y + "px";
+        clickEffect.style.transform = "scale(0)";
+        clickEffect.style.opacity = 1;
+        clickEffect.classList.add("hiep");
+        clickEffect.style.opacity = 0;
+        clickEffect.style.transform = "scale(1)";
+
+        setTimeout(() => {
+          clickEffect.style.opacity = 1;
+          clickEffect.style.transform = "scale(0)";
+          clickEffect.classList.remove("hiep");
+        }, 300);
+        //clickEffect.classList.remove("hiep");
+
+
+      }
+    
+    script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js")

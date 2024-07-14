@@ -1,0 +1,25 @@
+mixin testMixin(test)
+    .test-item.align-items-center
+        .container(style="margin-left: 1%; padding: 0; max-width: 100%;")
+            .row.align-items-center(style="margin: 0; padding: 0;")
+                .col-md-1.col
+                    img.img-fluid(src=test.img_url, style="width: 100%; height: auto; border-radius: 5px; border: 2px solid #c0b0b0")
+                .col
+                    .content-test-name(style="color: #c32b2b;") #{test.TenBaithi}
+                    .content-test-detail(style="margin-top:10px;") #{test.TheLoai}
+                    
+                .col.detail-test
+                    - var testDate = new Date(test.ThoiGianBatDau)
+                    - var ngay = testDate.getDate()
+                    - var thang = testDate.getMonth() + 1 // Lưu ý: getMonth trả về giá trị từ 0 đến 11
+                    - var nam = testDate.getFullYear()
+                    .content-test-detail Thời gian thi: #{test.ThoiGianThi} phút
+                    .content-test-detail Số câu: #{test.SoLuongCau}
+                    .content-test-detail Số lượt làm: #{test.count} 
+                .col.text-center.bt-test
+                    //- a.btn.btn-primary.btn-enter-test(
+                    //-     href=`/detail/${test.MaBaiThi}` 
+                    //- ) Chi tiết
+                    a.btn.btn-primary.btn-enter-test(                     
+                        href=`/result/test/${test.MaBaiThi}`
+                    ) Vào thi

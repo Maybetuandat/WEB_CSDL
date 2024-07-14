@@ -1,0 +1,34 @@
+extends ../../layout/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  br
+  h4 Danh sách bài đã làm
+  if testList == null || testList.length == 0
+    p Không có dữ liệu
+  else
+    table(class="table table-striped result-tn")
+      thead
+        tr
+          th Tên bài thi
+          th Mô tả
+          th Thời gian làm bài
+          th Thời gian nộp bài
+          th Điểm
+          th Chi tiết
+      tbody
+          each test, index in testList
+              tr
+                td 
+                  strong #{test.TenBaithi}
+                td #{test.TheLoai}
+                - var time = test['Results.ThoiGianLamBai']
+                td #{time.toISOString().replace('T', ' ').replace('Z', '').split('.')[0]}
+                - var time2 = test['Results.ThoiGianNopBai']
+                td #{time2.toISOString().replace('T', ' ').replace('Z', '').split('.')[0]}
+                
+                td 
+                  strong #{test['Results.Diem']}
+                td
+                  a.btn.btn-primary.btn-responsive(btn-detail-test-with-idResult idResult=test['Results.MaKetQua']) Xem chi tiết
+  +pagination(pagination)

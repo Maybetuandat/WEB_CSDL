@@ -1,0 +1,24 @@
+include ../mixins/itemSlider.pug
+.sidebar(slide-bar-item).sidebar-close
+  .sidebar-inner
+    .sidebar-logo
+      .peers.ai-c.fxw-nw
+        .peer.peer-greed
+          a(class="sidebar-link td-n" href="/result")
+            .peers.ai-c.fxw-nw
+            
+              .peer.peer-greed
+                h5.lh-1.mB-0.logo-text(name-admin) CSDL PTIT
+
+        .peer
+          .mobile-toggle.sidebar-toggle(onclick="toggleSidebar()")
+            i(class="ti-arrow-circle-left icon-close")
+    ul.sidebar-menu.scrollable.pos-r
+      +normal-item('Danh sách bài thi', 'ti-home c-red-500', '/practice/tn')
+      +normal-item('Kết quả', 'ti-harddrives c-red-500', '/result/tn')
+      //+normal-item('Thư viện', 'ti-book c-red-500', '/test')
+//- đóng thanh sidebar ở màn mobile.
+script.
+  function toggleSidebar() {
+    document.body.classList.toggle('is-collapsed');
+  }
