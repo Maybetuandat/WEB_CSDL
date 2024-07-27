@@ -1,8 +1,8 @@
 const { default: Transaction } = require("sequelize/lib/transaction");
 const db = require("../models/index");
-const { sequelize } = require('../config/connectDB')
-const { Op } = require('sequelize')
-const { createNewDetail } = require('./detail.services')
+const { sequelize } = require("../config/connectDB");
+const { Op } = require("sequelize");
+const { createNewDetail } = require("./detail.services");
 
 const getResultByIdStuAndIdTest = async (idStu, idTest) => {
   const data = {
@@ -59,7 +59,6 @@ const getResultByIdTest = async (idTest) => {
 };
 
 const getAllResult = async (req, res) => {
-
   const data = {
     status: null,
     data: null,
@@ -79,9 +78,7 @@ const getAllResult = async (req, res) => {
     data.status = 500;
     return data;
   }
-}
-
-
+};
 
 const getResultWithIdResult = async (idResult) => {
   const data = {
@@ -145,7 +142,7 @@ const getResultWithMaKetQua = async (idResult) => {
   return data;
 };
 
-const getResultWithDate = async (Date) => { };
+const getResultWithDate = async (Date) => {};
 
 const getResultbyIdStuandIdResult = async (mkq) => {
   try {
@@ -248,8 +245,19 @@ const createNewResult = async (msv, test, questionList) => {
     );
     //console.log('result:', result.dataValues.MaKetQua)
 
+    // for (var i = 0; i < questionList.length; i++) {
+    //   if(questionList[i].maluachon != 'E') {
+    //     await createNewDetail(
+    //       questionList[i],
+    //       result.dataValues.MaKetQua,
+    //       test.mabaithi,
+    //       i + 1,
+    //       diem[i],
+    //       t
+    //     );
+    //   }
+    // }
     await createNewDetail(questionList, result, test, diem, t);
-
     await t.commit();
     return result;
   } catch (error) {
@@ -259,26 +267,27 @@ const createNewResult = async (msv, test, questionList) => {
   }
 };
 
-const createSubmitCode = async (msv, submitid, problemname, namestatus, uri) => {
+const createSubmitCode = async (
+  msv,
+  submitid,
+  problemname,
+  namestatus,
+  uri
+) => {
   try {
     // //console.log(status)
-    let submit = await db.Submit.create(
-      {
-        MaSubmit: submitid,
-        MSV: msv,
-        TenVanDe: problemname,
-        TrangThai: namestatus,
-        Source: uri
-      },
-    )
+    let submit = await db.Submit.create({
+      MaSubmit: submitid,
+      MSV: msv,
+      TenVanDe: problemname,
+      TrangThai: namestatus,
+      Source: uri,
+    });
     //console.log(submit)
-  }
-  catch (error) {
+  } catch (error) {
     //console.log(error)
   }
-}
-
-
+};
 
 module.exports = {
   getResultWithIdResult,
@@ -289,5 +298,5 @@ module.exports = {
   createNewResult,
   getResultByIdTest,
   getResultWithMaKetQua,
-  createSubmitCode 
+  createSubmitCode,
 };

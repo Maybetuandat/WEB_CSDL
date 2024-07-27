@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const  auth = require("../controllers/auth.controllers");
+const { checkLoginUser } = require("../controllers/auth.controllers");
 
 const {
   getTestList,
@@ -57,24 +57,20 @@ const {
 
 //Guest
 
-router.post("/login/:role", auth.checkLoginUser);
+router.post("/login/:role", checkLoginUser);
 router.post("/createNewstudent", createNewStudentHandler);
 router.post("/new-test", isAuth, postTestHandler);
-router.delete("/delete-test/:id", deleteTestHandler);
+router.delete("/delete-test/:id", isAdmin, deleteTestHandler);
 router.post("/new-student", postStudentHandler);
-router.delete("/delete-student/:id", deleteStudentHandler);
-router.put("/update-test/:id", updateTestHandler);
+router.delete("/delete-student/:id", isAdmin, deleteStudentHandler);
+router.put("/update-test/:id", isAdmin, updateTestHandler);
 router.get("/get-student/:id", getStudentByIdHandler);
-router.put("/update-student/:id", updateStudentHandler);
-router.put("/update-profile-student/:id", updateStudentHandler2);
+router.put("/update-student/:id", isAdmin, updateStudentHandler);
+router.put("/update-profile-student/:id", isAuth, updateStudentHandler2);
 
 //User
 
 //Comment
-
-router.post('/comment/add',isAuth,addCommentHandler);
-router.get('/comment/:id',getCommentsHandler);
-router.get('/comment/reply/:id',getReplyCommentHandler);
 
 //hiep
 router.get("/thi/:id", isAuth, getQuestionHandlernoAns);
@@ -82,7 +78,7 @@ router.get("/result-list/:msv", isAuth, getResultList);
 router.get("/result-list/:msv/:mkq", isAuth, getDetailList);
 
 router.post("/new-test", isAuth, postTestHandler);
-router.post("/submit", isAuth, postSubmit);
+
 router.post("/khocvl", isAuth, codeSubmit);
 router.get("/search-test", isAuth, getSearchTest);
 
@@ -92,7 +88,7 @@ router.get("/get-test", isAuth, getTestList);
 router.get("/get-test-per-page", isAuth, getTestByPage);
 router.get("/get-test/:id", isAuth, getQuestionByTestHandler);
 router.get("/search-test", isAuth, searchTestHandler);
-router.get("/get-detail-test/:id",getTestByIdHandler);
+router.get("/get-detail-test/:id", isAuth, getTestByIdHandler);
 
 router.put("/update-test/:id", isAdmin, updateTestHandler);
 

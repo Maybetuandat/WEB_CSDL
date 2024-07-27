@@ -3,6 +3,9 @@ include ../../mixins/pagination.pug
 include ../../mixins/question.pug
 block main
   .container
+  if test == null
+    p Không có dữ liệu
+  else
     .row.mt-3
       .col-md-12
         p.test-name #{test.TenBaithi}
@@ -32,4 +35,4 @@ block main
           button.btn.btn-light.again(btn-again data-mbt=result.MaBaiThi) Làm lại
         .overflow-auto.list-question
           each question, index in detail
-            +question(index + 1, question.question.DeBai, question.question.LuaChon, question._detail.MaLuaChon)
+            +question(index + 1, question._detail.DeBai, question.question.Options, question._detail.MaLuaChon)

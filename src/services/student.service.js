@@ -27,10 +27,12 @@ const getAllStudent = async () => {
 const getStudentById = async (id) => {
   var data = { status: null, data: null };
   try {
-    const students = await db.Student.findAll({
+    const student = await db.Student.findOne({
       raw: true,
       where: { MSV: id },
     });
+
+    const students = student ? [student] : [];
 
     // console.log(students)
     if (students.length > 0) {
@@ -89,7 +91,7 @@ const updatePassword = async (email, newPassword) => {
 const createNewStudent = async (student) => {
   try {
     studentData = await db.Student.findAll({
-      where: { MSV: student.msv, Email: student.email },
+      where: { MSV: student.msv },
     });
 
     if (studentData.length > 0) {

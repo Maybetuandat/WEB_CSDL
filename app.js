@@ -25,6 +25,7 @@ app.set("view engine", "pug");
 //config req body
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data
+// app.use(trimInputs)
 app.use(cookieParser());
 
 app.use(
@@ -36,11 +37,10 @@ app.use(
 );
 //express-session
 app.use("/api", apiRoutes);
-
 viewEngine(app);
 
 const server = app.listen(port, () => {
-  //console.log(`Example app listening on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
 
 const socketIo = require("socket.io");

@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require("../../models/index");
 
 const testController = require("../../controllers/user/result/result.controller");
+
+router.get("/", testController.index);
 router.get("/tn", testController.testListForStudent);
 
 module.exports = router;

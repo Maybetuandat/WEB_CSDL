@@ -18,7 +18,7 @@ const path = require("path");
 // [GET] /admin/my-account
 module.exports.index = async (req, res) => {
   res.render("user/pages/viewResult/index.pug", {
-    titlePage: "Thông tin cá nhân",
+    titlePage: "Trang chủ",
   });
 };
 // [GET] /admin/my-account
@@ -123,7 +123,17 @@ module.exports.test = async (req, res) => {
 module.exports.testWithId = async (req, res) => {
   const testId = req.params.testId;
   const test = await testServices.getTestById(testId);
-  var questions = await getQuestionOfTest(testId);
+  const currentTime = new Date();
+  // Cộng thêm 7 giờ vào thời gian hiện tại
+  const updatedTime = new Date(currentTime.getTime() + 7 * 60 * 60 * 1000);
+  var questions = null;
+  if (
+    test.data[0].start == null ||
+    (test.data[0].start <= updatedTime && updatedTime <= test.data[0].end)
+  ) {
+    questions = await getQuestionOfTest(testId);
+  } else test.data = null;
+  //var questions = await getQuestionOfTest(testId);
   const data = {
     test: test && test.data ? test.data[0] : null,
     questions: questions && questions.data ? questions.data : null,
@@ -288,8 +298,8 @@ module.exports.detailStudentAndTest = async (req, res) => {
     req.jwtDecoded.data.id,
     req.params.idResult
   );
-  console.log(result.detail);
-  if (result) {
+  //console.log(result.detail);
+  if (result && result.result) {
     res.render("user/pages/viewResult/studentAndTestDetail.pug", {
       titlePage: "Kết quả sinh viên",
       result: result.result.data[0],
