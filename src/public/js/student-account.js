@@ -201,4 +201,85 @@ function finishEdit(id) {
 
 }
 
+async function handleFile(event) {
+
+    console.log("check")
+    const input = event.target;
+    console.log('Input:', input);
+
+    if (input.files.length === 0) {
+        console.log('No file selected.');
+        return;
+    }
+
+    const file = input.files[0];
+    console.log('Selected file:', file);
+
+    const reader = new FileReader();
+
+    reader.onload = async function (e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            console.log('File data:', data);
+
+            const workbook = XLSX.read(data, { type: 'array' });
+            console.log('Workbook:', workbook);
+
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            console.log('Worksheet:', worksheet);
+
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            console.log('JSON Data:', jsonData);
+
+            if (jsonData.length === 0) {
+                console.log('No data found in sheet.');
+                return;
+            }
+
+            const firstColumnData = jsonData.map(row => row[0]).filter(cell => cell !== undefined);
+            console.log('First Column Data:', firstColumnData);
+
+            await fetchNewAccApi(firstColumnData);
+            reloadPage()
+        } catch (error) {
+            console.error('Error processing file:', error);
+        }
+    };
+
+    reader.onerror = function (error) {
+        console.error('FileReader error:', error);
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+function reloadPage() {
+    window.location.href = "/admin/account";
+}
+
+
+async function fetchNewAccApi(accList) {
+
+    for (var i = 0; i < accList.length; i++) {
+        const formData = {
+            msv: accList[i],
+            name: "",
+            class: "",
+            email: "",
+            password: accList[i],
+            time: ""
+        };
+        const response = await fetch('/api/new-student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        const data = await response.json();
+        console.log(data);
+        // showAlert(data.message);
+    }
+}
 

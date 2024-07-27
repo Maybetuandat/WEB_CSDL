@@ -29,13 +29,17 @@ const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 //module dang nhap
 
 const indexLogin = async (req, res) => {
-  const response = req.session.response;
-  delete req.session.response; // Xóa session response sau khi sử dụng
-  res.render("user/login.pug", {
-    //render trang khi moi dang nhap
-    titlePage: "Thông tin cá nhân",
-    data: response,
-  });
+  try {
+    // const response = req.session.response;
+    // delete req.session.response; // Xóa session response sau khi sử dụng
+    res.render("user/login.pug", {
+      //render trang khi moi dang nhap
+      titlePage: "Thông tin cá nhân",
+      data: response,
+    });
+  } catch (error) {
+
+  }
 };
 
 const refreshToken = async (req, res) => {
@@ -378,6 +382,8 @@ const changePassword = async (req, res) => {
     res.status(500).json({ error: "Đã xảy ra lỗi khi thay đổi mật khẩu." });
   }
 };
+
+
 
 module.exports = {
   refreshToken,
