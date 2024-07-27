@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "root",
+    "password": "1111",
+    "database": "javasql2",
+    "host": "localhost",
+    "port": "3307",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "JtbDNtbFUBeYBfpgWnkhmFEEapWmQqlr",
+    "database": "railway",
+    "host": "viaduct.proxy.rlwy.net",
+    "port": "56581",
+    "dialect": "mysql"
+  }
+}
