@@ -11,3 +11,4 @@ lan 11
 lan 12
 tuan dat sap fix dc loi
 fix loi duoc roi
+ngu eo fix duoc loi
