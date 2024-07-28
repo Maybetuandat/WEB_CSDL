@@ -1,0 +1,36 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="/submit-survey" method="post">
+      <label for="experience">Trải nghiệm của bạn:</label><br />
+      <textarea id="experience" name="experience" rows="10" cols="50"></textarea
+      ><br />
+      <input type="submit" value="Gửi" />
+    </form>
+    <form action="/submit-blog" method="post">
+      <label for="blog-content">Viết bài blog của bạn:</label><br />
+      <div
+        id="editor"
+        contenteditable="true"
+        style="border: 1px solid #ccc; padding: 10px"
+      >
+        <!-- Đây là nơi bạn nhập văn bản và có thể định dạng -->
+      </div>
+      <br />
+      <input type="hidden" id="blog-content" name="blog-content" />
+      <input type="submit" value="Đăng bài" />
+    </form>
+
+    <script>
+      // JavaScript để lấy nội dung từ editor và đặt vào input ẩn khi form được submit
+      document.querySelector("form").addEventListener("submit", function () {
+        var content = document.getElementById("editor").innerHTML;
+        document.getElementById("blog-content").value = content;
+      });
+    </script>
+  </body>
+</html>
