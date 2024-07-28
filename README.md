@@ -7,7 +7,7 @@ lan 6
 lan 7
 lan 8 lan 9
 lan 10
-lan 11
-lan 12
-tuan dat sap fix dc loi
+lan 11,/asd,a/s.,d/a,s/d.,a/sd,.
+lan 12a,msd,.amsd,.mad.,ams,
+tuan dat sap fix dc loiasdal;sdjklajdlk
 fix loi duoc roi
