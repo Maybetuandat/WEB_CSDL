@@ -33,7 +33,7 @@ html
                   //-     input(type="number", class="form-control", id="otp",inputmode="numeric", maxlength="1", name="otp", placeholder="Mã OTP yêu cầu có 6 kí tự số",  Required)
 
                   //-   input(type="submit", value="Xác nhận", class="btn btn-block btn-primary", style="background-color: #c32b2b; color:white;")
-                  form.digit-group(  action ="/forgotPassword/verifyOTP", data-group-name="digits", data-autosubmit="false", autocomplete="off" method="post")
+                  form.digit-group(  action ="/forgotPassword/resetPassword/verifyOTP", data-group-name="digits", data-autosubmit="false", autocomplete="off" method="post")
                     input(type="text", id="digit-1", name="digit1", data-next="digit-2")
                     input(type="text", id="digit-2", name="digit2", data-next="digit-3", data-previous="digit-1")
                     input(type="text", id="digit-3", name="digit3", data-next="digit-4", data-previous="digit-2")
@@ -41,9 +41,10 @@ html
                     input(type="text", id="digit-5", name="digit5", data-next="digit-6", data-previous="digit-4")
                     input(type="text", id="digit-6", name="digit6", data-previous="digit-5")
                     script(src="/js/user/checkOTP.js")
+                    input(type="hidden", name="email", value=email)
                   br
                   if data && data.message
-                   p.error= data.message
+                   p.aler= data.message
                   form(action="/forgotPassword/resetPassword", method="post")
                     input(type="hidden", name="email", value=email)
                     input(type="submit", value="Gửi lại mã OTP", class="btn btn-block btn-primary", style="background-color: #c32b2b; color:white")

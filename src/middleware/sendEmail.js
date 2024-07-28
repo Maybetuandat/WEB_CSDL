@@ -1,27 +1,17 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 const sendMailTo = async (email, otp) => {
-  // const transporter = nodemailer.createTransport({
-  //     service: 'gmail',
-  //     auth: {
-  //         user: 'cosodulieuptit@csdl.aitc.vn',
-  //         pass: 'Nsn#0l!F;Uf8'
-  //     }
-  // });
-  const transporter = nodemailer.createTransport({
-    host: "csdl.aitc.vn", // Thay thế bằng domain của bạn
-    port: 465, // hoặc 587 nếu sử dụng TLS
-    secure: true, // true cho port 465, false cho các port khác
-    auth: {
-      user: "cosodulieuptit@csdl.aitc.vn", // Địa chỉ email
-      pass: "Nsn#0l!F;Uf8", // Mật khẩu email
-    },
-  });
-
-  const mailOptions = {
-    from: "cosodulieuptit@csdl.aitc.vn",
-    to: email,
-    subject: "Mã OTP Xác Thực", // Tiêu đề email
-    html: `
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'trinhvinhtuandat05102003@gmail.com',
+            pass: 'kjgolknrohytwqou'
+        }
+    });
+    const mailOptions = {
+        from: 'trinhvinhtuandat05102003@gmail.com',
+        to: email,
+        subject: 'Mã OTP Xác Thực', // Tiêu đề email
+        html: `
             <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
                 <div style="margin:50px auto;width:70%;padding:20px 0">
                     <div style="border-bottom:1px solid #eee">
@@ -39,15 +29,13 @@ const sendMailTo = async (email, otp) => {
                     </div>
                 </div>
             </div>
-        `,
-  };
+        `
+    };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
-};
-module.exports = sendMailTo;
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            //console.log(error);
+        }
+    });
+}
+module.exports = sendMailTo

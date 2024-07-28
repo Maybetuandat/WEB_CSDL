@@ -6,15 +6,15 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     link(href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap", rel="stylesheet")
     // Bootstrap CSS
-    link(rel="stylesheet", href="/css/owl.carousel.min.css")
+    link(rel="stylesheet", href="/css/owl.carousel.min.css" )
     // Bootstrap CSS
     link(rel="stylesheet", href="/css/bootstrap.min.css")
     // Style
     link(rel="stylesheet", href="/css/loginUser.css")
     if data && data.title
-      title= data.title
+        title= data.title
     else
-      title Đăng ký tài khoản mới
+         title Đăng ký tài khoản mới
   body
     .content
       .container
@@ -26,63 +26,19 @@ html(lang="en")
               .col-md-8
                 .mb-4
                   h3(style="text-align: center;") Đăng ký
-                form(action="/register/createNewUser", method="post", id="registerForm")
-                  .form-group
-                    
-                    input.form-control(type="text", id="msv", name="msv", placeholder="Mã Sinh Viên", required)
-                  br
-                  span#msvError.error
-                  br
-                  .form-group
-                    
-                    input.form-control(type="password", id="password", name="password", placeholder="Mật khẩu", required)
-                  br
-                  span#passwordError.error
-                  br
-                  .form-group
-                    input.form-control(type="email", id="email", name="email", placeholder="Email", required)
-                  br
-                  br
-                  input.btn.btn-block.btn-primary(type="submit", value="Đăng ký", style="background-color: #c32b2b; color:white;")
+                form(action="/register/createNewUser" method="post")
+                  .form-group.last.mb-4(style="display: none;")
+                    input.form-control(type="text" id="username" name="name" placeholder="Họ và tên")
+                  .form-group.last.mb-4(style="display: none;")
+                    input.form-control(type="text" id="class" name="class" placeholder="Lớp")
+                  .form-group.last.mb-4
+                    input.form-control(type="text" id="msv" name="msv" placeholder="Tài khoản" required)
+                  .form-group.last.mb-4(style="display: none;")
+                    input.form-control(type="email" id="email" name="email" placeholder="Email" )
+                  .form-group.last.mb-4
+                    input.form-control(type="password" id="password" name="password" placeholder="Mật khẩu" required)
+
+                  input.btn.btn-block.btn-primary(type="submit" value="Đăng ký", style="background-color: #c32b2b; color:white;")
                   br
                   if data && data.message
-                    p.error= data.message
-
-    script.
-      document.getElementById('registerForm').addEventListener('submit' , function(event) {
-        const msvInput = document.getElementById('msv').value;
-        const passwordInput = document.getElementById('password').value;
-        const msvErrorSpan = document.getElementById('msvError');
-        const passwordErrorSpan = document.getElementById('passwordError');
-        let valid = true;
-
-        // Kiểm tra Mã Sinh Viên
-        if (/\s/.test(msvInput)) {
-          msvErrorSpan.textContent = 'Mã Sinh Viên không được chứa khoảng trắng';
-          valid = false;
-        } else {
-          msvErrorSpan.textContent = '';
-        }
-
-        // Kiểm tra Mật khẩu
-        const passwordCriteria = [
-          { regex: /.{8,}/, message: 'Mật khẩu phải có ít nhất 8 ký tự !' },
-          { regex: /[a-z]/, message: 'Mật khẩu phải có ít nhất một chữ cái thường !' },
-          { regex: /[A-Z]/, message: 'Mật khẩu phải có ít nhất một chữ cái hoa !' },
-          { regex: /[!@#$%^&*(),.?":{}|<>]/, message: 'Mật khẩu phải có ít nhất một ký tự đặc biệt !' }
-        ];
-
-        for (let criterion of passwordCriteria) {
-          if (!criterion.regex.test(passwordInput)) {
-            passwordErrorSpan.textContent = criterion.message;
-            valid = false;
-            break; // Dừng kiểm tra khi gặp lỗi đầu tiên
-          } else {
-            passwordErrorSpan.textContent = '';
-          }
-        }
-
-        if (!valid) {
-          event.preventDefault(); // Ngăn chặn form submit nếu có lỗi
-        }
-      });
+                   p.aler= data.message

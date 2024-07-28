@@ -1,8 +1,9 @@
 const db = require("../models/index");
 const { sequelize } = require("../config/connectDB");
 const { createNewQuestion } = require("./question.service");
-const { where } = require("sequelize");
+const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
+const moment = require("moment-timezone");
 require("dotenv").config();
 var request = require("request");
 
@@ -90,7 +91,7 @@ const getTestById = async (id) => {
   }
 };
 
-const createNewTest = async (test, questionList) => { 
+const createNewTest = async (test, questionList) => {
   let t;
   try {
     t = await sequelize.transaction();
@@ -311,7 +312,7 @@ const getTestWithFindObject = async (find, pagination) => {
     return data;
   }
 };
-const getTestWithFindObjectUser = async (find, msv,  pagination) => {
+const getTestWithFindObjectUser = async (find, msv, pagination) => {
   const data = { status: null, data: null };
   // //console.log(pagination.limit, pagination.offset);
   // //console.log(find);
@@ -319,12 +320,12 @@ const getTestWithFindObjectUser = async (find, msv,  pagination) => {
     const tests = await db.Test.findAll({
       where: {
         ...find,
-        TacGia: msv
+        TacGia: msv,
       },
       limit: pagination.limitedItem,
       offset: pagination.limitedItem * (pagination.currentPage - 1),
       raw: true,
-      order: [['ThoiGianBatDau', 'DESC']],
+      order: [["ThoiGianBatDau", "DESC"]],
     });
     if (tests.length > 0) {
       data.status = 200;
@@ -393,7 +394,7 @@ const getCountTestWithFindObjectUser = async (find, msv) => {
       raw: true,
       where: {
         ...find,
-        TacGia: msv
+        TacGia: msv,
       },
     });
     if (tests.length > 0) {
@@ -429,24 +430,29 @@ const getTestByText = async (inputText) => {
 
 const getTestByStudentIdWithPage = async (stuID, pagination) => {
   try {
-    console.log(pagination.limitedItem)
+    console.log(pagination.limitedItem);
     const data = { status: null, data: [] };
     let listTest = await db.Test.findAll({
       raw: true,
       // limit: pagination.limitedItem,
       // offset: pagination.limitedItem * (pagination.currentPage - 1),
       include: {
-          model: db.Result,
-          where: {
-              MSV: stuID,
-          },
+        model: db.Result,
+        where: {
+          MSV: stuID,
+        },
       },
-      order: [[db.Result, 'ThoiGianNopBai', 'DESC']], // Sắp xếp theo trường ThoiGianNopBai trong bảng Result theo thứ tự giảm dần
-  });
-  
-    let start = pagination.limitedItem * (pagination.currentPage - 1)
-    newlist = listTest.slice(start, start + 5)
-    // console.log(newlist)
+      order: [[db.Result, "ThoiGianNopBai", "DESC"]], // Sắp xếp theo trường ThoiGianNopBai trong bảng Result theo thứ tự giảm dần
+    });
+
+    let start = pagination.limitedItem * (pagination.currentPage - 1);
+    newlist = listTest.slice(start, start + 5);
+    console.log(newlist);
+    for (let i = 0; i < newlist.length; i++) {
+      if (newlist[i].start != null) {
+        newlist[i]["Results.Diem"] = null;
+      }
+    }
     if (listTest.length > 0) {
       data.status = 200;
       data.data = newlist;
@@ -470,7 +476,7 @@ const getSubmitByStudentIdWithPage = async (stuID, pagination) => {
       where: {
         MSV: stuID,
       },
-      order: [['MaSubmit', 'DESC']],
+      order: [["MaSubmit", "DESC"]],
     });
 
     let submissionsIds = listSubmit.map((submit) => submit.MaSubmit);
@@ -508,9 +514,9 @@ const getSubmitByStudentIdWithPage = async (stuID, pagination) => {
               const body = JSON.parse(response.body);
               console.log(
                 "Error code: " +
-                body.error_code +
-                ", details available in the message: " +
-                body.message
+                  body.error_code +
+                  ", details available in the message: " +
+                  body.message
               );
             }
             data.status = 404;
@@ -519,7 +525,7 @@ const getSubmitByStudentIdWithPage = async (stuID, pagination) => {
         }
       );
     });
-    requestData.data = requestData.data.reverse()
+    requestData.data = requestData.data.reverse();
     return requestData;
   } catch (error) {
     console.error("Đã xảy ra lỗi khi lấy dữ liệu:", error);
@@ -596,28 +602,66 @@ const getCountTestListForStudentWithFindObject = async (find) => {
 
 const getTestListForStudentWithFindObject = async (find, pagination) => {
   const data = { status: null, data: null };
+  const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
+  console.log(currentTime);
   try {
     const tests = await db.Test.findAll({
-      where: find,
+      where: {
+        ...find,
+        [Op.or]: [
+          {
+            start: {
+              [Op.lte]: currentTime,
+            },
+            end: {
+              [Op.gte]: currentTime,
+            },
+          },
+          {
+            start: {
+              [Op.is]: null,
+            },
+            end: {
+              [Op.is]: null,
+            },
+          },
+          {
+            start: {
+              [Op.lte]: currentTime,
+            },
+            end: {
+              [Op.is]: null,
+            },
+          },
+          {
+            start: {
+              [Op.is]: null,
+            },
+            end: {
+              [Op.gte]: currentTime,
+            },
+          },
+        ],
+      },
       limit: pagination.limitedItem,
       offset: pagination.limitedItem * (pagination.currentPage - 1),
       raw: true,
-      order: [['ThoiGianBatDau', 'DESC']],
+      order: [["start", "DESC"]], // Sửa để sử dụng đúng tên cột
     });
 
     if (tests.length > 0) {
       // Lấy mã bài thi từ danh sách tests
-      const testIds = tests.map(test => test.MaBaiThi);
-      
+      const testIds = tests.map((test) => test.MaBaiThi);
+
       // Tạo mảng các promises cho các truy vấn đếm
-      const testCountPromises = testIds.map(testId => {
+      const testCountPromises = testIds.map((testId) => {
         return db.Result.findOne({
           attributes: [
-            'MaBaiThi',
-            [sequelize.fn('COUNT', sequelize.col('MaBaiThi')), 'count']
+            "MaBaiThi",
+            [sequelize.fn("COUNT", sequelize.col("MaBaiThi")), "count"],
           ],
           where: {
-            MaBaiThi: testId
+            MaBaiThi: testId,
           },
           raw: true,
         });
@@ -627,12 +671,14 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
       const testCounts = await Promise.all(testCountPromises);
 
       // Gộp kết quả đếm vào danh sách bài thi
-      const testsWithCounts = tests.map(test => {
-        const countInfo = testCounts.find(tc => tc && tc.MaBaiThi === test.MaBaiThi);
+      const testsWithCounts = tests.map((test) => {
+        const countInfo = testCounts.find(
+          (tc) => tc && tc.MaBaiThi === test.MaBaiThi
+        );
 
         return {
           ...test,
-          count: countInfo ? countInfo.count : 0
+          count: countInfo ? countInfo.count : 0,
         };
       });
 
@@ -641,7 +687,7 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
     } else {
       data.status = 404;
     }
-    console.log(data)
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Lỗi khi truy vấn dữ liệu:", error);
@@ -649,7 +695,6 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
     return data;
   }
 };
-
 
 module.exports = {
   getAllTest,
@@ -672,5 +717,5 @@ module.exports = {
   getSubmitByStudentId,
   getURL,
   getCountTestWithFindObjectUser,
-  getTestWithFindObjectUser
+  getTestWithFindObjectUser,
 };

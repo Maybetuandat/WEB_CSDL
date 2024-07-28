@@ -1,4 +1,10 @@
-const { getResultByIdStuAndIdTest, getAllResult, getResultWithIdResult, getResultWithMaKetQua, getResultWithDate } = require("../services/result.services");
+const {
+  getResultByIdStuAndIdTest,
+  getAllResult,
+  getResultWithIdResult,
+  getResultWithMaKetQua,
+  getResultWithDate,
+} = require("../services/result.services");
 const { getStudentById } = require("../services/student.service");
 const { getTestById, getURL } = require("../services/test.service");
 const { getQuestionOfTest } = require("../services/question.service");
@@ -50,7 +56,6 @@ const getDetailTestWithIdStuAndIdTest = async (idStudent, idTest) => {
   return dataRes;
 };
 
-
 const getDetailTestWithIdStuAndIdResult = async (idStudent, idResult) => {
   const dataRes = {
     status: null,
@@ -61,36 +66,48 @@ const getDetailTestWithIdStuAndIdResult = async (idStudent, idResult) => {
     result: null,
     detail: [],
   };
-  let result = await getResultWithMaKetQua(idResult);
-  //console.log(result)
-  let idTest = result.data[0].MaBaiThi;
-  //console.log(idTest)
-  const questionList = await getQuestionOfTest(idTest); //thong tin cac cau hoi
-  //console.log(questionList)
-  const student = await getStudentById(idStudent); //thong tin sinh vien
-  // const result = await getResultByIdStuAndIdTest(idStudent, idTest); //thong tin ket qua
 
-  const test = await getTestById(idTest); //thong tin bai thi
+  try {
+    const result = await getResultWithMaKetQua(idResult);
+    if (!result.data || result.data.length === 0) {
+      dataRes.status = 404;
+      return dataRes;
+    }
 
-  if (result.data) {
-    const detailList = await getDetailListWithIdResult(result.data[0].MaKetQua); //chi tiet tung cau
+    const idTest = result.data[0].MaBaiThi;
+
+    const [student, test, detailList] = await Promise.all([
+      //getQuestionOfTest(idTest), // thông tin các câu hỏi
+      getStudentById(idStudent), // thông tin sinh viên
+      getTestById(idTest), // thông tin bài thi
+      getDetailListWithIdResult(result.data[0].MaKetQua), // chi tiết từng câu
+    ]);
+
     dataRes.student = student;
-    dataRes.status = 200;
     dataRes.test = test;
+    if (test.data[0].start != null) {
+      dataRes.result = null;
+      dataRes.status = 404;
+      return dataRes;
+    }
     dataRes.result = result;
-    dataRes.numberTotal = detailList.length;
-    var cntCorrect = 0;
-    for (var i = 0; i < detailList.length; i++) {
+    dataRes.numberTotal = detailList._detail.length;
+    console.log(result);
+    let cntCorrect = 0;
+    for (let i = 0; i < detailList._detail.length; i++) {
       const questionInfor = { question: null, _detail: null };
-      questionInfor.question = questionList.data[i];
-      questionInfor._detail = detailList[i];
-      if (detailList[i].Dung === 1) cntCorrect++;
+      questionInfor.question = detailList._option[i];
+      questionInfor._detail = detailList._detail[i];
+      if (detailList._detail[i].Dung === 1) cntCorrect++;
       dataRes.detail.push(questionInfor);
     }
     dataRes.numberCorrect = cntCorrect;
-  } else {
-    dataRes.status = 404;
+    dataRes.status = 200;
+  } catch (error) {
+    dataRes.status = 500; // Internal Server Error
+    console.error(error); // Log lỗi để dễ dàng theo dõi
   }
+
   return dataRes;
 };
 
@@ -109,10 +126,9 @@ const getAllResultHandler = async (req, res) => {
     message: "Truy vấn cơ sở dữ liệu thành công",
     data: data.data,
   });
-
-}
+};
 const getAllStaticWithIdResult = async (req, res) => {
-  const idResult = req.params.id;;
+  const idResult = req.params.id;
 
   const data = await getResultWithIdResult(idResult);
   if (data.status === 404) {
@@ -120,7 +136,7 @@ const getAllStaticWithIdResult = async (req, res) => {
       code: 0,
       status: 404,
       message: "Không tìm thấy dữ liệu",
-      data: data.data
+      data: data.data,
     });
   }
   if (data.status === 500) {
@@ -138,30 +154,27 @@ const getAllStaticWithIdResult = async (req, res) => {
       data: data.data,
     });
   }
-
-}
+};
 const getAllStaticWithIdDate = async (req, res) => {
   const ngay = req.params.date;
   if (!req.params.date) {
     res.status(404).json({
       code: 0,
       message: "hay nhap day du du lieu",
-      data: null
-    })
-  }
-  else {
-    // truy vấn đến bài thi  với date được lấy từ req, sau đó trả về 1 danh sách các id bài thi 
-    // từ id bài thi truy vấn trong ketqua và hiển thị tất cả bài thi có trong bảng kết quả 
+      data: null,
+    });
+  } else {
+    // truy vấn đến bài thi  với date được lấy từ req, sau đó trả về 1 danh sách các id bài thi
+    // từ id bài thi truy vấn trong ketqua và hiển thị tất cả bài thi có trong bảng kết quả
     try {
       const listId = await getIdTestWithDate(ngay);
-      data = []
+      data = [];
       for (var i = 0; i < listId.length; i++) {
         var id = listId[i].MaBaiThi;
         const dataId = await getResultWithIdResult(id);
         if (dataId.status === 200) {
           data.push(dataId.data);
         }
-
       }
 
       if (data.length > 0) {
@@ -169,35 +182,31 @@ const getAllStaticWithIdDate = async (req, res) => {
           code: 1,
           status: 200,
           message: "Tất cả kết quả bài thi vào ngày " + ngay,
-          data: data
+          data: data,
         });
-      }
-      else {
+      } else {
         res.status(404).json({
           code: 0,
           status: 404,
           message: "Không tìm thấy dữ liệu",
-          data: data
+          data: data,
         });
       }
-
     } catch (error) {
       res.status(500).json({
         code: 0,
         status: 500,
         message: "Internal Server Error",
-        data: null
-      })
+        data: null,
+      });
     }
   }
-
-
-}
+};
 
 module.exports = {
   getResultWithIdStuAndIdTest,
   getDetailTestWithIdStuAndIdTest,
   getAllResultHandler,
   getAllStaticWithIdResult,
-  getDetailTestWithIdStuAndIdResult
+  getDetailTestWithIdStuAndIdResult,
 };

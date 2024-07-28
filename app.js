@@ -4,19 +4,17 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 9999;
+const session = require("express-session");
 
 const viewEngine = require("./src/config/viewEngine.config");
 const mainRoutes = require("./src/routes/main.route");
 const apiRoutes = require("./src/routes/api.route");
-const { connection } = require("./src/config/connectDB");
 
 const adminRoutes = require("./src/routes/admin/index.router");
 const userRoutes = require("./src/routes/user/index.router");
 const errorRoutes = require("./src/routes/pageError/index.router");
 
-//test connection
-connection();
-app.use(express.static('views/user/pages/test_list/problist'));
+app.use(express.static("views/user/pages/test_list/problist"));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -30,7 +28,13 @@ app.use(express.urlencoded({ extended: true })); // for form data
 // app.use(trimInputs)
 app.use(cookieParser());
 
-// app.use(trimInputs)
+app.use(
+  session({
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 //express-session
 app.use("/api", apiRoutes);
 viewEngine(app);
@@ -39,26 +43,9 @@ const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-const socketIo = require("socket.io");
-const io = socketIo(server);
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("message", (data) => {
-    console.log("message: ", data);
-    io.to(data.room).emit("message", data);
-  });
 
-  socket.on("join", (room) => {
-    socket.join(room);
-    console.log(`User joined room: ${room}`);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-  });
-});
 
 adminRoutes(app);
 userRoutes(app);
 errorRoutes(app);
-mainRoutes(app)
+mainRoutes(app);

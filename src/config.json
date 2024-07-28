@@ -1,26 +1,25 @@
 {
   "development": {
     "username": "root",
-    "password": "hvxk2003",
-    "database": "javasql",
+    "password": "1111",
+    "database": "javasql2",
     "host": "localhost",
-    "port": "3306",
+    "port": "3307",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "hvxk2003",
-    "database": "javasql",
-    "host": "localhost",
-    "port": "3306",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "hvxk2003",
-    "database": "javasql",
-    "host": "localhost",
-    "port": "3306",
+    "password": "JtbDNtbFUBeYBfpgWnkhmFEEapWmQqlr",
+    "database": "railway",
+    "host": "viaduct.proxy.rlwy.net",
+    "port": "56581",
     "dialect": "mysql"
   }
 }

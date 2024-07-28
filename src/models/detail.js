@@ -8,18 +8,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // //console.log(models.Test)
-      Detail.hasOne(models.Test, {
-        foreignKey: "MaBaiThi",
-        targetKey: "MaBaiThi",
-      });
+      // Detail.hasOne(models.Test, {
+      //   foreignKey: "MaBaiThi",
+      //   targetKey: "MaBaiThi",
+      // });
       Detail.hasOne(models.Result, {
         foreignKey: "MaKetQua",
         targetKey: "MaKetQua",
       });
-      Detail.hasOne(models.Question, {
+      Detail.belongsTo(models.Question, {
         foreignKey: "MaCauHoi",
         targetKey: "MaCauHoi",
+        as: "QuestionByMaCauHoi", // Đặt alias cho quan hệ
       });
+
+      // Detail.belongsTo(models.Question, {
+      //   foreignKey: "MaBaiThi",
+      //   targetKey: "MaBaiThi",
+      //   as: "QuestionByMaBaiThi", // Đặt alias cho quan hệ
+      // });
       Detail.hasOne(models.Option, {
         foreignKey: "MaLuaChon",
         targetKey: "MaLuaChon",
@@ -34,13 +41,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       MaKetQua: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
       },
       MaBaiThi: {
         type: DataTypes.STRING,
+        foreignKey: true,
       },
       MaCauHoi: {
         type: DataTypes.STRING,
+        foreignKey: true,
       },
       MaLuaChon: {
         type: DataTypes.STRING,
