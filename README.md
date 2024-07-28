@@ -1,2 +1,2 @@
 tuan dat test 
-lan 1
+lan 2
