@@ -1,2 +1,2 @@
-tuan dat test 
-lan 1
+tuan dat test
+lan 2

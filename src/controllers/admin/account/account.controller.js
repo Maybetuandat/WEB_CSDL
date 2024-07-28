@@ -37,6 +37,21 @@ module.exports.student = async (req, res) => {
     //     limitedItem: 5, // auasjdkladj
     //   },
     //   req.query,
+    //   const count = await studentServices.getCountStudentWithFindObject(find);
+    // const pagination = paginationHelper(
+    //   {
+    //     currentPage: 1,
+    //     limitedItem: 5, // auasjdkladj
+    //   },
+    //   req.query,
+    //   count.data ? count.data.length : 0//   const count = await studentServices.getCountStudentWithFindObject(find);
+    // const pagination = paginationHelper(
+    //   {
+    //     currentPage: 1,
+    //     limitedItem: 5, // auasjdkladj
+    //   },
+    //   req.query,
+    //   count.data ? count.data.length : 0
     //   count.data ? count.data.length : 0
   );
   const studentList = await studentServices.getStudentWithFindObject(
