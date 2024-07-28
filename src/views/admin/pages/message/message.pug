@@ -85,60 +85,60 @@ block main
                     i.fa.fa-paper-plane-o
   script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js')
-  script.
-      //socket
-      const socket = io();
-      const room = '#{room}';
-      socket.emit('join', room);
-      // Xử lý sự kiện khi gửi tin nhắn
-      $('#send-msg-button').click(function() {
-          var message = $('#chatt-footer input.text-box').val();
+  //- script.
+  //-     //socket
+  //-     const socket = io();
+  //-     const room = '#{room}';
+  //-     socket.emit('join', room);
+  //-     // Xử lý sự kiện khi gửi tin nhắn
+  //-     $('#send-msg-button').click(function() {
+  //-         var message = $('#chatt-footer input.text-box').val();
         
-          if(message === '') return;
-        // Gửi tin nhắn đến server với thông tin của tin nhắn và phòng
-          socket.emit('message', {name : 'Admin', message: message, room : room});
-          try{
-            var backendUrl = '/api/save-message'
-            var data = {
-              room: room,
-              message: message,
-              isAdmin: true
-            }
-            fetch(backendUrl, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-              .then(res => res.json())
-              .then(data => {
-                  console.log(data)
-              })
-                .then(res => res.json())
-                .then(data => {
-                    //console.log(data)
-                })
-                .catch(err => {
-                    //console.log(err)
-                })
-              }
-            catch (err) {
+  //-         if(message === '') return;
+  //-       // Gửi tin nhắn đến server với thông tin của tin nhắn và phòng
+  //-         socket.emit('message', {name : 'Admin', message: message, room : room});
+  //-         try{
+  //-           var backendUrl = '/api/save-message'
+  //-           var data = {
+  //-             room: room,
+  //-             message: message,
+  //-             isAdmin: true
+  //-           }
+  //-           fetch(backendUrl, {
+  //-             method: 'POST',
+  //-             headers: {
+  //-                 'Content-Type': 'application/json'
+  //-             },
+  //-             body: JSON.stringify(data)
+  //-           })
+  //-             .then(res => res.json())
+  //-             .then(data => {
+  //-                 console.log(data)
+  //-             })
+  //-               .then(res => res.json())
+  //-               .then(data => {
+  //-                   //console.log(data)
+  //-               })
+  //-               .catch(err => {
+  //-                   //console.log(err)
+  //-               })
+  //-             }
+  //-           catch (err) {
 
-            }
-          $('#chatt-footer input.text-box').val('')
-          return false;
-      });
+  //-           }
+  //-         $('#chatt-footer input.text-box').val('')
+  //-         return false;
+  //-     });
 
-      // Xử lý sự kiện nhận tin nhắn từ server
-      socket.on('message', function(data) {
-          const messageClass = data.name === 'Admin' ? 'self-message' : 'other-message';
-          const messageDiv = $('<div>');
-          messageDiv.addClass('message'); 
-          const messageElement = $('<li>').addClass(messageClass).text(`${data.message}`);
-          messageDiv.append(messageElement);
-          $('#chat-messages').append(messageDiv);
+  //-     // Xử lý sự kiện nhận tin nhắn từ server
+  //-     socket.on('message', function(data) {
+  //-         const messageClass = data.name === 'Admin' ? 'self-message' : 'other-message';
+  //-         const messageDiv = $('<div>');
+  //-         messageDiv.addClass('message'); 
+  //-         const messageElement = $('<li>').addClass(messageClass).text(`${data.message}`);
+  //-         messageDiv.append(messageElement);
+  //-         $('#chat-messages').append(messageDiv);
 
-          var chatMessages = document.getElementById('chat-messages');
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
+  //-         var chatMessages = document.getElementById('chat-messages');
+  //-         chatMessages.scrollTop = chatMessages.scrollHeight;
+  //-       });
