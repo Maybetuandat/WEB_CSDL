@@ -56,7 +56,8 @@ let cauhoi = document.getElementById("cauhoi");
 for (let i = 0; i < data.questions.length; i++) {
   let container_hoitrl = document.createElement("div");
   container_hoitrl.classList.add("container-hoitrl");
-  container_hoitrl.id = i;
+  container_hoitrl.id =
+    parseInt(data.questions[i].MaCauHoi.replace(/[^\d]/g, ""), 10) - 1;
 
   let stt = document.createElement("div");
   stt.classList.add("stt");
@@ -72,6 +73,7 @@ for (let i = 0; i < data.questions.length; i++) {
   for (let j = 0; j < data.questions[i].LuaChon.length; j++) {
     let container_choice = document.createElement("div");
     container_choice.classList.add("choice");
+    container_choice.classList.add(j + 1);
     container_choice.textContent = data.questions[i].LuaChon[j].NoiDung;
     container_hoitrl.appendChild(container_choice);
   }
@@ -105,7 +107,7 @@ for (let i = 0; i < choice.length; i++) {
       return;
     }
     block.style.background = "#578fde";
-    let selectedAnswer = i - cauhoiId * 4 + 1;
+    let selectedAnswer = parseInt(selectedChoice.classList[1]);
     ansUser[parseInt(cauhoiId)] = selectedAnswer;
 
     selectedChoice.classList.add("pick");
@@ -153,7 +155,16 @@ const nopbai = async () => {
             mabaithi: data.test.MaBaiThi,
           },
         ];
-
+        data.questions.sort((a, b) => {
+          // So sánh hai giá trị MaCauHoi
+          if (a.MaCauHoi < b.MaCauHoi) {
+            return -1; // a đứng trước b
+          }
+          if (a.MaCauHoi > b.MaCauHoi) {
+            return 1; // a đứng sau b
+          }
+          return 0; // a và b bằng nhau
+        });
         const dataoption = data.questions.map((question, index) => {
           const option =
             ansUser[index] !== 0
@@ -166,7 +177,7 @@ const nopbai = async () => {
         });
 
         const databody = JSON.stringify({ metadata, dataoption });
-
+        console.log(databody);
         const response = await fetch("/result/submit", {
           method: "POST",
           headers: {

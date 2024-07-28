@@ -1,8 +1,8 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
-const sequelize = new Sequelize("javasql2", "root", "1111", {
+const sequelize = new Sequelize("javasql", "root", "hvxk2003", {
   host: "localhost",
-  port: "3307",
+  port: "3306",
   dialect: "mysql",
 });
 const connection = async () => {
