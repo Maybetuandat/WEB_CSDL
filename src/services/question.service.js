@@ -86,6 +86,51 @@ const getQuestionOfTest = async (id) => {
   }
 };
 
+const getQuestionOfTestAdmin = async (id) => {
+  var data = { status: null, data: null };
+  try {
+    var questions = await db.Question.findAll({
+      where: {
+        MaBaiThi: id,
+      },
+      raw: true,
+    });
+    var allOptions = await db.Option.findAll({
+
+      raw: true,
+    });
+    for (var question of questions) {
+      var filterOptions = await allOptions.filter(
+        (option) =>
+          option.MaBaiThi === question.MaBaiThi &&
+          option.MaCauHoi === question.MaCauHoi
+      );
+
+      question.LuaChon = filterOptions.map((option) => {
+        const { MaBaiThi, MaCauHoi, ...rest } = option;
+        return rest;
+      });
+    }
+
+    questions = await questions.map((question) => {
+      const { MaBaiThi, ...rest } = question;
+      return rest;
+    });
+    questions = shuffleLast10KeepRest(questions);
+    if (questions.length > 0) {
+      data.status = 200;
+      data.data = questions;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    data.status = 500;
+    return data;
+  }
+};
+
 const createNewQuestion = async (question, testId, index, t) => {
   try {
     await db.Question.create(
@@ -149,4 +194,5 @@ module.exports = {
   getQuestionOfTest,
   createNewQuestion,
   getQuestionOfTestUser,
+  getQuestionOfTestAdmin
 };

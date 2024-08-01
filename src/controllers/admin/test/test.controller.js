@@ -4,13 +4,14 @@ const {
   getCountTestWithFindObject,
   getTestWithFindObject,
   getCountTestWithFindObjectUser,
-  getTestWithFindObjectUser,
+  getTestWithFindObjectUser
+
 } = require("../../../services/test.service");
 // const { getQuestionOfTest } = require('../../../routes/api.route');
 const paginationHelper = require("../../../helpers/paginationHelper");
 const { Op } = require("sequelize");
 const { testService } = require("../../../services/test.service");
-const { getQuestionOfTest } = require("../../../services/question.service");
+const { getQuestionOfTest, getQuestionOfTestAdmin } = require("../../../services/question.service");
 
 const testListPaginate = async (req, res) => {
   const find = {};
@@ -75,7 +76,7 @@ const EditTest = async (req, res) => {
   const testId = req.params.id;
   // //console.log("id: ", testId);
   var metadata = await getTestById(testId);
-  var questions = await getQuestionOfTest(testId);
+  var questions = await getQuestionOfTestAdmin(testId);
 
   const startTime = metadata.data[0].ThoiGianBatDau;
 
