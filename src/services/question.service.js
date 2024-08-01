@@ -116,10 +116,11 @@ const getQuestionOfTestAdmin = async (id) => {
       const { MaBaiThi, ...rest } = question;
       return rest;
     });
-    questions = shuffleLast10KeepRest(questions);
+    // questions = shuffleLast10KeepRest(questions);
     if (questions.length > 0) {
       data.status = 200;
       data.data = questions;
+      console.log(questions)
     } else {
       data.status = 404;
     }
