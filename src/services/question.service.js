@@ -87,6 +87,7 @@ const getQuestionOfTest = async (id) => {
 };
 
 const getQuestionOfTestAdmin = async (id) => {
+  console.log("hello")
   var data = { status: null, data: null };
   try {
     var questions = await db.Question.findAll({
