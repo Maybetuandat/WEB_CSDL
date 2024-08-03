@@ -91,6 +91,43 @@ const getTestById = async (id) => {
   }
 };
 
+const getThiById = async (id) => {
+  var data = { status: null, data: null };
+  const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
+  try {
+    const tests = await db.Test.findAll({
+      raw: true,
+      where: { MaBaiThi: id },
+      include: [
+        {
+          model: db.Shift,
+          required: true, // Đảm bảo chỉ lấy các bản ghi từ Test có mối quan hệ với Shift
+          where: {
+            start: {
+              [Op.lte]: currentTime,
+            },
+            end: {
+              [Op.gte]: currentTime,
+            }, // Điều kiện lọc trên bảng Shift
+          },
+        },
+      ],
+    });
+    // //console.log(tests);
+    if (tests.length > 0) {
+      data.status = 200;
+      data.data = tests;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    data.status = 500;
+    return data;
+  }
+};
+
 const createNewTest = async (test, questionList) => {
   let t;
   try {
@@ -603,50 +640,36 @@ const getCountTestListForStudentWithFindObject = async (find) => {
 const getTestListForStudentWithFindObject = async (find, pagination) => {
   const data = { status: null, data: null };
   const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
-  console.log(currentTime);
   try {
     const tests = await db.Test.findAll({
       where: {
         ...find,
-        [Op.or]: [
-          {
-            start: {
-              [Op.lte]: currentTime,
-            },
-            end: {
-              [Op.gte]: currentTime,
-            },
-          },
-          {
-            start: {
-              [Op.is]: null,
-            },
-            end: {
-              [Op.is]: null,
-            },
-          },
-          {
-            start: {
-              [Op.lte]: currentTime,
-            },
-            end: {
-              [Op.is]: null,
-            },
-          },
-          {
-            start: {
-              [Op.is]: null,
-            },
-            end: {
-              [Op.gte]: currentTime,
-            },
-          },
-        ],
+        TrangThai: {
+          [Op.ne]: "th",
+        },
+        // [Op.or]: [
+        //   {
+        //     start: {
+        //       [Op.lte]: currentTime,
+        //     },
+        //     end: {
+        //       [Op.gte]: currentTime,
+        //     },
+        //   },
+        //   {
+        //     start: {
+        //       [Op.eq]: null,
+        //     },
+        //     end: {
+        //       [Op.eq]: null,
+        //     },
+        //   },
+        // ],
       },
       limit: pagination.limitedItem,
       offset: pagination.limitedItem * (pagination.currentPage - 1),
       raw: true,
-      order: [["start", "DESC"]], // Sửa để sử dụng đúng tên cột
+      order: [["ThoiGianBatDau", "DESC"]], // Đảm bảo sử dụng đúng tên cột
     });
 
     if (tests.length > 0) {
@@ -687,7 +710,49 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
     } else {
       data.status = 404;
     }
-    console.log(data);
+    //console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    data.status = 500;
+    return data;
+  }
+};
+
+const getThiList = async () => {
+  const data = { status: null, data: null };
+  const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
+  console.log(currentTime);
+  try {
+    const tests = await db.Test.findAll({
+      include: [
+        {
+          model: db.Shift,
+          required: true, // Đảm bảo chỉ lấy các bản ghi từ Test có mối quan hệ với Shift
+          where: {
+            start: {
+              [Op.lte]: currentTime,
+            },
+            end: {
+              [Op.gte]: currentTime,
+            }, // Điều kiện lọc trên bảng Shift
+          },
+        },
+      ],
+      where: {
+        TrangThai: "th",
+      },
+      raw: true,
+      // order: [["ThoiGianBatDau", "DESC"]], // Đảm bảo sử dụng đúng tên cột
+    });
+
+    if (tests.length > 0) {
+      data.status = 200;
+      data.data = tests;
+    } else {
+      data.status = 404;
+    }
+    //console.log(data);
     return data;
   } catch (error) {
     console.error("Lỗi khi truy vấn dữ liệu:", error);
@@ -718,4 +783,6 @@ module.exports = {
   getURL,
   getCountTestWithFindObjectUser,
   getTestWithFindObjectUser,
+  getThiList,
+  getThiById,
 };

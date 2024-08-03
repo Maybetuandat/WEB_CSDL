@@ -289,6 +289,76 @@ const createSubmitCode = async (
   }
 };
 
+const tinhdiem2 = async (questionList, cauhoi) => {
+  //console.log("questionlist: ", questionList);
+  //console.log("cauhoi: ", cauhoi);
+  let diem = 0;
+  console.log(questionList);
+  for (var i = 0; i < questionList.length; i++) {
+    if (questionList[i] == cauhoi[i].MaLuaChon) {
+      diem += 10 / questionList.length;
+    }
+  }
+  console.log(diem);
+  return diem;
+};
+
+const resultAllThi = async (mbt) => {
+  let results = await db.ResultTest.findAll({
+    where: {
+      MaBaiThi: mbt,
+      ThoiGianNopBai: {
+        [Op.ne]: null,
+      },
+      Diem: {
+        [Op.is]: null,
+      },
+    },
+  });
+  if (results == null) return false;
+  else {
+    let cauhoi = [];
+    try {
+      cauhoi = await db.Option.findAll({
+        where: {
+          MaBaiThi: mbt,
+          Dung: "1",
+        },
+        attributes: ["MaCauHoi", "MaLuaChon"],
+        raw: true,
+      });
+    } catch (error) {
+      console.error("Lỗi khi truy vấn dữ liệu:", error);
+      return;
+    }
+    cauhoi.sort((a, b) => {
+      if (a.macauhoi < b.macauhoi) {
+        return -1;
+      }
+      if (a.macauhoi > b.macauhoi) {
+        return 1;
+      }
+      return 0;
+    });
+    console.log(cauhoi);
+    for (let i = 0; i < results.length; i++) {
+      let diem = await tinhdiem2(results[i].ChiTiet, cauhoi);
+      await db.ResultTest.update(
+        {
+          Diem: diem,
+        },
+        {
+          where: {
+            MSV: results[i].MSV,
+            MaBaiThi: mbt,
+          },
+        }
+      );
+    }
+    return true;
+  }
+};
+
 module.exports = {
   getResultWithIdResult,
   getResultWithDate,
@@ -299,4 +369,5 @@ module.exports = {
   getResultByIdTest,
   getResultWithMaKetQua,
   createSubmitCode,
+  resultAllThi,
 };

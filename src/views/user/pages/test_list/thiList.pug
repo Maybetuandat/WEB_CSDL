@@ -1,0 +1,17 @@
+extends ../../layout/default.pug
+include ../../mixins/testThi.pug
+
+block main
+
+
+  div.row.test-list-user
+    div.div-1
+      h4.d-inline-block.mb-0(style="font-weight:bold;font-size:28px;").title-list-test Thực hành
+  .test-list
+    if (tests === null)
+      p Không có bài thi nào
+    else
+      each test, index in tests
+        +testMixin(test, results[index])
+
+  

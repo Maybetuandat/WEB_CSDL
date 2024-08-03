@@ -127,10 +127,7 @@ module.exports.testWithId = async (req, res) => {
   // Cộng thêm 7 giờ vào thời gian hiện tại
   const updatedTime = new Date(currentTime.getTime() + 7 * 60 * 60 * 1000);
   var questions = null;
-  if (
-    test.data[0].start == null ||
-    (test.data[0].start <= updatedTime && updatedTime <= test.data[0].end)
-  ) {
+  if (test.data[0].TrangThai != "th") {
     questions = await getQuestionOfTest(testId);
   } else test.data = null;
   //var questions = await getQuestionOfTest(testId);
@@ -153,8 +150,8 @@ module.exports.testListForStudent = async (req, res) => {
     const regexExpression = new RegExp(keyword, "i").source;
     find[Op.or] = [
       { TenBaiThi: { [Op.regexp]: regexExpression } },
-      { TheLoai: { [Op.regexp]: regexExpression } },
-      { TacGia: { [Op.regexp]: regexExpression } },
+      //{ TheLoai: { [Op.regexp]: regexExpression } },
+      //{ TacGia: { [Op.regexp]: regexExpression } },
     ];
   }
   const count = await testServices.getCountTestListForStudentWithFindObject(
@@ -227,7 +224,7 @@ module.exports.resultTestOfStudent = async (req, res) => {
   // console.log(testListWithPage);
   res.render("user/pages/viewResult/testResult.pug", {
     titlePage: "Kết quả sinh viên",
-    student: student.data[0],
+    student: student.data && student.data[0] ? student.data[0] : null,
     testList: testListWithPage.data,
     pagination: pagination,
   });
