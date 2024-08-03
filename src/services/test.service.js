@@ -191,9 +191,16 @@ const updateTestById = async (testId, updateData) => {
             transaction: t,
           });
 
-          // //console.log(data[i][answerProperty])
+          // console.log(data[i][answerProperty])
 
           answer.NoiDung = data[i][answerProperty];
+          if (data[i]["check"] == j) {
+            answer.Dung = 1;
+          }
+          else {
+            answer.Dung = 0;
+          }
+
           await answer.save({ transaction: t });
         }
       } else {
