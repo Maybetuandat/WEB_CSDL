@@ -13,12 +13,12 @@ const { isAdminPermission } = require("../../middleware/auth.middleware");
 module.exports = (app) => {
   app.use("/admin/result", viewResultRoutes);
   app.use("/admin/test", testListRoutes);
-  app.use("/admin/account", isAdminPermission, accountManageRoutes);
+  app.use("/admin/account",  accountManageRoutes);
   app.use("/admin/profile", profileRoutes);
-  app.use("/admin/statistic", isAdminPermission, statisticRouter);
-  app.use("/admin/permission", isAdminPermission, permissionRouter);
-  app.use("/admin/message", isAdminPermission, messageRouter);
+  app.use("/admin/statistic",  statisticRouter);
+  app.use("/admin/permission",  permissionRouter);
+  app.use("/admin/message",  messageRouter);
   app.use("/admin/error", errorRouter);
   app.use("/admin", indexAdmin);
-  app.use("/admin/dashboard", isAdminPermission, dashboardRouter);
+  app.use("/admin/dashboard",  dashboardRouter);
 };
