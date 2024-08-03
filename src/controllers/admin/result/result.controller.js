@@ -129,7 +129,7 @@ module.exports.test = async (req, res) => {
 module.exports.testWithId = async (req, res) => {
   const testId = req.params.testId;
   const test = await testServices.getTestById(testId);
-  const resultList = await resultServices.getResultByIdTest(testId);
+  const resultList = await resultServices.getAllNewResults(testId);
   const studentList = [];
   const find = {};
   if (req.query.keyword && req.query.keyword !== "") {
@@ -140,16 +140,24 @@ module.exports.testWithId = async (req, res) => {
     ];
   }
   if (req.query.class) find.Lop = req.query.class;
-  for (let i = 0; i < resultList.data.length; i++) {
-    find.MSV = resultList.data[i].MSV;
-    const student = await studentServices.getCountStudentWithFindObject(find);
-    if (student.data) studentList.push(student.data[0]);
+  if (resultList.length > 0) {
+    for (let i = 0; i < resultList.length; i++) {
+
+      if (resultList[i].Diem == null) {
+        resultList[i].Diem = "Chưa xong";
+      }
+
+      find.MSV = resultList[i].MSV;
+      const student = await studentServices.getCountStudentWithFindObject(find);
+      if (student.data) studentList.push(student.data[0]);
+    }
   }
+
 
   res.render("admin/pages/viewResult/testResultStudent.pug", {
     titlePage: "Kết quả bài thi",
     test: test.data[0],
-    resultList: resultList.data,
+    resultList: resultList,
     studentList: studentList,
     className: req.query.class || "Tất cả",
     keyword: req.query.keyword || "",

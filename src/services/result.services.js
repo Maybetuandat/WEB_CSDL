@@ -142,7 +142,7 @@ const getResultWithMaKetQua = async (idResult) => {
   return data;
 };
 
-const getResultWithDate = async (Date) => {};
+const getResultWithDate = async (Date) => { };
 
 const getResultbyIdStuandIdResult = async (mkq) => {
   try {
@@ -359,6 +359,26 @@ const resultAllThi = async (mbt) => {
   }
 };
 
+const getAllNewResults = async (mbt) => {
+  try {
+    let results = await db.ResultTest.findAll({
+      where: {
+        MaBaiThi: mbt,
+      },
+    });
+
+    if (results.length > 0) {
+      return results;
+    }
+    else {
+      return [];
+    }
+  } catch (error) {
+    return null;
+  }
+
+};
+
 module.exports = {
   getResultWithIdResult,
   getResultWithDate,
@@ -370,4 +390,5 @@ module.exports = {
   getResultWithMaKetQua,
   createSubmitCode,
   resultAllThi,
+  getAllNewResults
 };
