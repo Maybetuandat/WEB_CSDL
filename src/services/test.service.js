@@ -625,7 +625,12 @@ const getCountTestListForStudentWithFindObject = async (find) => {
   try {
     const tests = await db.Test.findAll({
       raw: true,
-      where: find,
+      where: {
+        ...find,
+        TrangThai: {
+          [Sequelize.Op.ne]: "th",
+        },
+      },
       // order: [[db.Test, 'ThoiGianNopBai', 'DESC']],
     });
     if (tests.length > 0) {
