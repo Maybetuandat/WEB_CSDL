@@ -4,7 +4,8 @@ const fileUploader = require('../../config/cloudinary.config');
 const controllerViewTest = require("../../controllers/admin/test/test.controller");
 const { isAdminPermission } = require("../../middleware/auth.middleware");
 // router.get("/", controllerViewTest.index);
-router.get("/new-test", isAdminPermission, controllerViewTest.createNewTest);
+const { isAdmin } = require("../../middleware/auth.middleware");
+router.get("/new-test", isAdmin, controllerViewTest.createNewTest);
 router.get("/", controllerViewTest.testListPaginate);
 router.get("/edit-test/:id", controllerViewTest.EditTest);
 
