@@ -23,7 +23,11 @@ mixin shift-table(shifts, tests, pagination)
                             th Xóa
                             th(style = "display: none;") Action
                     tbody 
-                        each shift, index in shifts
+                        if shifts == null 
+                            tr
+                                td(colspan="7") Không có dữ liệu
+                        else
+                           each shift, index in shifts
                             tr.tb-round-test(id=shift.MaBaiThi)
                                 td.fw-600=shift.MaCaThi
                                 td
@@ -43,5 +47,5 @@ mixin shift-table(shifts, tests, pagination)
                                     a.mb-0(href="./shift/edit/" + shift.MaCaThi)
                                         button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
                                     a.mb-0(onclick=`confirmDelete('${shift.MaCaThi}')`)
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete Xóa         
+                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete Xóa        
                 +pagination(pagination)

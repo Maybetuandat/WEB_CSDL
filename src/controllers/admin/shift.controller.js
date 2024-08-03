@@ -56,11 +56,13 @@ const shiftListPaginate = async (req, res) => {
 
     var tests = []
 
-    for (var i = 0; i < data.length; i++) {
+    if (data != null) {
+        for (var i = 0; i < data.length; i++) {
 
-        var test = await getTestById(data[i].MaBaiThi)
-        tests.push(test.data[0])
-        // console.log(test.data[0])
+            var test = await getTestById(data[i].MaBaiThi)
+            tests.push(test.data[0])
+            // console.log(test.data[0])
+        }
     }
 
     res.render("admin/pages/viewTest/viewShift.pug", {
