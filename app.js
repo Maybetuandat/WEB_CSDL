@@ -43,24 +43,7 @@ const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-const socketIo = require("socket.io");
-const io = socketIo(server);
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("message", (data) => {
-    console.log("message: ", data);
-    io.to(data.room).emit("message", data);
-  });
 
-  socket.on("join", (room) => {
-    socket.join(room);
-    console.log(`User joined room: ${room}`);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-  });
-});
 
 adminRoutes(app);
 userRoutes(app);

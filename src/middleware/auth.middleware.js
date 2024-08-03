@@ -31,14 +31,15 @@ const isAuth = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
   const tokenFromClient = req.cookies.jwt;
+  // console.log(tokenFromClient)
   if (tokenFromClient) {
     try {
       const decoded = await jwtHelper.verifyToken(
         tokenFromClient,
         accessTokenSecret
       );
-      // //console.log(decoded);
-      if (decoded.data.role === "admin") {
+      console.log(decoded);
+      if (decoded.data.role === "1") {
         next();
       } else {
         return res.status(401).json({

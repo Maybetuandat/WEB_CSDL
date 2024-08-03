@@ -1,10 +1,15 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
-const sequelize = new Sequelize("javasql2", "root", "1111", {
-  host: "localhost",
-  port: "3307",
-  dialect: "mysql",
-});
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: "localhost",
+    port: process.env.DB_PORT,
+    dialect: "mysql",
+  }
+);
 const connection = async () => {
   try {
     await sequelize.authenticate();

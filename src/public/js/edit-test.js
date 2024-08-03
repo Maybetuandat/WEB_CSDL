@@ -25,6 +25,7 @@ function hideLoading() {
 }
 
 function render(questions) {
+  // console.log(questions.length)
   var numQuestions = questions.length;
   var questionsContainer = document.getElementById("questionsContainer");
 
@@ -94,7 +95,10 @@ function render(questions) {
       answerInput.id = "question" + i + "answer" + j;
       answerInput.value = questions[i - 1].LuaChon[j - 1].NoiDung;
 
+      // console.log(questions[i - 1].LuaChon[j - 1])
+
       if (questions[i - 1].LuaChon[j - 1].Dung == 1) {
+
         answerCheckbox.classList.add("checked");
       }
 
@@ -194,9 +198,11 @@ function hideAlert() {
 }
 
 function showAlert(content) {
-  document.getElementById("alertContent").textContent = content;
-  document.getElementById("myAlert").style.display = "block";
-  setTimeout(hideAlert, 3000);
+  if (content != null) {
+    document.getElementById("alertContent").textContent = content;
+    document.getElementById("myAlert").style.display = "block";
+    setTimeout(hideAlert, 3000);
+  }
 }
 
 function formatDatetime(date) {
@@ -215,6 +221,7 @@ function formatDatetime(date) {
 }
 
 async function Save(id) {
+  console.log("1")
   const currentDatetime = new Date();
   const formattedDatetime = formatDatetime(currentDatetime);
 
@@ -229,6 +236,7 @@ async function Save(id) {
   };
 
   if (!formData.numQuestions || !formData.examTime || !formData.examName) {
+    console.log("2")
     showAlert("Vui lòng điền đầy đủ thông tin cho bài thi");
     return;
   } else {
@@ -245,7 +253,10 @@ async function Save(id) {
       var answer = [];
       var check = "";
       var questionContent = document.getElementById("question" + i).value;
+      console.log(questionContent)
       if (questionContent === "") {
+
+        console.log("3")
         showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
         return;
       }
@@ -259,6 +270,7 @@ async function Save(id) {
         }
         var ans = document.getElementById("question" + i + "answer" + j).value;
         if (ans === "") {
+          console.log("4")
           showAlert("Bạn chưa nhập đáp án cho câu hỏi " + i);
           return;
         }
@@ -266,6 +278,7 @@ async function Save(id) {
       }
 
       if (check === "") {
+        console.log("5")
         showAlert("Bạn chưa chọn đáp án đúng cho câu hỏi " + i);
         return;
       }

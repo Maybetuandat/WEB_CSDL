@@ -11,7 +11,7 @@ module.exports.index = async (req, res) => {
   const thiList = await testServices.getThiList();
   console.log(thiList);
   let results = [];
-  for (let i = 0; i < thiList.data.length; i++) {
+  for (let i = 0; i < (thiList.data ? thiList.data.length : 0); i++) {
     let result = await thiService.getResultThiStuTest(
       req.jwtDecoded.data.id,
       thiList.data[i].MaBaiThi

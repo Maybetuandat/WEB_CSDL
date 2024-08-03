@@ -1,7 +1,14 @@
 extends ../../layout/default.pug
 include ../../mixins/testDescription
+
 block main
     + test-description()
+    .dialog-overlay#dialogOverlay
+        // Nội dung của dialog
+        .dialog-content#dialogContent
+            p.sent#question-dialog Câu trả lời của bạn đã được gửi đi.
+            .footer-dialog
+                button#btn-close(onclick="closeDialog()")  Đóng
     .container-fluid.mt-4
         .card.mb-4
             .card-header.pb-0.ptit-color.c-white
@@ -18,8 +25,9 @@ block main
                     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css")
                     //- Google Fonts
                     link(href="https://fonts.googleapis.com/css2?family=Poppins&display=swap", rel="stylesheet")
-                    //- Stylesheet
-                    link(rel="stylesheet", href="./style.css")
+
+                    link(rel="stylesheet", href="/css/textinput.css")
+
                 body
                     .container
                         .options
@@ -349,9 +357,10 @@ block main
 
                     // Hiển thị kết quả trong console
                     console.log(questionsAndAnswers);
+                    questionsAndAnswers.shift()
                     render2(questionsAndAnswers)
                     };
 
                     window.onload = initializer();
 
-
+                

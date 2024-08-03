@@ -141,9 +141,9 @@ const createNewTest = async (test, questionList) => {
         ThoiGianThi: parseInt(test.examTime),
         SoLuongCau: parseInt(questionList.length),
         TheLoai: test.examDescription,
-        TrangThai: "Đóng",
+        TrangThai: test.examStatus,
         img_url: test.imageUrl,
-        TacGia: test.TacGia,
+        TacGia: "B21DCCN343",
       }
       // { transaction: t }
     );
@@ -231,6 +231,11 @@ const updateTestById = async (testId, updateData) => {
           // //console.log(data[i][answerProperty])
 
           answer.NoiDung = data[i][answerProperty];
+          if (data[i]["check"] == j) {
+            answer.Dung = 1;
+          } else {
+            answer.Dung = 0;
+          }
           await answer.save({ transaction: t });
         }
       } else {
