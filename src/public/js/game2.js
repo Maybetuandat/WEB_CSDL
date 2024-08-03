@@ -165,6 +165,8 @@ const process = async () => {
 
   const databody = JSON.stringify({ metadata, option });
 
+  const btnNopBai = document.getElementById("btn-nopbai");
+  btnNopBai.textContent = "Đang gửi bài...";
   const response = await fetch("/thi/submit", {
     method: "POST",
     headers: {
@@ -174,6 +176,7 @@ const process = async () => {
   });
 
   if (!response.ok) {
+    btnNopBai.textContent = "Nộp bài";
     throw new Error("Network response was not ok");
   } else window.location.assign(`../thi`);
 };
