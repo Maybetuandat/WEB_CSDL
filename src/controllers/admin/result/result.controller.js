@@ -156,4 +156,8 @@ module.exports.testWithId = async (req, res) => {
   });
 };
 
+module.exports.chamThi = async (req, res) => {
+  await resultServices.resultAllThi(req.params.testId);
+};
+
 // [GET] /admin/my-account

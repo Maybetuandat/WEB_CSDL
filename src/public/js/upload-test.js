@@ -415,6 +415,7 @@ async function Save() {
     imageUrl:
       "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg",
     examDescription: document.getElementById("examDescription").value,
+    examStatus: document.getElementById("examStatus").value,
   };
 
   if (!formData.numQuestions || !formData.examTime || !formData.examName) {
@@ -514,7 +515,7 @@ async function Save() {
     console.log("phản hồi: ", data);
     if (data.code == 2) {
       openDialog("Bài thi chứa từ ngữ không hợp lệ, vui lòng kiểm tra lại !!!");
-    } else window.location.href = "/test";
+    } else window.location.href = "/admin/test";
     const invalidWordsList = document.getElementById("invalidWordsList");
     invalidWordsList.textContent = null;
     data.data.forEach((word) => {

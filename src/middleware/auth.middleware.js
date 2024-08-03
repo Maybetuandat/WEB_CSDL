@@ -95,7 +95,7 @@ const isAdminPermission = async (req, res, next) => {
         tokenFromClient,
         accessTokenSecret
       );
-      // //console.log(decoded);
+      console.log(decoded);
 
       var role = decoded.data.role;
       var check = await checkPermission(url, role);

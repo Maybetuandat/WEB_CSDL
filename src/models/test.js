@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Test.hasMany(models.Question, { foreignKey: "MaBaiThi" });
       Test.hasMany(models.Result, { foreignKey: "MaBaiThi" });
+      Test.hasMany(models.Shift, { foreignKey: "MaBaiThi" });
       Test.belongsTo(models.Student, {
         foreignKey: "TacGia",
         targetKey: "MSV",

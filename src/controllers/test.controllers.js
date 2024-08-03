@@ -314,14 +314,7 @@ const containsInvalidWords = async (data, invalidWords) => {
   return Array.from(invalidFoundSet);
 };
 
-const invalidWords = [
-  "phản động",
-  "hehe",
-  "bất hợp pháp",
-  "câu xyz",
-  "khiêu dâm",
-  "giết",
-];
+const invalidWords = ["phản động", "hehe", "câu xyz", "khiêu dâm", "giết"];
 
 const postTestHandler = async (req, res) => {
   var reqBody = req.body;
@@ -329,9 +322,9 @@ const postTestHandler = async (req, res) => {
   var test = reqBody.metadata;
   var questionList = reqBody.data;
   console.log(req.jwtDecoded);
-  let msv = req.jwtDecoded.data.id;
+  //let msv = req.jwtDecoded.data.id;
 
-  test.TacGia = msv;
+  //test.TacGia = msv;
   console.log("test: ", test);
   console.log("questionList: ", questionList);
   let data = { test, questionList };

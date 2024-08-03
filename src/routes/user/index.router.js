@@ -5,6 +5,7 @@ const profileRoutes = require("./profile.router");
 const detailTest = require("./detailTest.router");
 const { isAuth } = require("../../middleware/auth.middleware");
 const testListRoutes = require("./testList.router");
+const userThi = require("./userThi.router");
 
 module.exports = (app) => {
   app.use("/", indexUser);
@@ -13,4 +14,5 @@ module.exports = (app) => {
   app.use("/profile", isAuth, profileRoutes);
   app.use("/test", isAuth, testListRoutes);
   app.use("/detail", isAuth, detailTest);
+  app.use("/thi", isAuth, userThi);
 };
