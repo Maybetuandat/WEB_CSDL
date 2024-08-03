@@ -155,7 +155,6 @@ module.exports.testWithId = async (req, res) => {
   if (req.query.class) find.Lop = req.query.class;
   if (resultList.length > 0) {
     for (let i = 0; i < resultList.length; i++) {
-
       if (resultList[i].Diem == null) {
         resultList[i].Diem = "Chưa xong";
       }
@@ -165,7 +164,6 @@ module.exports.testWithId = async (req, res) => {
       if (student.data) studentList.push(student.data[0]);
     }
   }
-
 
   res.render("admin/pages/viewResult/testResultStudent.pug", {
     titlePage: "Kết quả bài thi",
@@ -195,7 +193,7 @@ module.exports.thi = async (req, res) => {
       limitedItem: 5,
     },
     req.query,
-    testList.data.length
+    testList.data?.length || 0
   );
   const testListWithPage = await testServices.getThiWithFindObjectAndPage(
     find,
