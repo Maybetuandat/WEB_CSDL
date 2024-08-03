@@ -1,0 +1,47 @@
+include ./pagination.pug
+mixin shift-table(shifts, tests, pagination)
+    .container-fluid
+        .card.mb-4
+            .card-header.pb-0.ptit-color.c-white
+                h5 Danh sách bài thi
+            .card-body
+                .align-items-center.justify-content-between
+                    .d-flex.align-items-center.mb-3.search-colum
+                        .search-wrapper.d-flex.align-items-center
+                            input(type="text" class="form-control search-box" tim-kiem placeholder="--- Tìm kiếm ---" value=keyword)
+                            button.btn.cur-p.ptit-color.btn-color(btn-loc).ml-2.btn-responsive Lọc
+                        button.btn.cur-p.ptit-color.btn-color.ml-5.search-btn-new.btn-responsive
+                            a.submit-btn(href="./shift/new")  Tạo mới 
+                table.table.table-test-admin
+                    thead
+                        tr.th-round-test
+                            th ID
+                            th Tên bài thi
+                            th Bắt đầu
+                            th Kết thúc
+                            th Chỉnh sửa
+                            th Xóa
+                            th(style = "display: none;") Action
+                    tbody 
+                        each shift, index in shifts
+                            tr.tb-round-test(id=shift.MaBaiThi)
+                                td.fw-600=shift.MaCaThi
+                                td
+                                    if tests[index] && tests[index].TenBaithi
+                                        =tests[index].TenBaithi
+                                    else
+                                        | No test name found
+                                td=shift.start
+                                td=shift.end
+                                td
+                                    a.mb-0(href="./shift/edit/" + shift.MaCaThi)
+                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive Chỉnh sửa
+                                td
+                                    a.mb-0(onclick=`confirmDelete('${shift.MaCaThi}')`)
+                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive Xóa 
+                                td(style = "display: none;")
+                                    a.mb-0(href="./shift/edit/" + shift.MaCaThi)
+                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
+                                    a.mb-0(onclick=`confirmDelete('${shift.MaCaThi}')`)
+                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete Xóa         
+                +pagination(pagination)
