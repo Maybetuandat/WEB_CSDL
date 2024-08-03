@@ -60,6 +60,7 @@ async function createShiftSubmit() {
         if (!datetime) return null;
 
         const date = new Date(datetime);
+        date.setHours(date.getHours() + 7);
         return date.toISOString();
     };
 
