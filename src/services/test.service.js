@@ -250,7 +250,7 @@ const updateTestById = async (testId, updateData) => {
             transaction: t,
           });
 
-          // //console.log(data[i][answerProperty])
+          // console.log(data[i][answerProperty])
 
           answer.NoiDung = data[i][answerProperty];
           if (data[i]["check"] == j) {
@@ -578,9 +578,9 @@ const getSubmitByStudentIdWithPage = async (stuID, pagination) => {
               const body = JSON.parse(response.body);
               console.log(
                 "Error code: " +
-                  body.error_code +
-                  ", details available in the message: " +
-                  body.message
+                body.error_code +
+                ", details available in the message: " +
+                body.message
               );
             }
             data.status = 404;

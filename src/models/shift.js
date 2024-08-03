@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Shift.init(
     {
+      MaCaThi: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       MaBaiThi: {
         type: DataTypes.INTEGER,
       },

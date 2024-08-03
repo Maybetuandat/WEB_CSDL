@@ -412,6 +412,24 @@ const resultAllThi = async (mbt) => {
     return true;
   }
 };
+
+const getAllNewResults = async (mbt) => {
+  try {
+    let results = await db.ResultTest.findAll({
+      where: {
+        MaBaiThi: mbt,
+      },
+    });
+
+    if (results.length > 0) {
+      return results;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    return null;
+  }
+};
 const getOptions = async (mbt) => {
   let cauhoi = [];
   try {
@@ -454,4 +472,5 @@ module.exports = {
   getResultByIdThi,
   getResultThiByIdStuAndIdTest,
   getOptions,
+  getAllNewResults,
 };

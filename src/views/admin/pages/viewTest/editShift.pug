@@ -1,0 +1,24 @@
+extends ../../layout/default.pug
+include ../../mixins/testDescription
+
+block main
+    h1 Chỉnh sửa ca thi
+    form#edit-shift-form
+        div.form-group
+            input(style='display:none', type='text', id='edit-id', name='id', value=shift.MaCaThi)
+        div.form-group
+            label(for='edit-ma') Bài thi:
+            select.form-control(id='edit-ma', name='test', required)
+                each t in tests
+                    option(value=t.MaBaiThi)= t.MaBaiThi + " - " + t.TenBaithi
+        div.form-group
+            label(for='edit-start') Bắt đầu:
+            input.form-control(type='datetime-local', id='edit-start', name='start', value=shift.start, required)
+        div.form-group
+            label(for='edit-end') Kết thúc:
+            input.form-control(type='datetime-local', id='edit-end', name='end', value=shift.end, required)
+        div.btn-new-student
+            button.btn.btn-primary(type='button', onclick='editShiftSubmit()') Cập nhật
+            button.btn.btn-secondary(type='button', onclick='shiftCancel()') Hủy
+    script.
+       
