@@ -1,16 +1,16 @@
 {
   "development": {
-    "username": "maybetuandat",
-    "password": "123456",
-    "database": "Quizz_Web_Db",
+    "username": "aitcvnkd_hoanghiep",
+    "password": "@Hiep2003",
+    "database": "aitcvnkd_hoanghiep2",
     "host": "localhost",
     "port": "3306",
     "dialect": "mysql"
   },
   "test": {
-    "username": "maybetuandat",
-    "password": "123456",
-    "database": "Quizz_Web_Db",
+    "username": "aitcvnkd_hoanghiep",
+    "password": "Hiep2003",
+    "database": "aitcvnkd_hoanghiep2",
     "host": "localhost",
     "port": "3306",
     "dialect": "mysql"
