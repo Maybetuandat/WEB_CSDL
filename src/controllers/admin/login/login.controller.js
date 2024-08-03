@@ -54,7 +54,7 @@ module.exports.checkLoginAdmin = async (req, res) => {
         SameSite: "None",
       });
       return res.redirect("/admin/dashboard");
-      res.status(200).json({ message: "Đăng nhập thành công" });
+    
     } else {
       const response = {
         message: "Thông tin tài khoản hoặc mật khẩu không chính xác",
