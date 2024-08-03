@@ -48,7 +48,9 @@ const shiftListPaginate = async (req, res) => {
         for (var i = 0; i < data.length; i++) {
             var startTime = new Date(data[i].start)
             var endTime = new Date(data[i].end)
-
+            // date.setHours(date.getHours() + 7);
+            startTime.setHours(date.getHours() + 7)
+            endTime.setHours(date.getHours() + 7)
             data[i].start = formatDateTime(startTime)
             data[i].end = formatDateTime(endTime)
         }
@@ -91,6 +93,7 @@ const editShift = async (req, res) => {
     const tests = await getAllTest();
     var shift = await getShiftById(id);
 
+
     var test;
 
     for (var i = 0; i < tests.data.length; i++) {
@@ -104,7 +107,7 @@ const editShift = async (req, res) => {
         titlePage: "Chỉnh sửa ca thi",
         shift: shift.data,
         test: test,
-        tests: tests.data // Pass the normalized tests data to the template
+        tests: tests.data
     });
 };
 
