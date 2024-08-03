@@ -49,8 +49,8 @@ const shiftListPaginate = async (req, res) => {
             var startTime = new Date(data[i].start)
             var endTime = new Date(data[i].end)
             // date.setHours(date.getHours() + 7);
-            startTime.setHours(date.getHours() + 7)
-            endTime.setHours(date.getHours() + 7)
+            startTime.setHours(startTime.getHours() + 7)
+            endTime.setHours(endTime.getHours() + 7)
             data[i].start = formatDateTime(startTime)
             data[i].end = formatDateTime(endTime)
         }
