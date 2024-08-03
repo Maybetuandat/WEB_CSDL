@@ -5,11 +5,30 @@ async function editShiftSubmit() {
 
     // Lấy dữ liệu từ form
     const formData = new FormData(form);
+
+    const id = formData.get('id');
+    const test = formData.get('test');
+    const start = formData.get('start');
+    const end = formData.get('end');
+
+
+    const formatDateTimeToISO = (datetime) => {
+
+        if (!datetime) return null;
+
+        const date = new Date(datetime);
+        date.setHours(date.getHours() + 7);
+        return date.toISOString();
+    };
+
+    const startISO = formatDateTimeToISO(start);
+    const endISO = formatDateTimeToISO(end);
+
     const data = {
-        MaCaThi: formData.get('id'),
-        MaBaiThi: formData.get('test'),
-        start: formData.get('start'),
-        end: formData.get('end')
+        MaCaThi: id,
+        MaBaiThi: test,
+        start: startISO,
+        end: endISO
     };
 
     console.log('Form Data:', data);
@@ -101,6 +120,7 @@ async function createShiftSubmit() {
             alert('Có lỗi xảy ra. Vui lòng thử lại.');
         });
 }
+
 
 function shiftCancel() {
     window.location.href = '/admin/shift';
