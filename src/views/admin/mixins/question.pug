@@ -1,6 +1,6 @@
 mixin question(index, question, answers, userAnswer)
   .question
-    p Câu #{index}: #{question.content}
+    p Câu #{index}: #{question}
     - isTrue = false
     for answer in answers
       if answer.Dung === 1 && userAnswer === answer.MaLuaChon
@@ -18,9 +18,14 @@ mixin question(index, question, answers, userAnswer)
         if userAnswer && userAnswer === answer.MaLuaChon
           .wrong
             p #{answer.MaLuaChon}. #{answer.NoiDung}
-        else if answer.Dung === 1
-          .right
-            p #{answer.MaLuaChon}. #{answer.NoiDung}
+        else if answer.Dung === 1 
+          
+          if userAnswer === 'E'
+            .answer
+              p #{answer.MaLuaChon}. #{answer.NoiDung}
+          else 
+            .right
+              p #{answer.MaLuaChon}. #{answer.NoiDung}
         else
           .answer
             p #{answer.MaLuaChon}. #{answer.NoiDung}

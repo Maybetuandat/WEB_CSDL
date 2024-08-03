@@ -31,4 +31,4 @@ block main
         p.test-name Chi tiết các câu hỏi
         .overflow-auto.list-question
           each question, index in detail
-            +question(index + 1, question.question.DeBai, question.question.LuaChon, question._detail.MaLuaChon)
+            +question(index + 1, question.DeBai, question.LuaChon, result.ChiTiet[index])

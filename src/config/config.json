@@ -16,9 +16,9 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "aitcvnkd_hoanghiep",
-    "password": "@Hiep2003",
-    "database": "aitcvnkd_hoanghiep2",
+    "username": "maybetuandat",
+    "password": "123456",
+    "database": "Quizz_Web_Db",
     "host": "localhost",
     "port": "3306",
     "dialect": "mysql"

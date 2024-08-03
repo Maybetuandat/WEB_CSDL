@@ -88,6 +88,19 @@ btnDetailList.forEach(function (btn) {
     window.location.href = url;
   });
 });
+const btnDetailThiStu = document.querySelectorAll("[btn-detail-thi-stu]");
+btnDetailThiStu.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    const studentId = btn.getAttribute("idStu");
+    const url = new URL(window.location.href);
+    url.searchParams.delete("keyword");
+    url.searchParams.delete("page");
+    url.searchParams.delete("class");
+    url.href += `/${studentId}`;
+    console.log(url.href);
+    window.location.href = url;
+  });
+});
 
 const btnDetailTestList = document.querySelectorAll(
   "[btn-detail-test-with-idStu]"
@@ -191,7 +204,18 @@ btnDetailTest.forEach(function (btn) {
     window.location.href = url;
   });
 });
-
+const btnDetailThi = document.querySelectorAll("[btn-detail-thi]");
+btnDetailThi.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    const testId = btn.getAttribute("idTest");
+    const url = new URL(window.location.href);
+    url.searchParams.delete("keyword");
+    url.searchParams.delete("page");
+    url.searchParams.delete("class");
+    url.pathname = `/admin/result/thi/${testId}`;
+    window.location.href = url;
+  });
+});
 const btnDetailTestUser = document.querySelectorAll("[btn-detail-test-user]");
 
 btnDetailTestUser.forEach(function (btn) {

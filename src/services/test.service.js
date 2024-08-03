@@ -51,6 +51,28 @@ const getAllTest = async () => {
     return data;
   }
 };
+const getAllThi = async () => {
+  var data = { status: null, data: null };
+  try {
+    const tests = await db.Test.findAll({
+      raw: true,
+      where: {
+        TrangThai: "th",
+      },
+    });
+    //console.log(tests);
+    if (tests.length > 0) {
+      data.status = 200;
+      data.data = tests;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (error) {
+    data.status = 500;
+    return data;
+  }
+};
 
 const getAllTestPerPage = async (page) => {
   var data = { status: null, data: null };
@@ -598,6 +620,32 @@ const getTestWithFindObjectAndPage = async (find, pagination) => {
   }
 };
 
+const getThiWithFindObjectAndPage = async (find, pagination) => {
+  const data = { status: null, data: null };
+  try {
+    const tests = await db.Test.findAll({
+      where: {
+        ...find,
+        TrangThai: "th",
+      },
+      limit: pagination.limitedItem,
+      offset: pagination.limitedItem * (pagination.currentPage - 1),
+      raw: true,
+    });
+    if (tests.length > 0) {
+      data.status = 200;
+      data.data = tests;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    data.status = 500;
+    return data;
+  }
+};
+
 const getTestListForStudent = async () => {
   const data = { status: null, data: null };
   try {
@@ -795,4 +843,6 @@ module.exports = {
   getTestWithFindObjectUser,
   getThiList,
   getThiById,
+  getAllThi,
+  getThiWithFindObjectAndPage,
 };

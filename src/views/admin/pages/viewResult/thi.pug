@@ -1,0 +1,19 @@
+extends ../../layout/default.pug
+include ../../mixins/pagination.pug
+include ../../mixins/thi.pug
+
+
+block main
+  br
+  .search-wrapper.d-flex.align-items-center
+    input.search-wrapper(type="text" class="form-control search-box-test" tim-kiem-test placeholder="---Tìm kiếm---" value=keyword)
+    button.btn.btn-light.search-wrapper(btn-loc-test) Lọc
+  br
+  h4 Danh sách bài thực hành
+  .test-list
+    if (tests === null)
+      p Không có bài thực hành nào
+    else
+      each test in tests
+        +thiMixin(test)
+  +pagination(pagination)

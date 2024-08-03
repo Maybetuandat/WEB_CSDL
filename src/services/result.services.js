@@ -31,6 +31,33 @@ const getResultByIdStuAndIdTest = async (idStu, idTest) => {
     return data;
   }
 };
+const getResultThiByIdStuAndIdTest = async (idStu, idTest) => {
+  const data = {
+    status: null,
+    data: null,
+  };
+  try {
+    const res = await db.ResultTest.findAll({
+      raw: true,
+      where: {
+        MSV: idStu,
+        MaBaiThi: idTest,
+      },
+    });
+    ////console.log(res);
+    if (res) {
+      data.status = 200;
+      data.data = res;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (e) {
+    //console.log(e);
+    data.status = 500;
+    return data;
+  }
+};
 const getResultByIdTest = async (idTest) => {
   const data = {
     status: null,
@@ -38,6 +65,33 @@ const getResultByIdTest = async (idTest) => {
   };
   try {
     const res = await db.Result.findAll({
+      raw: true,
+      where: {
+        MaBaiThi: idTest,
+      },
+    });
+    ////console.log(res);
+    if (res) {
+      data.status = 200;
+      data.data = res;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (e) {
+    //console.log(e);
+    data.status = 500;
+    return data;
+  }
+};
+
+const getResultByIdThi = async (idTest) => {
+  const data = {
+    status: null,
+    data: null,
+  };
+  try {
+    const res = await db.ResultTest.findAll({
       raw: true,
       where: {
         MaBaiThi: idTest,
@@ -358,6 +412,33 @@ const resultAllThi = async (mbt) => {
     return true;
   }
 };
+const getOptions = async (mbt) => {
+  let cauhoi = [];
+  try {
+    cauhoi = await db.Option.findAll({
+      where: {
+        MaBaiThi: mbt,
+      },
+      attributes: ["MaCauHoi", "MaLuaChon", "NoiDung", "Dung"],
+      raw: true,
+    });
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    return;
+  }
+  cauhoi.sort((a, b) => {
+    if (a.macauhoi < b.macauhoi) {
+      return -1;
+    }
+    if (a.macauhoi > b.macauhoi) {
+      return 1;
+    }
+    return 0;
+  });
+  console.log(cauhoi);
+
+  return cauhoi;
+};
 
 module.exports = {
   getResultWithIdResult,
@@ -370,4 +451,7 @@ module.exports = {
   getResultWithMaKetQua,
   createSubmitCode,
   resultAllThi,
+  getResultByIdThi,
+  getResultThiByIdStuAndIdTest,
+  getOptions,
 };

@@ -90,6 +90,19 @@ module.exports.detailStudentAndTest = async (req, res) => {
     detail: result.detail,
   });
 };
+module.exports.detailStudentAndThi = async (req, res) => {
+  const result = await resultController.getDetailThiWithIdStuAndIdTest(
+    req.params.studentId,
+    req.params.testId
+  );
+  res.render("admin/pages/viewResult/studentAndTestDetail.pug", {
+    titlePage: "Kết quả sinh viên",
+    result: result.result.data[0],
+    student: result.student.data[0],
+    test: result.test.data[0],
+    detail: result.detail,
+  });
+};
 // [GET] /admin/my-account
 module.exports.test = async (req, res) => {
   const find = {};
@@ -158,6 +171,69 @@ module.exports.testWithId = async (req, res) => {
 
 module.exports.chamThi = async (req, res) => {
   await resultServices.resultAllThi(req.params.testId);
+};
+
+module.exports.thi = async (req, res) => {
+  const find = {};
+  if (req.query.keyword && req.query.keyword !== "") {
+    console.log(req.query.keyword);
+    const regexExpression = new RegExp(req.query.keyword, "i").source;
+    find[Op.or] = [{ TenBaiThi: { [Op.regexp]: regexExpression } }];
+  }
+  const testList = await testServices.getAllThi();
+  const pagination = paginationHelper(
+    {
+      currentPage: 1,
+      limitedItem: 5,
+    },
+    req.query,
+    testList.data.length
+  );
+  const testListWithPage = await testServices.getThiWithFindObjectAndPage(
+    find,
+    pagination
+  );
+  console.log(find);
+  console.log(testListWithPage);
+  // let token
+  // if(req.token) token = req.token
+  res.render("admin/pages/viewResult/thi.pug", {
+    // token: token,
+    titlePage: "Kết quả bài thi",
+    tests: testListWithPage.data,
+    pagination: pagination,
+    keyword: req.query.keyword || "",
+  });
+};
+
+module.exports.thiWithId = async (req, res) => {
+  const testId = req.params.testId;
+  const test = await testServices.getTestById(testId);
+  const resultList = await resultServices.getResultByIdThi(testId);
+  const studentList = [];
+  const find = {};
+  if (req.query.keyword && req.query.keyword !== "") {
+    const regexExpression = new RegExp(req.query.keyword, "i").source;
+    find[Op.or] = [
+      { Ten: { [Op.regexp]: regexExpression } },
+      { MSV: { [Op.regexp]: regexExpression } },
+    ];
+  }
+  if (req.query.class) find.Lop = req.query.class;
+  for (let i = 0; i < resultList.data.length; i++) {
+    find.MSV = resultList.data[i].MSV;
+    const student = await studentServices.getCountStudentWithFindObject(find);
+    if (student.data) studentList.push(student.data[0]);
+  }
+
+  res.render("admin/pages/viewResult/thiResultStudent.pug", {
+    titlePage: "Kết quả bài thi",
+    test: test.data[0],
+    resultList: resultList.data,
+    studentList: studentList,
+    className: req.query.class || "Tất cả",
+    keyword: req.query.keyword || "",
+  });
 };
 
 // [GET] /admin/my-account
