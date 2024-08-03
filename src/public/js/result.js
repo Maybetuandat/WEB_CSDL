@@ -277,6 +277,18 @@ btnLocStu.forEach(function (btn) {
     window.location.href = url;
   });
 });
+const btnTinhDiem = document.querySelectorAll("[btn-tinh-diem]");
+btnTinhDiem.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    const url = new URL(window.location.href);
+    const testId = url.pathname.split("/").pop(); // Lấy phần tử cuối cùng của đường dẫn
+    const newUrl = `/admin/result/chamthi/${testId}`;
+    window.location.href = newUrl;
+    setTimeout(function () {
+      window.location.reload(); // Reload ngay lập tức sau khi quay lại
+    }, 2000); // Thời gian delay là 2 giây
+  });
+});
 
 const sidebar_toggle = document.getElementById("sidebar-toggle");
 const body = document.querySelector("body");
@@ -461,3 +473,35 @@ function sidebarColor(a) {
   }
   parent.classList.add(localStorage.getItem("sidebarColor"));
 }
+
+function formatDatetime(date) {
+  // Chuyển đổi giờ UTC sang giờ Việt Nam (UTC+7)
+  const vietnamOffset = 7 * 60; // 7 giờ * 60 phút
+  const localDate = new Date(date.getTime() - vietnamOffset * 60 * 1000);
+
+  const year = localDate.getFullYear();
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const day = String(localDate.getDate()).padStart(2, "0");
+  const hours = String(localDate.getHours()).padStart(2, "0");
+  const minutes = String(localDate.getMinutes()).padStart(2, "0");
+  const seconds = String(localDate.getSeconds()).padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Lấy các phần tử bằng ID
+  const startTextElement = document.getElementById("start-text");
+  const endTextElement = document.getElementById("end-text");
+
+  if (startTextElement && endTextElement) {
+    // Lấy dữ liệu từ các thuộc tính data-datetime
+    console.log("start: " + startTextElement.dataset.datetime);
+    const startDate = new Date(startTextElement.dataset.datetime);
+    const endDate = new Date(endTextElement.dataset.datetime);
+
+    // Gán giá trị đã định dạng vào các phần tử
+    startTextElement.textContent = formatDatetime(startDate);
+    endTextElement.textContent = formatDatetime(endDate);
+  }
+});
