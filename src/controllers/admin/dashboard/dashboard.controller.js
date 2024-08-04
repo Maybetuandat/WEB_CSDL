@@ -11,9 +11,10 @@ module.exports.index = async (req, res) => {
     var nguoiDungMoi = await LayNguoiDungMoiTrongMotThang();
     var data1 = await LaySoLuongSinhVienTheoThang();
     var data2 = await laythongkemon();
+
     console.log(data1);
-    // console.log(data2.first);
-    // console.log(data2.second);
+     console.log(data2.first);
+     console.log(data2.second);
     var data3 = await getStudentsWithHighestAverageScore();
 
     if (data.status != 200) {

@@ -9,7 +9,7 @@ const {
   updatePassword,
 } = require("../../services/student.service");
 const { student } = require("./result/result.controller");
-const sendMailTo = require("../../middleware/sendEmail");
+
 const {
   getOtpWithEmail,
   createOtp,

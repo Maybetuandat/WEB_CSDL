@@ -54,18 +54,31 @@ const getAllStatistic = async () => {
 
 const getStudentsWithHighestAverageScore = async () => {
     try {
-        const highestAverageScoreStudents = await db.Result.findAll({
+        // const highestAverageScoreStudents = await db.ResultTest.findAll({
+        //     attributes: [
+        //         'MSV',
+        //         [Sequelize.fn('AVG', Sequelize.col('Diem')), 'averageScore']
+        //     ],
+        //     group: ['MSV'],
+        //     order: [[Sequelize.literal('averageScore'), 'DESC']],
+        //     include: [{
+        //         model: db.Student,
+        //         attributes: ['Ten', 'Lop'] // Chọn các trường thông tin sinh viên cần hiển thị
+        //     }]
+        // });
+        const highestAverageScoreStudents = await db.ResultTest.findAll({
             attributes: [
                 'MSV',
-                [Sequelize.fn('AVG', Sequelize.col('Diem')), 'averageScore']
+                [Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('Diem')), 1), 'averageScore']
             ],
             group: ['MSV'],
             order: [[Sequelize.literal('averageScore'), 'DESC']],
             include: [{
                 model: db.Student,
-                attributes: ['Ten', 'Lop'] // Chọn các trường thông tin sinh viên cần hiển thị
+                attributes: ['Ten', 'Lop']
             }]
         });
+        
         return highestAverageScoreStudents;
     } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
@@ -108,7 +121,7 @@ const LaySoLuongToanBoBaiThi = async () => {
 
 const LaySoLuongToanBoKetQua = async () => {
     try {
-        var results = await db.Result.findAll();
+        var results = await db.ResultTest.findAll();
         const length = results.length;
         const status = length > 0 ? 200 : 404;
 

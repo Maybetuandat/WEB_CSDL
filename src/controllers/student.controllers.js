@@ -140,6 +140,7 @@ const postStudentHandler = async (req, res) => {
 
 const deleteStudentHandler = async (req, res) => {
   studentId = req.params;
+  console.log(studentId)
   var status = deleteStudentById(studentId);
   if (status) {
     res.status(200).json({
