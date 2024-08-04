@@ -106,7 +106,7 @@ const editShift = async (req, res) => {
     var test;
 
     for (var i = 0; i < tests.data.length; i++) {
-        if (tests.data[i].MaBaiThi == shift.MaBaiThi) {
+        if (tests.data[i].MaBaiThi == shift.data.MaBaiThi) {
             test = tests.data[i];
         }
     }
