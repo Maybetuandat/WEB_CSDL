@@ -10,7 +10,7 @@ block main
             label(for='edit-ma') Bài thi:
             select.form-control(id='edit-ma', name='test', required)
                 each t in tests
-                    option(value=t.MaBaiThi)= t.MaBaiThi + " - " + t.TenBaithi
+                    option(value=t.MaBaiThi, selected=(t.MaBaiThi === test.MaBaiThi))= t.MaBaiThi + " - " + t.TenBaithi
         div.form-group
             label(for='edit-start') Bắt đầu:
             input.form-control(type='datetime-local', id='edit-start', name='start', value=shift.start, required)
