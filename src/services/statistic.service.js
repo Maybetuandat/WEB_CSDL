@@ -54,18 +54,7 @@ const getAllStatistic = async () => {
 
 const getStudentsWithHighestAverageScore = async () => {
     try {
-        // const highestAverageScoreStudents = await db.ResultTest.findAll({
-        //     attributes: [
-        //         'MSV',
-        //         [Sequelize.fn('AVG', Sequelize.col('Diem')), 'averageScore']
-        //     ],
-        //     group: ['MSV'],
-        //     order: [[Sequelize.literal('averageScore'), 'DESC']],
-        //     include: [{
-        //         model: db.Student,
-        //         attributes: ['Ten', 'Lop'] // Chọn các trường thông tin sinh viên cần hiển thị
-        //     }]
-        // });
+      
         const highestAverageScoreStudents = await db.ResultTest.findAll({
             attributes: [
                 'MSV',
