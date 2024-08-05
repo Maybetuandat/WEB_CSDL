@@ -51,6 +51,7 @@ block main
                   a.btn.btn-primary.btn-responsive( idStu = student.MSV btn-detail-thi-stu) Xem chi tiết
   input(type="hidden" data_to_excel_student=JSON.stringify(studentList))
   input(type="hidden" data_to_excel_result=JSON.stringify(resultList))
+  input(type="hidden" name_excel=JSON.stringify(test.TenBaithi))
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   script(src="/js/admin/export_excel.js")
   
