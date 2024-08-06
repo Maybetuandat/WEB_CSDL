@@ -406,13 +406,10 @@ function formatDatetime(date) {
 }
 
 async function Save() {
-  const currentDatetime = new Date(document.getElementById("examDate").value);
+  const currentDate = document.getElementById("examDate").value;
+  const currentDateTime = document.getElementById("timeStart").value;
 
-  console.log(currentDatetime);
-
-  const formattedDatetime = formatDatetime(currentDatetime);
-
-  console.log(formattedDatetime);
+  const formattedDatetime = formatDatetime(new Date(currentDate + "T" + currentDateTime));
 
   var formData = {
     examName: document.getElementById("examName").value,

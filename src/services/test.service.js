@@ -165,7 +165,7 @@ const createNewTest = async (test, questionList) => {
       {
         // MaBaiThi: mbt,
         TenBaithi: test.examName,
-        ThoiGianBatDau: formattedDate,
+        ThoiGianBatDau: "2024-11-12 12:00:00",
         ThoiGianThi: parseInt(test.examTime),
         SoLuongCau: parseInt(questionList.length),
         TheLoai: test.examDescription,
