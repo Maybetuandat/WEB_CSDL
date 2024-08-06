@@ -15,10 +15,13 @@ const userRoutes = require("./src/routes/user/index.router");
 const errorRoutes = require("./src/routes/pageError/index.router");
 const { connection } = require("./src/config/connectDB");
 
+const bodyParserErrorHandler = require('express-body-parser-error-handler')
+
 app.use(express.static("views/user/pages/test_list/problist"));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(bodyParserErrorHandler());
 // app.use(bodyParser.json());
 
 app.set("views", `views`);
