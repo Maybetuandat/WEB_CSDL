@@ -159,7 +159,7 @@ const createNewTest = async (test, questionList) => {
 
     console.log(test)
 
-    const formattedDate = moment2(test.examDateTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+    // const formattedDate = moment2(test.examDateTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
 
     var newTest = await db.Test.create(
       {
