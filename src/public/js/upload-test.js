@@ -518,7 +518,7 @@ async function Save() {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response}`);
     }
     const data = await response.json();
     hideLoading();
