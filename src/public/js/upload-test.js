@@ -368,20 +368,7 @@ function showAlert(content) {
   setTimeout(hideAlert, 3000);
 }
 
-function formatDatetime(date) {
-  // Chuyển đổi giờ UTC sang giờ Việt Nam (UTC+7)
-  const vietnamOffset = 7 * 60; // 7 giờ * 60 phút
-  const localDate = new Date(date.getTime() - vietnamOffset * 60 * 1000);
 
-  const year = localDate.getFullYear();
-  const month = String(localDate.getMonth() + 1).padStart(2, "0");
-  const day = String(localDate.getDate()).padStart(2, "0");
-  const hours = String(localDate.getHours()).padStart(2, "0");
-  const minutes = String(localDate.getMinutes()).padStart(2, "0");
-  const seconds = String(localDate.getSeconds()).padStart(2, "0");
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
 
 async function uploadImageWithRetry(url, options, retries = 3, delay = 3000) {
   for (let i = 0; i < retries; i++) {
@@ -403,9 +390,29 @@ async function uploadImageWithRetry(url, options, retries = 3, delay = 3000) {
   }
 }
 
+function formatDatetime(date) {
+  // Chuyển đổi giờ UTC sang giờ Việt Nam (UTC+7)
+  const vietnamOffset = 7 * 60; // 7 giờ * 60 phút
+  const localDate = new Date(date.getTime() - vietnamOffset * 60 * 1000);
+
+  const year = localDate.getFullYear();
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const day = String(localDate.getDate()).padStart(2, "0");
+  const hours = String(localDate.getHours()).padStart(2, "0");
+  const minutes = String(localDate.getMinutes()).padStart(2, "0");
+  const seconds = String(localDate.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 async function Save() {
-  const currentDatetime = new Date();
+  const currentDatetime = new Date(document.getElementById("examDate").value);
+
+  console.log(currentDatetime);
+
   const formattedDatetime = formatDatetime(currentDatetime);
+
+  console.log(formattedDatetime);
 
   var formData = {
     examName: document.getElementById("examName").value,

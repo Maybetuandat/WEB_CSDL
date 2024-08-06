@@ -4,6 +4,7 @@ const { createNewQuestion } = require("./question.service");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
 const moment = require("moment-timezone");
+const moment2 = require('moment');
 require("dotenv").config();
 var request = require("request");
 
@@ -155,11 +156,16 @@ const createNewTest = async (test, questionList) => {
   try {
     t = await sequelize.transaction();
     // var mbt = "BT111";
+
+    console.log(test)
+
+    const formattedDate = moment2(test.examDateTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+
     var newTest = await db.Test.create(
       {
         // MaBaiThi: mbt,
         TenBaithi: test.examName,
-        ThoiGianBatDau: test.examDateTime,
+        ThoiGianBatDau: formattedDate,
         ThoiGianThi: parseInt(test.examTime),
         SoLuongCau: parseInt(questionList.length),
         TheLoai: test.examDescription,
