@@ -1,0 +1,27 @@
+mixin thiMixin(test)
+    .test-item.align-items-center
+        .container(style="margin-left: 3%; padding: 0; max-width: 100%;")
+            .row.align-items-center(style="margin: 0; padding: 0;")
+                .col-md-1.col-3
+                    img.img-fluid(src=test.img_url, alt="test", style="width: 100%; height: auto; border-radius: 5px;")
+                .col
+                    .content-test-name #{test.TenBaithi}
+                    br
+                    - var testDate = new Date(test.ThoiGianBatDau)
+                    - var ngay = testDate.getDate()
+                    - var thang = testDate.getMonth() + 1 // Lưu ý: getMonth trả về giá trị từ 0 đến 11
+                    - var nam = testDate.getFullYear()
+                    .content-test-detail Bắt đầu: #{ngay}/#{thang}/#{nam}
+                .col.detail-test
+                    .content-test-detail Số Lượng Câu: #{test.SoLuongCau}
+                    br
+                    .content-test-detail Thời Gian: #{test.ThoiGianThi} phút
+                .col-1.text-center
+                    if test.TrangThai == "Đóng"
+                        .alert(role='alert' style = " display: flex;justify-content: center;align-items: center; margin-top: 13px") Đóng
+                    else
+                        .alert(role='alert' style = " display: flex;justify-content: center;align-items: center; margin-top: 13px") Mở
+                .col.text-center.bt-test
+                    a.btn.btn-primary.btn-enter-test(
+                        btn-detail-thi idTest = test.MaBaiThi style = "font-size: 15px;"
+                    ) Xem chi tiết

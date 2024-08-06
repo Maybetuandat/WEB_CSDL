@@ -280,6 +280,7 @@ const getCountStudentWithFindObject = async (find) => {
       data.data = students;
     } else {
       data.status = 404;
+      data.data = [{ MSV: "" }];
     }
     return data;
   } catch (error) {

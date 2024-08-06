@@ -24,9 +24,9 @@ mixin test-table(tests, pagination)
                             th Xóa
                             th(style = "display: none;") Action
                     tbody 
-                        each test in tests
+                        each test, index in tests
                             tr.tb-round-test(id=test.MaBaiThi)
-                                td.fw-600=test.MaBaiThi
+                                td.fw-600=index+1
                                 td=test.TenBaithi
                                 td=test.ThoiGianBatDau
                                 td=test.ThoiGianThi + ' phút'

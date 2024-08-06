@@ -1,13 +1,18 @@
 const {
   getResultByIdStuAndIdTest,
+  getResultThiByIdStuAndIdTest,
   getAllResult,
   getResultWithIdResult,
   getResultWithMaKetQua,
   getResultWithDate,
+  getOptions,
 } = require("../services/result.services");
 const { getStudentById } = require("../services/student.service");
 const { getTestById, getURL } = require("../services/test.service");
-const { getQuestionOfTest } = require("../services/question.service");
+const {
+  getQuestionOfTest,
+  getQuestionOfTest2,
+} = require("../services/question.service");
 const { getDetailListWithIdResult } = require("../services/detail.services");
 
 const detail = require("../models/detail");
@@ -42,6 +47,7 @@ const getDetailTestWithIdStuAndIdTest = async (idStudent, idTest) => {
     dataRes.result = result;
     dataRes.numberTotal = detailList.length;
     var cntCorrect = 0;
+    console.log(detailList);
     for (var i = 0; i < detailList.length; i++) {
       const questionInfor = { question: null, _detail: null };
       questionInfor.question = questionList.data[i];
@@ -53,6 +59,42 @@ const getDetailTestWithIdStuAndIdTest = async (idStudent, idTest) => {
   } else {
     dataRes.status = 404;
   }
+  return dataRes;
+};
+const getDetailThiWithIdStuAndIdTest = async (idStudent, idTest) => {
+  const dataRes = {
+    status: null,
+    student: null,
+    test: null,
+    numberCorrect: null,
+    numberTotal: null,
+    result: null,
+    detail: [],
+  };
+  const questionList = await getQuestionOfTest2(idTest); //thong tin cac cau hoi
+  questionList.data.sort((a, b) => {
+    if (a.MaCauHoi < b.MaCauHoi) {
+      return -1;
+    }
+    if (a.MaCauHoi > b.MaCauHoi) {
+      return 1;
+    }
+    return 0;
+  });
+  const student = await getStudentById(idStudent); //thong tin sinh vien
+  const result = await getResultThiByIdStuAndIdTest(idStudent, idTest); //thong tin ket qua
+  const test = await getTestById(idTest); //thong tin bai thi
+
+  if (result.data) {
+    dataRes.student = student;
+    dataRes.status = 200;
+    dataRes.test = test;
+    dataRes.result = result;
+    dataRes.detail = questionList.data;
+  } else {
+    dataRes.status = 404;
+  }
+  //console.log(dataRes);
   return dataRes;
 };
 
@@ -209,4 +251,5 @@ module.exports = {
   getAllResultHandler,
   getAllStaticWithIdResult,
   getDetailTestWithIdStuAndIdResult,
+  getDetailThiWithIdStuAndIdTest,
 };

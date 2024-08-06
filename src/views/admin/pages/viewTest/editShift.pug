@@ -10,7 +10,10 @@ block main
             label(for='edit-ma') Bài thi:
             select.form-control(id='edit-ma', name='test', required)
                 each t in tests
+<<<<<<< HEAD
                     - console.log(test)
+=======
+>>>>>>> 1e9dc340bc8af380a68032244fe53a3306aab97e
                     option(value=t.MaBaiThi, selected=(t.MaBaiThi === test.MaBaiThi))= t.MaBaiThi + " - " + t.TenBaithi
         div.form-group
             label(for='edit-start') Bắt đầu:

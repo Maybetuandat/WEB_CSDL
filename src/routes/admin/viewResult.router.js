@@ -20,4 +20,7 @@ router.get("/test", controllerResult.test);
 router.get("/test/:testId", controllerResult.testWithId);
 router.get("/test/:testId/:studentId", controllerResult.detailStudentAndTest);
 router.get("/chamthi/:testId", controllerResult.chamThi);
+router.get("/thi", controllerResult.thi);
+router.get("/thi/:testId", controllerResult.thiWithId);
+router.get("/thi/:testId/:studentId", controllerResult.detailStudentAndThi);
 module.exports = router;

@@ -58,7 +58,7 @@ block main
                 td #{user.dataValues.Student.dataValues.Ten}
                 td #{user.dataValues.MSV}
                 td #{user.dataValues.Student.dataValues.Lop}
-                td #{user.dataValues.averageScore}
+                td #{user.dataValues.averageScore || 0}
 
   input(type="hidden" data-view-dashboard=JSON.stringify(data1))
   input(type="hidden" data-TheLoai-dashboard=JSON.stringify(data2))

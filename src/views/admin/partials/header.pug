@@ -7,9 +7,6 @@ include ../mixins/itemSlider.pug
             .peer.peer-greed
               a(class="sidebar-link td-n" href="/admin/dashboard")
                 .peers.ai-c.fxw-nw
-                  .peer
-                    .logo
-                      img(src="assets/static/images/logo.png" alt="")
                   .peer.peer-greed
                     h5(class="lh-1 mB-0 logo-text" name-admin) Adminator
             .peer
@@ -24,9 +21,10 @@ include ../mixins/itemSlider.pug
               {title:"Quản lý tài khoản", href:"/admin/account"}
             ])
         +item-arrow('Kết quả', 'ti-harddrives c-red-500',
-            [
-                {title: 'Kết quả bài thi', href: '/admin/result/test'},
-                {title: 'Kết quả sinh viên', href: '/admin/result/student'}
+            [ 
+              {title: 'Kết quả thực hành', href: '/admin/result/thi'},
+              {title: 'Kết quả bài thi', href: '/admin/result/test'},
+              {title: 'Kết quả sinh viên', href: '/admin/result/student'}
             ])
         //- +item-arrow('Thống kê', 'ti-bar-chart c-red-500',
         //- [

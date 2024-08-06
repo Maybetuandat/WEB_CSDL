@@ -86,7 +86,7 @@ async function deleteAccount(id) {
 
     try {
 
-        const response = await fetch(`/api/delete-student/${id}`, {
+        const response = await fetch('/api/delete-student/${id}', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -101,7 +101,7 @@ async function deleteAccount(id) {
         }
     } catch (error) {
         console.error('Lỗi khi gửi yêu cầu xóa:', error);
-        showAlert('Đã xảy ra lỗi khi xóa bài thi!')
+        showAlert('Đã xảy ra lỗi khi xóa tài khoản!')
     }
 }
 

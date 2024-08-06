@@ -279,6 +279,7 @@ td {
   margin-bottom: 5px;
   font-size: 18px;
   font-weight: bold;
+  white-space: pre-wrap;
 }
 
 .list-question {
@@ -292,7 +293,7 @@ td {
   margin-top: 10px;
   margin-bottom: 10px;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   display: flex;
   text-align: left;
   align-items: center;
@@ -304,6 +305,8 @@ td {
 
 .answer p {
   font-size: 18px;
+  overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .wrong {
@@ -311,7 +314,7 @@ td {
   margin-top: 10px;
   margin-bottom: 10px;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   text-align: left;
   padding-left: 10px;
   border-radius: 5px;
@@ -319,6 +322,8 @@ td {
   align-items: center;
   background-color: #fe3d3d;
   color: white;
+  overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .right {
@@ -326,13 +331,15 @@ td {
   margin-top: 10px;
   margin-bottom: 10px;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   align-items: center;
   text-align: left;
   padding-left: 10px;
   border-radius: 5px;
   cursor: pointer;
   background-color: #00ff00;
+  overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .title-table-infor {
