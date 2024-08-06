@@ -154,7 +154,7 @@ const getThiById = async (id) => {
 const createNewTest = async (test, questionList) => {
   let t;
   try {
-    t = await sequelize.transaction();
+    // t = await sequelize.transaction();
     // var mbt = "BT111";
 
     console.log(test)
@@ -204,18 +204,21 @@ const createNewTest = async (test, questionList) => {
       }
     }
 
-    await db.Question.bulkCreate(bulkQuestions, { transaction: t });
-    await db.Option.bulkCreate(bulkOptions, { transaction: t });
+    await db.Question.bulkCreate(bulkQuestions);
+    await db.Option.bulkCreate(bulkOptions);
+
+    // await db.Question.bulkCreate(bulkQuestions, { transaction: t });
+    // await db.Option.bulkCreate(bulkOptions, { transaction: t });
 
 
     // for (var i = 0; i < questionList.length; i++) {
     //   await createNewQuestion(questionList[i], mbt, i + 1, t);
     // }
-    await t.commit();
+    // await t.commit();
     return true;
   } catch (error) {
     console.error("Lỗi khi truy vấn dữ liệu:", error);
-    await t.rollback();
+    // await t.rollback();
     return false;
   }
 };

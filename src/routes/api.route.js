@@ -57,9 +57,15 @@ const {
 
 //Guest
 
+const increaseTimeout = (req, res, next) => {
+  req.setTimeout(300000); // 5 minutes
+  res.setTimeout(300000); // 5 minutes
+  next();
+};
+
 router.post("/login/:role", checkLoginUser);
 router.post("/createNewstudent", createNewStudentHandler);
-router.post("/new-test", isAuth, postTestHandler);
+router.post("/new-test", isAuth, increaseTimeout, postTestHandler);
 router.delete("/delete-test/:id", isAdmin, deleteTestHandler);
 router.post("/new-student", postStudentHandler);
 router.delete("/delete-student/:id", isAdmin, deleteStudentHandler);
