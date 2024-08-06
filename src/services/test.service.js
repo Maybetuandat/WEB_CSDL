@@ -247,7 +247,7 @@ const updateTestById = async (testId, updateData) => {
     // //console.log(metadata)
 
     test.TenBaithi = metadata.examName;
-    test.ThoiGianBatDau = metadata.examDateTime;
+    test.ThoiGianBatDau = "2024-11-12 12:00:00";
     test.ThoiGianThi = parseInt(metadata.examTime);
     test.SoLuongCau = parseInt(data.length);
     if (metadata.imageUrl != "") {
