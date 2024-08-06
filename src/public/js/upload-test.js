@@ -517,8 +517,11 @@ async function Save() {
     const response = await fetch(backendURL, { ...options, signal: controller.signal });
     clearTimeout(timeoutId);
 
+
+    console.log("response:", response);
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
     hideLoading();
