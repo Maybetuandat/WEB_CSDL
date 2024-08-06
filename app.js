@@ -13,6 +13,7 @@ const apiRoutes = require("./src/routes/api.route");
 const adminRoutes = require("./src/routes/admin/index.router");
 const userRoutes = require("./src/routes/user/index.router");
 const errorRoutes = require("./src/routes/pageError/index.router");
+const { connection } = require("./src/config/connectDB");
 
 app.use(express.static("views/user/pages/test_list/problist"));
 
@@ -43,7 +44,7 @@ const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-
+connection();
 
 adminRoutes(app);
 userRoutes(app);

@@ -149,11 +149,40 @@ const createNewTest = async (test, questionList) => {
     );
 
     var mbt = newTest.dataValues.MaBaiThi;
-    // //console.log(newTest.dataValues.MaBaiThi);
+
+    var bulkQuestions = []
+    var bulkOptions = [];
 
     for (var i = 0; i < questionList.length; i++) {
-      await createNewQuestion(questionList[i], mbt, i + 1, t);
+      bulkQuestions.push({
+        MaCauHoi: "C" + String(i + 1).padStart(2, "0"),
+        MaBaiThi: mbt,
+        DeBai: questionList[i].questionContent,
+        SoThuTu: i + 1,
+        TheLoai: "Trắc nghiệm"
+      })
+
+      for (var j = 1; j <= 4; j++) {
+        var answerProperty = "answer" + j;
+        var answerId = String.fromCharCode("A".charCodeAt(0) + j - 1);
+
+        bulkOptions.push({
+          MaCauHoi: "C" + String(i + 1).padStart(2, "0"),
+          MaLuaChon: answerId,
+          MaBaiThi: mbt,
+          NoiDung: questionList[i][answerProperty],
+          Dung: questionList[i]["check"] == j ? 1 : 0
+        })
+      }
     }
+
+    await db.Question.bulkCreate(bulkQuestions, { transaction: t });
+    await db.Option.bulkCreate(bulkOptions, { transaction: t });
+
+
+    // for (var i = 0; i < questionList.length; i++) {
+    //   await createNewQuestion(questionList[i], mbt, i + 1, t);
+    // }
     await t.commit();
     return true;
   } catch (error) {
@@ -201,58 +230,54 @@ const updateTestById = async (testId, updateData) => {
 
     var len = data.length;
 
+    //delete all question and option
+    await db.Question.destroy({
+      where: {
+        MaBaiThi: testId,
+      },
+
+      transaction: t,
+    });
+
+    await db.Option.destroy({
+
+      where: {
+        MaBaiThi: testId,
+      },
+      transaction: t,
+    });
+
+    //create new question and option using bulk
+    var bulkQuestions = []
+    var bulkOptions = [];
+
     for (var i = 0; i < len; i++) {
-      var questionId = "C" + String(i + 1).padStart(2, "0");
-      var question = await db.Question.findOne({
-        where: {
+      bulkQuestions.push({
+        MaCauHoi: "C" + String(i + 1).padStart(2, "0"),
+        MaBaiThi: testId,
+        DeBai: data[i].questionContent,
+        SoThuTu: i + 1,
+        TheLoai: "Trắc nghiệm"
+      })
+
+      for (var j = 1; j <= 4; j++) {
+        var answerProperty = "answer" + j;
+        var answerId = String.fromCharCode("A".charCodeAt(0) + j - 1);
+
+        bulkOptions.push({
+          MaCauHoi: "C" + String(i + 1).padStart(2, "0"),
+          MaLuaChon: answerId,
           MaBaiThi: testId,
-          MaCauHoi: questionId,
-        },
-        transaction: t,
-      });
-      if (question) {
-        //update
-        question.DeBai = data[i].questionContent;
-        question.SoThuTu = i + 1;
-        await question.save({ transaction: t });
-        for (var j = 1; j <= 4; j++) {
-          var answerProperty = "answer" + j;
-          var answerId = String.fromCharCode("A".charCodeAt(0) + j - 1);
-
-          var answer = await db.Option.findOne({
-            where: {
-              MaCauHoi: questionId,
-              MaLuaChon: answerId,
-              MaBaiThi: testId,
-            },
-            transaction: t,
-          });
-
-          // console.log(data[i][answerProperty])
-
-          answer.NoiDung = data[i][answerProperty];
-          if (data[i]["check"] == j) {
-            answer.Dung = 1;
-          } else {
-            answer.Dung = 0;
-          }
-          await answer.save({ transaction: t });
-        }
-      } else {
-        //create
-        await createNewQuestion(data[i], testId, i + 1, t);
+          NoiDung: data[i][answerProperty],
+          Dung: data[i]["check"] == j ? 1 : 0
+        })
       }
     }
-    for (var i = len; i < test.SoLuongCau; i++) {
-      var questionId = "C" + String(i + 1).padStart(2, "0");
-      var question = await db.Question.destroy({
-        where: {
-          MaBaiThi: testId,
-          MaCauHoi: questionId,
-        },
-        transaction: t,
-      });
-    }
+
+    await db.Question.bulkCreate(bulkQuestions, { transaction: t });
+    await db.Option.bulkCreate(bulkOptions, { transaction: t });
+
+
     await t.commit();
     return true;
   } catch (e) {

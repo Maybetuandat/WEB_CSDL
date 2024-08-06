@@ -105,13 +105,16 @@ const editShift = async (req, res) => {
 
     var test;
 
-    for (var i = 0; i < tests.data.length; i++) {
-        if (tests.data[i].MaBaiThi == shift.MaBaiThi) {
-            test = tests.data[i];
+    await new Promise((resolve) => {
+        for (var i = 0; i < tests.data.length; i++) {
+            if (tests.data[i].MaBaiThi == shift.data.MaBaiThi) {
+                test = tests.data[i];
+            }
         }
-    }
+        resolve();
+    });
 
-
+    console.log(shift)
     res.render("admin/pages/viewTest/editShift.pug", {
         titlePage: "Chỉnh sửa ca thi",
         shift: shift.data,
