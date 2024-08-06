@@ -508,11 +508,17 @@ async function Save() {
     body: JSON.stringify({ metadata: formData, data: questions }),
   };
 
+  const controller = new AbortController();
+  const timeout = 300000; // 5 minutes
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
   try {
     showLoading();
-    const response = await fetch(backendURL, options);
+    const response = await fetch(backendURL, { ...options, signal: controller.signal });
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error("Có lỗi xảy ra khi gửi yêu cầu: " + response.status);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
     hideLoading();
