@@ -2,7 +2,58 @@ const { raw } = require("mysql2");
 const db = require("../models/index");
 const { where, Op } = require("sequelize");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const getJwtFromDb = async (id) => {
+  try {
+    const sessionUser = await db.SessionUser.findAll({
+      raw: true,
+      where: {
+        MSV: id,
+      },
+    });
+    //   console.log("jwt từ db trong service", sessionUser[0].AccessToken);
+    return sessionUser[0].AccessToken;
+  } catch (error) {
+    console.log("lỗi khi lấy jwt từ db", error);
+    return null;
+  }
+};
+
+const insertJwt = async (data) => {
+  //check xem đã tồn tại jwt chưa
+  const sessionUser = await db.SessionUser.findOne({
+    where: {
+      MSV: data.msv,
+    },
+  });
+  if (!sessionUser) {
+    try {
+      await db.SessionUser.create({
+        MSV: data.msv,
+        AccessToken: data.accessToken,
+        LastActivity: new Date(),
+      });
+    } catch (error) {
+      console.log("lỗi khi insert jwt", error);
+    }
+  } else {
+    try {
+      await db.SessionUser.update(
+        {
+          AccessToken: data.accessToken,
+          LastActivity: new Date(),
+        },
+        {
+          where: {
+            MSV: data.msv,
+          },
+        }
+      );
+    } catch (error) {
+      console.log("lỗi khi update jwt", error);
+    }
+  }
+};
+
 const getAllStudent = async () => {
   var data = { status: null, data: null };
 
@@ -302,4 +353,6 @@ module.exports = {
   getCountStudentWithFindObject,
   getStudentByEmail,
   updatePassword,
+  insertJwt,
+  getJwtFromDb,
 };

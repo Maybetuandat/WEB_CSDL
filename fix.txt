@@ -1,2 +1,16 @@
-fix loi nhap vao
-fix loi url
+// đọc hiểu về database 
+admin chứa tài khoản admin
+sinhvien chứa tài khoản của sinh viên
+bai thi chứa các thông tin hiển thị của bài thi như tên, ma, thòi gian, số lượng câu, 
+ca thi sẽ chứa bài thi
+câu hỏi chứa đề bài và lựa chọn chứa lựa chọn để hiển thị
+kết quả sẽ chứa kết quả làm bài của sinh viên được quản lý bằng  mã kết quản
+
+
+
+// cần làm trong tuần này
+
+
+thêm chức năng chỉ cho phép một thiết bị đăng nhập trong một phiên làm việc -> hướng đến sử dụng session lưu trữ vào database
+
+thêm chức năng hiển thị danh sách sinh viên tham gia ứng với ca thi

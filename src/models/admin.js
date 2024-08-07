@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       LastName: DataTypes.STRING,
       Pass: DataTypes.STRING,
       Avatar: DataTypes.STRING,
-      Role_id: DataTypes.INTEGER
+      Role_id: DataTypes.INTEGER,
     },
     {
       // options
@@ -34,6 +34,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  Admin.removeAttribute("username");
+  Admin.removeAttribute("id");
   return Admin;
 };
