@@ -290,6 +290,15 @@ const getCountStudentWithFindObject = async (find) => {
   }
 };
 
+const studentListService = async (students) => {
+  try {
+    await db.Student.bulkCreate(students);
+    return 1;
+  } catch (error) {
+    return 0;
+  }
+};
+
 module.exports = {
   getAllStudent,
   getStudentById,
@@ -302,4 +311,5 @@ module.exports = {
   getCountStudentWithFindObject,
   getStudentByEmail,
   updatePassword,
+  studentListService
 };

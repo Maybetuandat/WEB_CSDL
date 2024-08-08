@@ -7,6 +7,7 @@ const {
   updateStudentById2,
   getStudentCondition,
   getAllStudentPerPage,
+  studentListService
 } = require("../services/student.service");
 
 const bcrypt = require('bcrypt');
@@ -134,6 +135,29 @@ const postStudentHandler = async (req, res) => {
       code: -1,
       status: 409,
       message: "Mã sinh viên đã tồn tại",
+    });
+  }
+};
+
+const createNewStudentList = async (req, res) => {
+  students = req.body;
+  // console.log(students)
+
+  for (let i = 0; i < students.length; i++) {
+    students[i].MatKhau = await bcrypt.hashSync(students[i].MatKhau, saltRounds);
+  }
+  var status = await studentListService(students);
+  if (status == 1) {
+    res.status(200).json({
+      code: 1,
+      status: 200,
+      message: "Tạo sinh viên thành công!",
+    });
+  } else if (status == 0) {
+    res.status(500).json({
+      code: 0,
+      status: 500,
+      message: "Tạo sinh viên thất bại!",
     });
   }
 };
@@ -315,4 +339,5 @@ module.exports = {
   getStudentInresultHandler,
   createNewStudentHandler,
   getStudentByPage,
+  createNewStudentList
 };

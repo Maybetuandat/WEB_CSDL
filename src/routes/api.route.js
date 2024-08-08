@@ -29,6 +29,7 @@ const {
   getStudentInresultHandler,
   createNewStudentHandler,
   getStudentByPage,
+  createNewStudentList
 } = require("../controllers/student.controllers");
 
 const {
@@ -69,6 +70,7 @@ router.post("/createNewstudent", createNewStudentHandler);
 router.post("/new-test", isAuth, increaseTimeout, postTestHandler);
 router.delete("/delete-test/:id", isAdmin, deleteTestHandler);
 router.post("/new-student", postStudentHandler);
+router.post("/new-student-list", createNewStudentList);
 router.delete("/delete-student/:id", isAdmin, deleteStudentHandler);
 router.put("/update-test/:id", isAdmin, updateTestHandler);
 router.get("/get-student/:id", getStudentByIdHandler);
