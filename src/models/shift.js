@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaBaiThi",
         targetKey: "MaBaiThi",
       });
+      Shift.hasMany(models.ListStudent, {
+        foreignKey: "MaCaThi",
+        targetKey: "MaCaThi",
+      });
     }
   }
   Shift.init(

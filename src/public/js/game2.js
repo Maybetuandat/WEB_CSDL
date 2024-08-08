@@ -205,7 +205,8 @@ var timer = setInterval(async () => {
   let startTime = Date.parse(data.time);
   var distance =
     1000 * data.test.ThoiGianThi * 60 - (adjustedTime.getTime() - startTime);
-  // Tính toán thời gian còn lại
+
+  //console.log(startTime / 60000); // Tính toán thời gian còn lại
   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);

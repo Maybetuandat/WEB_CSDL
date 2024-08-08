@@ -135,6 +135,7 @@ const getThiById = async (id) => {
         },
       ],
     });
+
     // //console.log(tests);
     if (tests.length > 0) {
       data.status = 200;
@@ -578,9 +579,9 @@ const getSubmitByStudentIdWithPage = async (stuID, pagination) => {
               const body = JSON.parse(response.body);
               console.log(
                 "Error code: " +
-                body.error_code +
-                ", details available in the message: " +
-                body.message
+                  body.error_code +
+                  ", details available in the message: " +
+                  body.message
               );
             }
             data.status = 404;
@@ -777,7 +778,7 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
   }
 };
 
-const getThiList = async () => {
+const getThiList = async (msv) => {
   const data = { status: null, data: null };
   const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
   console.log(currentTime);
@@ -795,6 +796,15 @@ const getThiList = async () => {
               [Op.gte]: currentTime,
             }, // Điều kiện lọc trên bảng Shift
           },
+          include: [
+            {
+              model: db.ListStudent,
+              required: true,
+              where: {
+                MSV: msv,
+              },
+            },
+          ],
         },
       ],
       where: {

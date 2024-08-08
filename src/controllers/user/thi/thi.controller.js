@@ -8,7 +8,7 @@ const thiService = require("../../../services/thi.service");
 const jwtHelper = require("../../../helpers/jwt.helper");
 
 module.exports.index = async (req, res) => {
-  const thiList = await testServices.getThiList();
+  const thiList = await testServices.getThiList(req.jwtDecoded.data.id);
   console.log(thiList);
   let results = [];
   for (let i = 0; i < (thiList.data ? thiList.data.length : 0); i++) {
@@ -52,6 +52,20 @@ module.exports.testWithId = async (req, res) => {
         questions = await getQuestionOfTest(testId);
       }
     } else test.data = null;
+    if (test.data) {
+      for (let i = 0; i < test.data.length; i++) {
+        if (
+          result.data.ThoiGianLamBai.getTime() +
+            test.data[i].ThoiGianThi * 60 * 1000 >
+          test.data[i]["Shifts.end"].getTime()
+        ) {
+          test.data[i].ThoiGianThi =
+            (test.data[i]["Shifts.end"].getTime() -
+              result.data.ThoiGianLamBai.getTime()) /
+            60000;
+        }
+      }
+    }
   }
 
   //var questions = await getQuestionOfTest(testId);
