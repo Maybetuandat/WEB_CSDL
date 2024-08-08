@@ -4,7 +4,7 @@ const { getStudentById } = require("../services/student.service");
 const testServices = require("../services/test.service");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-
+const { insertJwt } = require("../services/student.service");
 let tokenList = {};
 
 // Thời gian sống của token
@@ -61,7 +61,9 @@ const checkLoginUser = async (req, res) => {
       message: "Yêu cầu điền thông tin đầy đủ",
     };
 
-    res.status(400).json(response);
+    res.render("user/login.pug", {
+      data: response,
+    });
   } else {
     // check database
     let data = await getStudentById(req.body.msv);
@@ -93,7 +95,7 @@ const checkLoginUser = async (req, res) => {
       );
       let response = {};
       if (ok) {
-        console.log(data.data[0]);
+        //  console.log(data.data[0]);
         const userData = {
           id: req.body.msv,
           role: req.params.role,
@@ -113,6 +115,14 @@ const checkLoginUser = async (req, res) => {
           httpOnly: true,
           SameSite: "None",
         });
+
+        // insert jwt to database
+        const dataInsertjwt = {
+          msv: req.body.msv,
+          accessToken: data.accessToken,
+        };
+        await insertJwt(dataInsertjwt);
+
         return res.redirect("/");
       } else {
         response = {

@@ -24,5 +24,5 @@ module.exports = (app) => {
   app.use("/admin/error", errorRouter);
   app.use("/admin", indexAdmin);
   app.use("/admin/dashboard", isAdmin, dashboardRouter);
-  app.use("/admin/shift", shiftRouter);
+  app.use("/admin/shift", isAdmin, shiftRouter);
 };

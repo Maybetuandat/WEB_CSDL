@@ -1,4 +1,3 @@
-// const { param } = require('../../../../routes/api.route');
 const {
   getCountShiftWithFindObject,
   getShiftWithFindObject,
@@ -9,7 +8,7 @@ const {
 } = require("../../services/shift.service");
 
 const { getTestById, getAllTest } = require("../../services/test.service");
-// const { getQuestionOfTest } = require('../../../routes/api.route');
+
 const paginationHelper = require("../../helpers/paginationHelper");
 const { Op } = require("sequelize");
 
@@ -23,7 +22,7 @@ const shiftListPaginate = async (req, res) => {
     ];
   }
   const count = await getCountShiftWithFindObject(find); // tim doi tuong voi dieu kien find
-  //  console.log(count)
+  console.log(count);
   const pagination = paginationHelper(
     {
       currentPage: 1,
