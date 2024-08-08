@@ -86,7 +86,7 @@ async function deleteAccount(id) {
 
     try {
 
-        const response = await fetch(`/api/delete-student/${id}`, {
+        const response = await fetch('/api/delete-student/${id}', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -101,7 +101,7 @@ async function deleteAccount(id) {
         }
     } catch (error) {
         console.error('Lỗi khi gửi yêu cầu xóa:', error);
-        showAlert('Đã xảy ra lỗi khi xóa bài thi!')
+        showAlert('Đã xảy ra lỗi khi xóa tài khoản!')
     }
 }
 
@@ -230,18 +230,28 @@ async function handleFile(event) {
             console.log('Worksheet:', worksheet);
 
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-            console.log('JSON Data:', jsonData);
+            // console.log('JSON Data:', jsonData);
 
             if (jsonData.length === 0) {
                 console.log('No data found in sheet.');
                 return;
             }
 
-            const firstColumnData = jsonData.map(row => row[0]).filter(cell => cell !== undefined);
-            console.log('First Column Data:', firstColumnData);
+            // const firstColumnData = jsonData.map(row => row[0]).filter(cell => cell !== undefined);
+            const fiveColumnsData = jsonData.map(row => ({
+                MSV: row[0],
+                Ten: row[2] + ' ' + row[3],
+                Lop: row[4],
+                TaiKhoan: row[0],
+                MatKhau: row[0],
+                ThoiGian: '',
+                AccessToken: ''
+            })).filter(row => row.MSV !== undefined);
 
-            await fetchNewAccApi(firstColumnData);
-            reloadPage()
+            console.log('Five Columns Data:', fiveColumnsData);
+
+            await fetchNewAccApi(fiveColumnsData);
+            // reloadPage()
         } catch (error) {
             console.error('Error processing file:', error);
         }
@@ -260,25 +270,23 @@ function reloadPage() {
 
 
 async function fetchNewAccApi(accList) {
-
-    for (var i = 0; i < accList.length; i++) {
-        const formData = {
-            msv: accList[i],
-            name: "",
-            class: "",
-            email: "",
-            password: accList[i],
-            time: ""
-        };
-        const response = await fetch('/api/new-student', {
+    try {
+        const response = await fetch('/api/new-student-list', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formData)
-        })
-        const data = await response.json();
-        console.log(data);
-        // showAlert(data.message);
+            body: JSON.stringify(accList)
+        });
+
+        if (!response.ok) {
+            showAlert('Đã xảy ra lỗi khi thêm tài khoản!');
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        reloadPage();
+    } catch (error) {
+        showAlert('Đã xảy ra lỗi khi thêm tài khoản!');
+        console.error('Error fetching new account API:', error);
     }
 }

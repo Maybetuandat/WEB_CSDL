@@ -232,6 +232,8 @@ module.exports.thiWithId = async (req, res) => {
     if (student.data) studentList.push(student.data[0]);
   }
 
+  // console.log(studentList)
+  // console.log(resultList)
   res.render("admin/pages/viewResult/thiResultStudent.pug", {
     titlePage: "Kết quả bài thi",
     test: test.data[0],

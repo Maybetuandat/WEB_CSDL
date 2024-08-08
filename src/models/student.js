@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       TaiKhoan: DataTypes.STRING,
       MatKhau: DataTypes.STRING,
       ThoiGian: DataTypes.DATE,
+      AccessToken: DataTypes.STRING,
     },
     {
       // options

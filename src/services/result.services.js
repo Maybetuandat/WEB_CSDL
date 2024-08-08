@@ -91,7 +91,7 @@ const getResultByIdThi = async (idTest) => {
     data: null,
   };
   try {
-    const res = await db.ResultTest.findAll({
+    const res = await db.Result.findAll({
       raw: true,
       where: {
         MaBaiThi: idTest,

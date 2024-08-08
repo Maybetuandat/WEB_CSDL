@@ -55,7 +55,7 @@ mixin test-description(metadata)
                                     select.form-control#fileOption
                                         option(value='new') Nhập thủ công
                                         option(value='upload') Tải lên file
-                                .form-group#fileUpload(style='display: none;')
+                                .form-group#fileUpload(style)
                                     label(for='excelFile') Tải lên tệp (Excel):
                                     input.form-control-file(type='file', id='excel-file', name='excelFile', accept='.xls,.xlsx')
                                 .form-group 

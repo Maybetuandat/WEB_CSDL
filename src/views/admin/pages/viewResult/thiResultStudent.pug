@@ -21,6 +21,7 @@ block main
         button.btn.btn-light(btn-loc-stu) Lọc
       .d-flex.align-items-center.ml-2
         button.btn.btn-light(btn-tinh-diem) Tính điểm
+        button#exportButton.btn.btn-light.btn-export-excel.btn-responsive.mr-2.btn-export-excel-stu Xuất Excel
 
   hr
   h5 Danh sách sinh viên
@@ -45,6 +46,14 @@ block main
                 td #{student.MSV}
                 td #{student.Ten}
                 td #{student.Lop}
-                td #{resultList[index].Diem}
+                td #{resultList[index].Diem || 0}
                 td
                   a.btn.btn-primary.btn-responsive( idStu = student.MSV btn-detail-thi-stu) Xem chi tiết
+  input(type="hidden" data_to_excel_student=JSON.stringify(studentList))
+  input(type="hidden" data_to_excel_result=JSON.stringify(resultList))
+  input(type="hidden" name_excel=JSON.stringify(test.TenBaithi))
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  script(src="/js/admin/export_excel.js")
+  
+
+  

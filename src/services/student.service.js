@@ -2,7 +2,56 @@ const { raw } = require("mysql2");
 const db = require("../models/index");
 const { where, Op } = require("sequelize");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const getJwtFromDb = async (id) => {
+  try {
+    const sessionUser = await db.Student.findAll({
+      raw: true,
+      where: {
+        MSV: id,
+      },
+    });
+    //   console.log("jwt từ db trong service", sessionUser[0].AccessToken);
+    return sessionUser[0].AccessToken;
+  } catch (error) {
+    console.log("lỗi khi lấy jwt từ db", error);
+    return null;
+  }
+};
+
+const insertJwt = async (data) => {
+  //check xem đã tồn tại jwt chưa
+  const sessionUser = await db.Student.findOne({
+    where: {
+      MSV: data.msv,
+    },
+  });
+  if (!sessionUser) {
+    try {
+      await db.Student.create({
+        MSV: data.msv,
+        AccessToken: data.accessToken,
+      });
+    } catch (error) {
+      console.log("lỗi khi insert jwt", error);
+    }
+  } else {
+    try {
+      await db.Student.update(
+        {
+          AccessToken: data.accessToken,
+        },
+        {
+          where: {
+            MSV: data.msv,
+          },
+        }
+      );
+    } catch (error) {
+      console.log("lỗi khi update jwt", error);
+    }
+  }
+};
+
 const getAllStudent = async () => {
   var data = { status: null, data: null };
 
@@ -290,6 +339,15 @@ const getCountStudentWithFindObject = async (find) => {
   }
 };
 
+const studentListService = async (students) => {
+  try {
+    await db.Student.bulkCreate(students);
+    return 1;
+  } catch (error) {
+    return 0;
+  }
+};
+
 module.exports = {
   getAllStudent,
   getStudentById,
@@ -302,4 +360,7 @@ module.exports = {
   getCountStudentWithFindObject,
   getStudentByEmail,
   updatePassword,
+  studentListService,
+  insertJwt,
+  getJwtFromDb,
 };
