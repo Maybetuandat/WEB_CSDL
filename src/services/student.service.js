@@ -360,10 +360,7 @@ module.exports = {
   getCountStudentWithFindObject,
   getStudentByEmail,
   updatePassword,
-<<<<<<< HEAD
-  studentListService
-=======
+  studentListService,
   insertJwt,
   getJwtFromDb,
->>>>>>> 5e0f7194d03138ddc3b85a60695bb28211a9d21a
 };
