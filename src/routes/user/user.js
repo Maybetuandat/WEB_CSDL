@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../models/index");
 const User = require("../../controllers/user/user.controller");
 const { checkLoginUser } = require("../../controllers/auth.controllers");
-const { isAuth, isAdmin } = require("../../middleware/auth.middleware");
+const { isAuth } = require("../../middleware/auth.middleware");
 
 router.get("/", isAuth, User.index);
 router.get("/login", User.userLogin);

@@ -115,7 +115,7 @@ const checkLoginUser = async (req, res) => {
           httpOnly: true,
           SameSite: "None",
         });
-        console.log("Cookie: ", data.accessToken);
+
         // insert jwt to database
         const dataInsertjwt = {
           msv: req.body.msv,

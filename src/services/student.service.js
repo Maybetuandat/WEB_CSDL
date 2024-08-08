@@ -4,7 +4,7 @@ const { where, Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const getJwtFromDb = async (id) => {
   try {
-    const sessionUser = await db.SessionUser.findAll({
+    const sessionUser = await db.Student.findAll({
       raw: true,
       where: {
         MSV: id,
@@ -20,27 +20,25 @@ const getJwtFromDb = async (id) => {
 
 const insertJwt = async (data) => {
   //check xem đã tồn tại jwt chưa
-  const sessionUser = await db.SessionUser.findOne({
+  const sessionUser = await db.Student.findOne({
     where: {
       MSV: data.msv,
     },
   });
   if (!sessionUser) {
     try {
-      await db.SessionUser.create({
+      await db.Student.create({
         MSV: data.msv,
         AccessToken: data.accessToken,
-        LastActivity: new Date(),
       });
     } catch (error) {
       console.log("lỗi khi insert jwt", error);
     }
   } else {
     try {
-      await db.SessionUser.update(
+      await db.Student.update(
         {
           AccessToken: data.accessToken,
-          LastActivity: new Date(),
         },
         {
           where: {
