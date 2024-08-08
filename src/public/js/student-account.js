@@ -243,7 +243,9 @@ async function handleFile(event) {
                 Ten: row[2] + ' ' + row[3],
                 Lop: row[4],
                 TaiKhoan: row[0],
-                MatKhau: row[0]
+                MatKhau: row[0],
+                ThoiGian: '',
+                AccessToken: ''
             })).filter(row => row.MSV !== undefined);
 
             console.log('Five Columns Data:', fiveColumnsData);
