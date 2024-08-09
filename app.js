@@ -15,7 +15,7 @@ const userRoutes = require("./src/routes/user/index.router");
 const errorRoutes = require("./src/routes/pageError/index.router");
 const { connection } = require("./src/config/connectDB");
 
-const bodyParserErrorHandler = require('express-body-parser-error-handler')
+const bodyParserErrorHandler = require("express-body-parser-error-handler");
 
 app.use(express.static("views/user/pages/test_list/problist"));
 

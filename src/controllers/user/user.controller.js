@@ -20,9 +20,15 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000); // Tạo số ngẫu nhiên từ 100000 đến 999999
 }
 module.exports.index = async (req, res) => {
-  res.render("user/pages/viewResult/index.pug", {
-    titlePage: "Trang chủ",
-  });
+  if (req.ip == "2001:0:2851:fcb0:845:836d:feca:da96") {
+    res.render("user/login.pug", {
+      titlePage: "Đăng nhập",
+    });
+  } else {
+    res.render("user/pages/viewResult/index.pug", {
+      titlePage: "Trang chủ",
+    });
+  }
 };
 module.exports.userLogin = async (req, res) => {
   res.render("user/login.pug", {
