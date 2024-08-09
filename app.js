@@ -43,7 +43,7 @@ app.use(
 app.use("/api", apiRoutes);
 viewEngine(app);
 
-const server = app.listen(port, () => {
+const server = app.listen(port, "127.0.0.1", () => {
   console.log(`Example app listening on port ${port}`);
 });
 

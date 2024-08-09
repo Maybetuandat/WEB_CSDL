@@ -20,7 +20,7 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000); // Tạo số ngẫu nhiên từ 100000 đến 999999
 }
 module.exports.index = async (req, res) => {
-  if (req.ip == "2001:0:2851:fcb0:845:836d:feca:da96") {
+  if (req.ip == "192.168.0.104") {
     res.render("user/login.pug", {
       titlePage: "Đăng nhập",
     });
