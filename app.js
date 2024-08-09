@@ -43,7 +43,6 @@ app.use(
 app.use("/api", apiRoutes);
 viewEngine(app);
 
-app.set("trust proxy", true);
 const server = app.listen(port, "127.0.0.1", () => {
   console.log(`Example app listening on port ${port}`);
 });
