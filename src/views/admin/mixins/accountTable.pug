@@ -23,23 +23,24 @@ mixin account-table(students, pagination)
                             th Xóa
                             th(style = "display: none;") Action
                     tbody 
-                        each student in students
-                            tr.th-round-account(id=student.MSV)
-                                td.fw-600=student.MSV
-                                td=student.Ten
-                                td=student.Lop
-                                td=student.Email
-                                td
-                                    a.mb-0
-                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive(onclick=`getStudentData('edit-student','${student.MSV}', '${role}')`) Chỉnh sửa
-                                td
-                                    a.mb-0
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive(onclick=`confirmDeleteAccount('${student.MSV}')`) Xóa    
-                                td(style = "display: none;")
-                                    a.mb-0
-                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put(onclick=`getStudentData('edit-student','${student.MSV}', '${role}')`) Chỉnh sửa
-                                    a.mb-0
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete(onclick=`confirmDeleteAccount('${student.MSV}')`) Xóa      
+                        - if (students && students.length > 0)
+                            each student in students
+                                tr.th-round-account(id=student.MSV)
+                                    td.fw-600=student.MSV
+                                    td=student.Ten
+                                    td=student.Lop
+                                    td=student.Email
+                                    td
+                                        a.mb-0
+                                            button.btn.cur-p.ptit-color.btn-color.btn-responsive(onclick=`getStudentData('edit-student','${student.MSV}', '${role}')`) Chỉnh sửa
+                                    td
+                                        a.mb-0
+                                            button.btn.btn-primary.ptit-color.btn-color.btn-responsive(onclick=`confirmDeleteAccount('${student.MSV}')`) Xóa    
+                                    td(style = "display: none;")
+                                        a.mb-0
+                                            button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put(onclick=`getStudentData('edit-student','${student.MSV}', '${role}')`) Chỉnh sửa
+                                        a.mb-0
+                                            button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete(onclick=`confirmDeleteAccount('${student.MSV}')`) Xóa      
                 +pagination(pagination)
                     
             
