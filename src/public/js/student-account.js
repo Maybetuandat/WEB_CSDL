@@ -247,7 +247,19 @@ async function handleFile(event) {
 
             console.log('Five Columns Data:', fiveColumnsData);
 
-            await fetchNewAccApi(fiveColumnsData);
+            const chunkArray = (array, chunkSize) => {
+                const chunks = [];
+                for (let i = 0; i < array.length; i += chunkSize) {
+                    chunks.push(array.slice(i, i + chunkSize));
+                }
+                return chunks;
+            };
+
+            const chunks = chunkArray(fiveColumnsData, 5);
+
+            for (var i = 0; i < chunks.length; i++) {
+                await fetchNewAccApi(chunks[i], i, chunks.length);
+            }
             // reloadPage()
         } catch (error) {
             console.error('Error processing file:', error);
@@ -266,7 +278,7 @@ function reloadPage() {
 }
 
 
-async function fetchNewAccApi(accList) {
+async function fetchNewAccApi(accList, step, n) {
     try {
         console.log("loading")
         const response = await fetch('/api/new-student-list', {
@@ -285,7 +297,8 @@ async function fetchNewAccApi(accList) {
             console.log(response.status);
         }
 
-        reloadPage();
+        if (step === n - 1)
+            reloadPage();
     } catch (error) {
         showAlert('Đã xảy ra lỗi khi thêm tài khoản!');
         console.error('Error fetching new account API:', error);
