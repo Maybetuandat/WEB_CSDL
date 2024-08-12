@@ -281,6 +281,9 @@ async function fetchNewAccApi(accList) {
             showAlert('Đã xảy ra lỗi khi thêm tài khoản!');
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        else {
+            console.log(response.status);
+        }
 
         reloadPage();
     } catch (error) {
