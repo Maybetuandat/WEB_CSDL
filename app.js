@@ -19,8 +19,8 @@ const bodyParserErrorHandler = require("express-body-parser-error-handler");
 
 app.use(express.static("views/user/pages/test_list/problist"));
 
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(bodyParser.json({ limit: "50000mb" }));
+app.use(bodyParser.urlencoded({ limit: "5000mb", extended: true }));
 app.use(bodyParserErrorHandler());
 // app.use(bodyParser.json());
 
