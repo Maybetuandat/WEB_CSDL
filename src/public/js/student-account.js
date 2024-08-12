@@ -217,14 +217,14 @@ async function handleFile(event) {
     reader.onload = async function (e) {
         try {
             const data = new Uint8Array(e.target.result);
-            console.log('File data:', data);
+            // console.log('File data:', data);
 
             const workbook = XLSX.read(data, { type: 'array' });
-            console.log('Workbook:', workbook);
+            // console.log('Workbook:', workbook);
 
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
-            console.log('Worksheet:', worksheet);
+            // console.log('Worksheet:', worksheet);
 
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
             // console.log('JSON Data:', jsonData);
