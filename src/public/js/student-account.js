@@ -244,8 +244,8 @@ async function handleFile(event) {
                 Lop: row[4],
                 TaiKhoan: row[0],
                 MatKhau: row[0],
-                ThoiGian: '',
-                AccessToken: ''
+                // ThoiGian: null,
+                // AccessToken: null
             })).filter(row => row.MSV !== undefined);
 
             console.log('Five Columns Data:', fiveColumnsData);
@@ -271,6 +271,7 @@ function reloadPage() {
 
 async function fetchNewAccApi(accList) {
     try {
+
         const response = await fetch('/api/new-student-list', {
             method: 'POST',
             headers: {
