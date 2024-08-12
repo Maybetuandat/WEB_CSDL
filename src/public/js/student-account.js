@@ -203,9 +203,7 @@ function finishEdit(id) {
 
 async function handleFile(event) {
 
-    console.log("check")
     const input = event.target;
-    console.log('Input:', input);
 
     if (input.files.length === 0) {
         console.log('No file selected.');
@@ -213,7 +211,6 @@ async function handleFile(event) {
     }
 
     const file = input.files[0];
-    console.log('Selected file:', file);
 
     const reader = new FileReader();
 
@@ -271,7 +268,7 @@ function reloadPage() {
 
 async function fetchNewAccApi(accList) {
     try {
-
+        console.log("loading")
         const response = await fetch('/api/new-student-list', {
             method: 'POST',
             headers: {
