@@ -259,6 +259,7 @@ async function handleFile(event) {
 
             for (var i = 0; i < chunks.length; i++) {
                 await fetchNewAccApi(chunks[i], i, chunks.length);
+                console.log(i);
             }
             // reloadPage()
         } catch (error) {
