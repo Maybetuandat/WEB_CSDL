@@ -12,6 +12,13 @@ const getCountShiftWithFindObject = async (find) => {
     const tests = await db.Shift.findAll({
       raw: true,
       where: find,
+      include: [
+        {
+          model: db.Test,
+          as: "Test",
+          required: true,
+        },
+      ],
     });
     if (tests.length > 0) {
       data.status = 200;
@@ -27,29 +34,35 @@ const getCountShiftWithFindObject = async (find) => {
   }
 };
 
-const getShiftWithFindObject = async (find, pagination) => {
-  const data = { status: null, data: null };
+// const getShiftWithFindObject = async (find, pagination) => {
+//   const data = { status: null, data: null };
 
-  try {
-    const shifts = await db.Shift.findAll({
-      where: find,
-      limit: pagination.limitedItem,
-      offset: pagination.limitedItem * (pagination.currentPage - 1),
-      raw: true,
-    });
-    if (shifts.length > 0) {
-      data.status = 200;
-      data.data = shifts;
-    } else {
-      data.status = 404;
-    }
-    return data;
-  } catch (error) {
-    console.error("Lỗi khi truy vấn dữ liệu:", error);
-    data.status = 500;
-    return data;
-  }
-};
+//   try {
+//     const shifts = await db.Shift.findAll({
+//       where: find,
+//       limit: pagination.limitedItem,
+//       offset: pagination.limitedItem * (pagination.currentPage - 1),
+//       raw: true,
+//       include: [
+//         {
+//           model: db.Test,
+//           attributes: [],
+//         },
+//       ],
+//     });
+//     if (shifts.length > 0) {
+//       data.status = 200;
+//       data.data = shifts;
+//     } else {
+//       data.status = 404;
+//     }
+//     return data;
+//   } catch (error) {
+//     console.error("Lỗi khi truy vấn dữ liệu:", error);
+//     data.status = 500;
+//     return data;
+//   }
+// };
 
 const getShiftById = async (id) => {
   const data = { status: null, data: null };
@@ -132,7 +145,7 @@ const createNewShiftById = async (data) => {
 
 module.exports = {
   getCountShiftWithFindObject,
-  getShiftWithFindObject,
+
   getShiftById,
   getAllShift,
   updateShiftById,

@@ -1,13 +1,13 @@
+const { Sequelize } = require("sequelize");
+
 const {
   getCountShiftWithFindObject,
-  getShiftWithFindObject,
-  getShiftById,
-  getAllShift,
   updateShiftById,
   createNewShiftById,
+  getShiftById,
 } = require("../../services/shift.service");
 
-const { getTestById, getAllTest } = require("../../services/test.service");
+const { getAllTest } = require("../../services/test.service");
 
 const paginationHelper = require("../../helpers/paginationHelper");
 const { Op } = require("sequelize");
@@ -15,53 +15,49 @@ const { Op } = require("sequelize");
 const shiftListPaginate = async (req, res) => {
   const find = {};
   if (req.query.keyword) {
-    const regexExpression = new RegExp(req.query.keyword, "i").source;
-    find[Op.or] = [
-      { MaCaThi: { [Op.regexp]: regexExpression } },
-      { MaBaiThi: { [Op.regexp]: regexExpression } },
-    ];
+    const keyword = req.query.keyword.toLowerCase(); // Chuyển từ khóa về chữ thường
+    const likeCondition = `%${keyword}%`; // Điều kiện tìm kiếm có chứa từ khóa
+    find["$Test.TenBaiThi$"] = {
+      [Op.like]: likeCondition,
+    };
   }
+  const limit = 5;
   const count = await getCountShiftWithFindObject(find); // tim doi tuong voi dieu kien find
-  console.log(count);
   const pagination = paginationHelper(
     {
       currentPage: 1,
-      limitedItem: 5,
+      limitedItem: limit,
     },
     req.query,
     count.data ? count.data.length : 0
   );
-  const shiftList = await getShiftWithFindObject(find, pagination);
-
-  var data = shiftList.data;
-
+  // console.log(pagination);
+  //limit data để phân trang
+  var data = [];
+  if (count != null) {
+    var page = req.query.page || 1;
+    var index = 0;
+    for (var i = (page - 1) * limit; i < page * limit; i++) {
+      if (count.data[i]) {
+        data[index] = count.data[i];
+        index += 1;
+      }
+    }
+  }
   if (data != null) {
     for (var i = 0; i < data.length; i++) {
       var startTime = new Date(data[i].start);
       var endTime = new Date(data[i].end);
-      // date.setHours(date.getHours() + 7);
       startTime.setHours(startTime.getHours() - 7);
       endTime.setHours(endTime.getHours() - 7);
       data[i].start = formatDateTime(startTime);
       data[i].end = formatDateTime(endTime);
     }
   }
-
-  var tests = [];
-
-  if (data != null) {
-    for (var i = 0; i < data.length; i++) {
-      var test = await getTestById(data[i].MaBaiThi);
-      tests.push(test.data[0]);
-      // console.log(test.data[0])
-    }
-  }
-
   res.render("admin/pages/viewTest/viewShift.pug", {
     titlePage: "Danh sách ca thực hành",
     className: "Tất cả",
     shifts: data,
-    tests: tests,
     pagination: pagination,
     keyword: req.query.keyword || "",
   });
@@ -80,6 +76,7 @@ const editShift = async (req, res) => {
   const id = req.params.id;
 
   const tests = await getAllTest();
+  //console.log(tests);
   var shift = await getShiftById(id);
 
   var startTime = new Date(shift.data.start);

@@ -30,11 +30,7 @@ mixin shift-table(shifts, tests, pagination)
                            each shift, index in shifts
                             tr.tb-round-test(id=shift.MaBaiThi)
                                 td.fw-600=shift.MaCaThi
-                                td
-                                    if tests[index] && tests[index].TenBaithi
-                                        =tests[index].TenBaithi
-                                    else
-                                        | No test name found
+                                td=shift["Test.TenBaiThi"]
                                 td=shift.start
                                 td=shift.end
                                 td
