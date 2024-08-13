@@ -5,6 +5,7 @@ const {
   updateShiftById,
   createNewShiftById,
   getShiftById,
+  deleteShiftById,
 } = require("../../services/shift.service");
 
 const { getAllTest } = require("../../services/test.service");
@@ -33,8 +34,9 @@ const shiftListPaginate = async (req, res) => {
   );
   // console.log(pagination);
   //limit data để phân trang
+
   var data = [];
-  if (count != null) {
+  if (count.data != null) {
     var page = req.query.page || 1;
     var index = 0;
     for (var i = (page - 1) * limit; i < page * limit; i++) {
@@ -182,10 +184,31 @@ const createShift = async (req, res) => {
   }
 };
 
+const deleteShift = async (req, res) => {
+  const id = parseInt(req.body.id, 10);
+  console.log(id);
+  const deleteShift = await deleteShiftById(id);
+  if (deleteShift.status === 200) {
+    res.status(200).json({
+      code: 1,
+      status: 200,
+      message: "Xóa thành công",
+    });
+  } else {
+    res.status(500).json({
+      code: 0,
+      status: 500,
+      message: "Có lỗi xảy ra",
+    });
+  }
+
+  // nhớ là cần trả về res cho front end
+};
 module.exports = {
   shiftListPaginate,
   createNewShift,
   editShift,
   updateShift,
   createShift,
+  deleteShift,
 };

@@ -37,11 +37,10 @@ mixin shift-table(shifts, tests, pagination)
                                     a.mb-0(href="./shift/edit/" + shift.MaCaThi)
                                         button.btn.cur-p.ptit-color.btn-color.btn-responsive Chỉnh sửa
                                 td
-                                    a.mb-0()
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive Xóa 
-                                td(style = "display: none;")
-                                    a.mb-0(href="./shift/edit/" + shift.MaCaThi)
-                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
-                                    a.mb-0()
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete Xóa        
+                                    button.btn.btn-primary.ptit-color.btn-color.btn-responsive(type='button',onclick=`deleteShift('${shift.MaCaThi}')`) Xóa 
+                                //- td(style = "display: none;")
+                                //-     a.mb-0(href="./shift/edit/" + shift.MaCaThi)
+                                //-         button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
+                                //-     a.mb-0()
+                                //-         button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete(type='button',onclick='deleteShift()') Xóa        
                 +pagination(pagination)

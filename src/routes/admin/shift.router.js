@@ -10,5 +10,5 @@ router.get("/new", controllerShift.createNewShift);
 router.get("/edit/:id", controllerShift.editShift);
 router.post("/api/edit-shift", controllerShift.updateShift);
 router.post("/api/new-shift", controllerShift.createShift);
-
+router.post("/api/delete-shift", controllerShift.deleteShift);
 module.exports = router;

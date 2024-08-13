@@ -142,10 +142,29 @@ const createNewShiftById = async (data) => {
     return dataRes;
   }
 };
-
+const deleteShiftById = async (id) => {
+  const data = { status: null };
+  try {
+    const shift = await db.Shift.destroy({
+      where: {
+        MaCaThi: id,
+      },
+    });
+    if (shift) {
+      data.status = 200;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    data.status = 500;
+    return data;
+  }
+};
 module.exports = {
   getCountShiftWithFindObject,
-
+  deleteShiftById,
   getShiftById,
   getAllShift,
   updateShiftById,
