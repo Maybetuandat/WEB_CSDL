@@ -30,22 +30,17 @@ mixin shift-table(shifts, tests, pagination)
                            each shift, index in shifts
                             tr.tb-round-test(id=shift.MaBaiThi)
                                 td.fw-600=shift.MaCaThi
-                                td
-                                    if tests[index] && tests[index].TenBaithi
-                                        =tests[index].TenBaithi
-                                    else
-                                        | No test name found
+                                td=shift["Test.TenBaiThi"]
                                 td=shift.start
                                 td=shift.end
                                 td
                                     a.mb-0(href="./shift/edit/" + shift.MaCaThi)
                                         button.btn.cur-p.ptit-color.btn-color.btn-responsive Chỉnh sửa
                                 td
-                                    a.mb-0()
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive Xóa 
-                                td(style = "display: none;")
-                                    a.mb-0(href="./shift/edit/" + shift.MaCaThi)
-                                        button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
-                                    a.mb-0()
-                                        button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete Xóa        
+                                    button.btn.btn-primary.ptit-color.btn-color.btn-responsive(type='button',onclick=`deleteShift('${shift.MaCaThi}')`) Xóa 
+                                //- td(style = "display: none;")
+                                //-     a.mb-0(href="./shift/edit/" + shift.MaCaThi)
+                                //-         button.btn.cur-p.ptit-color.btn-color.btn-responsive.btn-put Chỉnh sửa
+                                //-     a.mb-0()
+                                //-         button.btn.btn-primary.ptit-color.btn-color.btn-responsive.btn-delete(type='button',onclick='deleteShift()') Xóa        
                 +pagination(pagination)
