@@ -56,8 +56,8 @@ for (let i = 0; i < data.questions.length; i++) {
   let container_hoitrl = document.createElement("div");
   container_hoitrl.classList.add("container-hoitrl");
   container_hoitrl.classList.add(i);
-  container_hoitrl.id =
-    parseInt(data.questions[i].MaCauHoi.replace(/[^\d]/g, ""), 10) - 1;
+  container_hoitrl.id = i;
+  //parseInt(data.questions[i].MaCauHoi.replace(/[^\d]/g, ""), 10) - 1;
 
   let stt = document.createElement("div");
   stt.classList.add("stt");
@@ -94,6 +94,10 @@ trangthai.appendChild(blockDiv);
 
 let choice = Array.from(document.getElementsByClassName("choice"));
 // //console.log('choice: ', choice);
+let anstmp = null;
+if (localStorage.getItem("answerofUser") != null) {
+  anstmp = JSON.parse(localStorage.getItem("answerofUser"));
+}
 for (let i = 0; i < choice.length; i++) {
   let x = choice[i];
   x.addEventListener("click", (e) => {
@@ -105,6 +109,7 @@ for (let i = 0; i < choice.length; i++) {
       selectedChoice.classList.remove("pick");
       block.style.background = "white";
       ansUser[parseInt(cauhoiId)] = 0;
+      localStorage.setItem("answerofUser", JSON.stringify(ansUser));
       return;
     }
     block.style.background = "#578fde";
@@ -121,7 +126,21 @@ for (let i = 0; i < choice.length; i++) {
         x.classList.remove("pick");
     });
   });
+
+  if (anstmp != null) {
+    if (
+      anstmp[parseInt(i / 4)] != 0 &&
+      parseInt(i / 4) * 4 + anstmp[parseInt(i / 4)] - 1 == i
+    ) {
+      choice[i].classList.add("pick");
+      let cauhoiStt = parseInt(choice[i].parentElement.classList[1]);
+      let block = document.getElementById("block" + (cauhoiStt + 1));
+      block.style.background = "#578fde";
+      ansUser[parseInt(i / 4)] = anstmp[parseInt(i / 4)];
+    }
+  }
 }
+
 let arrBlocks = Array.from(document.getElementsByClassName("block"));
 arrBlocks.forEach((block, index) => {
   block.addEventListener("click", () => {
@@ -178,7 +197,10 @@ const process = async () => {
   if (!response.ok) {
     btnNopBai.textContent = "Nộp bài";
     throw new Error("Network response was not ok");
-  } else window.location.assign(`../thi`);
+  } else {
+    localStorage.removeItem("answerofUser");
+    window.location.assign(`../thi`);
+  }
 };
 
 // }

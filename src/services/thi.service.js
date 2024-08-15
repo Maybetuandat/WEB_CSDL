@@ -8,7 +8,7 @@ require("dotenv").config();
 var request = require("request");
 const { test } = require("../controllers/user/result/result.controller");
 
-const getThiResult = async (msv, mbt, time) => {
+const getThiResult = async (msv, mbt, time, dscau) => {
   var data = { status: null, data: null };
   try {
     let result = await db.ResultTest.findOne({
@@ -27,6 +27,7 @@ const getThiResult = async (msv, mbt, time) => {
         MSV: msv,
         MaBaiThi: mbt,
         ThoiGianLamBai: time,
+        DanhSachCau: dscau,
       });
       data.status = 200;
       data.data = result;

@@ -36,20 +36,56 @@ module.exports.testWithId = async (req, res) => {
   let result = null;
   if (test.data) {
     if (test.data[0].TrangThai == "th") {
-      result = await thiService.getThiResult(
-        req.jwtDecoded.data.id,
-        testId,
-        updatedTime
-      );
-      console.log(result);
-      if (
-        updatedTime.getTime() - result.data.ThoiGianLamBai.getTime() >
-          test.data[0].ThoiGianThi * 60 * 1000 ||
-        result.data.ThoiGianNopBai != null
-      ) {
-        test.data = null;
-      } else {
-        questions = await getQuestionOfTest(testId);
+      // result = await thiService.getThiResult(
+      //   req.jwtDecoded.data.id,
+      //   testId,
+      //   updatedTime
+      // );
+      // console.log(result);
+      // if (
+      //   updatedTime.getTime() - result.data.ThoiGianLamBai.getTime() >
+      //     test.data[0].ThoiGianThi * 60 * 1000 ||
+      //   result.data.ThoiGianNopBai != null
+      // ) {
+      //   test.data = null;
+      // } else {
+      //   questions = await getQuestionOfTest(testId);
+      // }
+      questions = await getQuestionOfTest(testId);
+      let maCauHoiString = null;
+      if (questions.data) {
+        let maCauHoiArray = questions.data.map((question) => question.MaCauHoi);
+        maCauHoiString = maCauHoiArray.join("");
+        console.log(maCauHoiString);
+
+        result = await thiService.getThiResult(
+          req.jwtDecoded.data.id,
+          testId,
+          updatedTime,
+          maCauHoiString
+        );
+
+        const dscauArray = result.data.DanhSachCau.match(/C\d{2}/g);
+
+        if (dscauArray) {
+          // Sắp xếp mảng questions theo thứ tự trong danhSachArray
+          const sortedQuestions = questions.data.sort((a, b) => {
+            return (
+              dscauArray.indexOf(a.MaCauHoi) - dscauArray.indexOf(b.MaCauHoi)
+            );
+          });
+          questions.data = questions.data.map(({ MaCauHoi, ...rest }) => rest);
+          //console.log(sortedQuestions);
+        } else {
+        }
+
+        if (
+          updatedTime.getTime() - result.data.ThoiGianLamBai.getTime() >
+            test.data[0].ThoiGianThi * 60 * 1000 ||
+          result.data.ThoiGianNopBai != null
+        ) {
+          test.data = null;
+        }
       }
     } else test.data = null;
     if (test.data) {

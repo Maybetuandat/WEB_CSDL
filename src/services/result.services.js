@@ -91,7 +91,7 @@ const getResultByIdThi = async (idTest) => {
     data: null,
   };
   try {
-    const res = await db.Result.findAll({
+    const res = await db.ResultTest.findAll({
       raw: true,
       where: {
         MaBaiThi: idTest,
@@ -343,11 +343,24 @@ const createSubmitCode = async (
   }
 };
 
-const tinhdiem2 = async (questionList, cauhoi) => {
+const tinhdiem2 = async (questionList, dsCau, cauhoi) => {
   //console.log("questionlist: ", questionList);
   //console.log("cauhoi: ", cauhoi);
   let diem = 0;
-  console.log(questionList);
+  //console.log(questionList);
+  if (dsCau != null) {
+    const dscauArray = dsCau.match(/C\d{2}/g);
+
+    if (dscauArray) {
+      // Sắp xếp mảng questions theo thứ tự trong danhSachArray
+      const sortedQuestions = cauhoi.sort((a, b) => {
+        return dscauArray.indexOf(a.MaCauHoi) - dscauArray.indexOf(b.MaCauHoi);
+      });
+      //console.log(sortedQuestions);
+    } else {
+    }
+  }
+  console.log(cauhoi);
   for (var i = 0; i < questionList.length; i++) {
     if (questionList[i] == cauhoi[i].MaLuaChon) {
       diem += 10 / questionList.length;
@@ -369,6 +382,7 @@ const resultAllThi = async (mbt) => {
       },
     },
   });
+
   if (results == null) return false;
   else {
     let cauhoi = [];
@@ -385,18 +399,22 @@ const resultAllThi = async (mbt) => {
       console.error("Lỗi khi truy vấn dữ liệu:", error);
       return;
     }
-    cauhoi.sort((a, b) => {
-      if (a.macauhoi < b.macauhoi) {
-        return -1;
-      }
-      if (a.macauhoi > b.macauhoi) {
-        return 1;
-      }
-      return 0;
-    });
-    console.log(cauhoi);
+    // cauhoi.sort((a, b) => {
+    //   if (a.macauhoi < b.macauhoi) {
+    //     return -1;
+    //   }
+    //   if (a.macauhoi > b.macauhoi) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
+    //console.log(cauhoi);
     for (let i = 0; i < results.length; i++) {
-      let diem = await tinhdiem2(results[i].ChiTiet, cauhoi);
+      let diem = await tinhdiem2(
+        results[i].ChiTiet,
+        results[i].DanhSachCau,
+        cauhoi
+      );
       await db.ResultTest.update(
         {
           Diem: diem,

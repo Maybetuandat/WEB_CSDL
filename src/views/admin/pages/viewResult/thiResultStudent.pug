@@ -46,7 +46,13 @@ block main
                 td #{student.MSV}
                 td #{student.Ten}
                 td #{student.Lop}
-                td #{resultList[index].Diem || 0}
+                td
+                  if resultList[index].ThoiGianNopBai === null
+                    | chưa thi xong
+                  else if resultList[index].Diem === null
+                    | chưa chấm
+                  else
+                    | #{resultList[index].Diem}
                 td
                   a.btn.btn-primary.btn-responsive( idStu = student.MSV btn-detail-thi-stu) Xem chi tiết
   input(type="hidden" data_to_excel_student=JSON.stringify(studentList))

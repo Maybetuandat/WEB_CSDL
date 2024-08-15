@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       //     foreignKey: "MaBaiThi",
       //     targetKey: "MaBaiThi",
       //   });
-        ResultTest.belongsTo(models.Student, { foreignKey: "MSV" });
+      ResultTest.belongsTo(models.Student, { foreignKey: "MSV" });
     }
   }
   ResultTest.init(
@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       ThoiGianLamBai: DataTypes.DATE,
       ThoiGianNopBai: DataTypes.DATE,
       ChiTiet: DataTypes.STRING,
+      DanhSachCau: DataTypes.STRING,
     },
     {
       // options
