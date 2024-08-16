@@ -44,6 +44,16 @@ const getResultThiByIdStuAndIdTest = async (idStu, idTest) => {
         MaBaiThi: idTest,
       },
     });
+    let matches = res[0].DanhSachCau.match(/C\d{2}/g);
+    let numbers = matches.map((match) => parseInt(match.slice(1), 10));
+    let anstmpArray = new Array(numbers.length).fill("E"); // Tạo mảng toàn chữ 'E'
+    for (let i = 0; i < numbers.length; i++) {
+      console.log(numbers[i] + " " + res[0].ChiTiet[i]);
+      anstmpArray[numbers[i] - 1] = res[0].ChiTiet[i]; // Thay đổi giá trị tại chỉ số tương ứng
+    }
+    let anstmp = anstmpArray.join(""); // Chuyển mảng thành chuỗi
+    console.log(anstmp);
+    res[0].ChiTiet = anstmp;
     ////console.log(res);
     if (res) {
       data.status = 200;

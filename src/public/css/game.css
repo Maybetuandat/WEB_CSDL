@@ -190,8 +190,9 @@
 
 .container-cauhoi {
   margin-bottom: 10px;
-  font-size: 22px;
+  font-size: 18px;
   white-space: pre-line;
+  line-height: 1.5;
 }
 
 .choice {

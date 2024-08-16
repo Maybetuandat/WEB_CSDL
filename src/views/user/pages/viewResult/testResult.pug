@@ -20,7 +20,7 @@ block main
           each test, index in testList
               tr
                 td 
-                  strong #{test.TenBaithi}
+                  strong #{test.TenBaiThi}
                 td #{test.TheLoai}
                 - var time = test['Results.ThoiGianLamBai']
                 td #{time.toISOString().replace('T', ' ').replace('Z', '').split('.')[0]}
