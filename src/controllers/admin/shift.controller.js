@@ -84,8 +84,8 @@ const editShift = async (req, res) => {
   var startTime = new Date(shift.data.start);
   var endTime = new Date(shift.data.end);
 
-  startTime.setHours(startTime.getHours() - 7);
-  endTime.setHours(endTime.getHours() - 7);
+  startTime.setHours(startTime.getHours() );
+  endTime.setHours(endTime.getHours() );
 
   shift.data.start = formatDateTimeForInput(startTime);
   shift.data.end = formatDateTimeForInput(endTime);
