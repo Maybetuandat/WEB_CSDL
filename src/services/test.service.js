@@ -4,7 +4,7 @@ const { createNewQuestion } = require("./question.service");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
 const moment = require("moment-timezone");
-const moment2 = require('moment');
+const moment2 = require("moment");
 require("dotenv").config();
 var request = require("request");
 
@@ -158,14 +158,14 @@ const createNewTest = async (test, questionList) => {
     // t = await sequelize.transaction();
     // var mbt = "BT111";
 
-    console.log(test)
+    console.log(test);
 
     // const formattedDate = moment2(test.examDateTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
 
     var newTest = await db.Test.create(
       {
         // MaBaiThi: mbt,
-        TenBaithi: test.examName,
+        TenBaiThi: test.examName,
         ThoiGianBatDau: "2024-11-12 12:00:00",
         ThoiGianThi: parseInt(test.examTime),
         SoLuongCau: parseInt(questionList.length),
@@ -179,7 +179,7 @@ const createNewTest = async (test, questionList) => {
 
     var mbt = newTest.dataValues.MaBaiThi;
 
-    var bulkQuestions = []
+    var bulkQuestions = [];
     var bulkOptions = [];
 
     for (var i = 0; i < questionList.length; i++) {
@@ -188,8 +188,8 @@ const createNewTest = async (test, questionList) => {
         MaBaiThi: mbt,
         DeBai: questionList[i].questionContent,
         SoThuTu: i + 1,
-        TheLoai: "Trắc nghiệm"
-      })
+        TheLoai: "Trắc nghiệm",
+      });
 
       for (var j = 1; j <= 4; j++) {
         var answerProperty = "answer" + j;
@@ -200,8 +200,8 @@ const createNewTest = async (test, questionList) => {
           MaLuaChon: answerId,
           MaBaiThi: mbt,
           NoiDung: questionList[i][answerProperty],
-          Dung: questionList[i]["check"] == j ? 1 : 0
-        })
+          Dung: questionList[i]["check"] == j ? 1 : 0,
+        });
       }
     }
 
@@ -210,7 +210,6 @@ const createNewTest = async (test, questionList) => {
 
     // await db.Question.bulkCreate(bulkQuestions, { transaction: t });
     // await db.Option.bulkCreate(bulkOptions, { transaction: t });
-
 
     // for (var i = 0; i < questionList.length; i++) {
     //   await createNewQuestion(questionList[i], mbt, i + 1, t);
@@ -272,7 +271,6 @@ const updateTestById = async (testId, updateData) => {
     });
 
     await db.Option.destroy({
-
       where: {
         MaBaiThi: testId,
       },
@@ -280,7 +278,7 @@ const updateTestById = async (testId, updateData) => {
     });
 
     //create new question and option using bulk
-    var bulkQuestions = []
+    var bulkQuestions = [];
     var bulkOptions = [];
 
     for (var i = 0; i < len; i++) {
@@ -289,8 +287,8 @@ const updateTestById = async (testId, updateData) => {
         MaBaiThi: testId,
         DeBai: data[i].questionContent,
         SoThuTu: i + 1,
-        TheLoai: "Trắc nghiệm"
-      })
+        TheLoai: "Trắc nghiệm",
+      });
 
       for (var j = 1; j <= 4; j++) {
         var answerProperty = "answer" + j;
@@ -301,14 +299,13 @@ const updateTestById = async (testId, updateData) => {
           MaLuaChon: answerId,
           MaBaiThi: testId,
           NoiDung: data[i][answerProperty],
-          Dung: data[i]["check"] == j ? 1 : 0
-        })
+          Dung: data[i]["check"] == j ? 1 : 0,
+        });
       }
     }
 
     await db.Question.bulkCreate(bulkQuestions, { transaction: t });
     await db.Option.bulkCreate(bulkOptions, { transaction: t });
-
 
     await t.commit();
     return true;
