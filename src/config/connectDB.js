@@ -9,6 +9,9 @@ const sequelize = new Sequelize(
     host: "localhost",
     port: process.env.DB_PORT,
     dialect: "mysql",
+    dialectOptions: {
+      connectTimeout: 60000, // Thời gian chờ kết nối đến MySQL, tính bằng ms
+    },
   }
 );
 const connection = async () => {

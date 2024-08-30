@@ -327,17 +327,7 @@ const postTestHandler = async (req, res) => {
   //test.TacGia = msv;
   console.log("test: ", test);
   console.log("questionList: ", questionList);
-  let data = { test, questionList };
-  let invalidWord = await containsInvalidWords(data, invalidWords);
-  console.log("chứa từ không phù hợp: ", invalidWord);
-  if (invalidWord.length > 0) {
-    return res.status(200).json({
-      code: 2,
-      status: 200,
-      message: "Tạo bài thi thất bại! Bài thi chứa từ không phù hợp",
-      data: invalidWord,
-    });
-  }
+
   var status = await createNewTest(test, questionList);
   if (status) {
     res.status(200).json({
