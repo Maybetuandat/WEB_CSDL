@@ -50,8 +50,8 @@ const shiftListPaginate = async (req, res) => {
     for (var i = 0; i < data.length; i++) {
       var startTime = new Date(data[i].start);
       var endTime = new Date(data[i].end);
-      startTime.setHours(startTime.getHours() );
-      endTime.setHours(endTime.getHours() );
+      startTime.setHours(startTime.getHours());
+      endTime.setHours(endTime.getHours());
       data[i].start = formatDateTime(startTime);
       data[i].end = formatDateTime(endTime);
     }
@@ -84,8 +84,8 @@ const editShift = async (req, res) => {
   var startTime = new Date(shift.data.start);
   var endTime = new Date(shift.data.end);
 
-  startTime.setHours(startTime.getHours() );
-  endTime.setHours(endTime.getHours() );
+  startTime.setHours(startTime.getHours());
+  endTime.setHours(endTime.getHours());
 
   shift.data.start = formatDateTimeForInput(startTime);
   shift.data.end = formatDateTimeForInput(endTime);

@@ -4,14 +4,16 @@ const {
   getCountTestWithFindObject,
   getTestWithFindObject,
   getCountTestWithFindObjectUser,
-  getTestWithFindObjectUser
-
+  getTestWithFindObjectUser,
 } = require("../../../services/test.service");
 // const { getQuestionOfTest } = require('../../../routes/api.route');
 const paginationHelper = require("../../../helpers/paginationHelper");
 const { Op } = require("sequelize");
 const { testService } = require("../../../services/test.service");
-const { getQuestionOfTest, getQuestionOfTestAdmin } = require("../../../services/question.service");
+const {
+  getQuestionOfTest,
+  getQuestionOfTestAdmin,
+} = require("../../../services/question.service");
 
 const testListPaginate = async (req, res) => {
   const find = {};
@@ -23,7 +25,7 @@ const testListPaginate = async (req, res) => {
   if (req.query.keyword) {
     const regexExpression = new RegExp(req.query.keyword, "i").source;
     find[Op.or] = [
-      { TenBaithi: { [Op.regexp]: regexExpression } },
+      { TenBaiThi: { [Op.regexp]: regexExpression } },
       { MaBaiThi: { [Op.regexp]: regexExpression } },
     ];
   }
@@ -138,7 +140,7 @@ const testListPaginateUser = async (req, res) => {
   if (req.query.keyword) {
     const regexExpression = new RegExp(req.query.keyword, "i").source;
     find[Op.or] = [
-      { TenBaithi: { [Op.regexp]: regexExpression } },
+      { TenBaiThi: { [Op.regexp]: regexExpression } },
       { MaBaiThi: { [Op.regexp]: regexExpression } },
     ];
   }

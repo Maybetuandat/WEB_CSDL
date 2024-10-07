@@ -249,7 +249,7 @@ const updateTestById = async (testId, updateData) => {
     data = updateData.data;
     // //console.log(metadata)
 
-    test.TenBaithi = metadata.examName;
+    test.TenBaiThi = metadata.examName;
     test.ThoiGianBatDau = "2024-11-12 12:00:00";
     test.ThoiGianThi = parseInt(metadata.examTime);
     test.SoLuongCau = parseInt(data.length);
@@ -321,7 +321,7 @@ const searchTestByName = async (name) => {
   try {
     const tests = await db.Test.findAll({
       where: {
-        TenBaithi: { [Op.like]: "%" + name.replace(/"/g, "") + "%" },
+        TenBaiThi: { [Op.like]: "%" + name.replace(/"/g, "") + "%" },
       },
     });
 

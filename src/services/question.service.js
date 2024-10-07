@@ -39,7 +39,7 @@ function shuffleLast10KeepRest(array) {
   return array;
 }
 
-const getQuestionOfTest = async (id) => {
+const getQuestionOfTest = async (id, theloai) => {
   var data = { status: null, data: null };
   try {
     var questions = await db.Question.findAll({
@@ -48,6 +48,15 @@ const getQuestionOfTest = async (id) => {
       },
       raw: true,
     });
+    if (theloai == "tự luận") {
+      if (questions.length > 0) {
+        data.status = 200;
+        data.data = questions;
+      } else {
+        data.status = 404;
+      }
+      return data;
+    }
     var allOptions = await db.Option.findAll({
       attributes: {
         exclude: ["Dung"], // Loại trừ cột `Dung`

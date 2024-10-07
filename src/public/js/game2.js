@@ -46,8 +46,8 @@ ansUser = myArray;
 
 // hiencauhoi = () => {
 let subject = document.getElementById("subject");
-subject.textContent = data.test.TenBaithi;
-// //console.log(data.test.TenBaithi)
+subject.textContent = data.test.TenBaiThi;
+// //console.log(data.test.TenBaiThi)
 
 let cauhoi = document.getElementById("cauhoi");
 // //console.log(cauhoi);

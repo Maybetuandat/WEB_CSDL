@@ -64,7 +64,7 @@ async function fetchTestDetails() {
     .then((data) => {
       // Extract and display test details (assuming structure of the data)
       console.log(data);
-      const nameTest = data[0].TenBaithi;
+      const nameTest = data[0].TenBaiThi;
       const subject = data[0].TheLoai;
       const testDuration = data[0].ThoiGianThi; // Replace with appropriate property name
       const numberOfQuestions = data[0].SoLuongCau; // Replace with appropriate property name
