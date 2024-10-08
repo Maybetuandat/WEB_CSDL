@@ -98,11 +98,11 @@ const getAllTestPerPage = async (page) => {
 const getTestById = async (id) => {
   var data = { status: null, data: null };
   try {
-    const tests = await db.Test.findAll({ raw: true, where: { MaBaiThi: id } });
-    // //// console.log(tests);
-    if (tests.length > 0) {
+    const test = await db.Test.findOne({ raw: true, where: { MaBaiThi: id } });
+
+    if (test) {
       data.status = 200;
-      data.data = tests;
+      data.data = test;
     } else {
       data.status = 404;
     }

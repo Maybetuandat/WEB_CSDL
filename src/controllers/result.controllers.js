@@ -16,6 +16,8 @@ const {
 const { getDetailListWithIdResult } = require("../services/detail.services");
 
 const detail = require("../models/detail");
+const { getSqlResult } = require("../services/thi.service");
+
 const getResultWithIdStuAndIdTest = async (req, res) => {
   const idStu = req.params.id;
   const idTest = req.params.idTest;
@@ -71,19 +73,27 @@ const getDetailThiWithIdStuAndIdTest = async (idStudent, idTest) => {
     result: null,
     detail: [],
   };
-  const questionList = await getQuestionOfTest2(idTest); //thong tin cac cau hoi
-  questionList.data.sort((a, b) => {
-    if (a.MaCauHoi < b.MaCauHoi) {
-      return -1;
-    }
-    if (a.MaCauHoi > b.MaCauHoi) {
-      return 1;
-    }
-    return 0;
-  });
   const student = await getStudentById(idStudent); //thong tin sinh vien
-  const result = await getResultThiByIdStuAndIdTest(idStudent, idTest); //thong tin ket qua
   const test = await getTestById(idTest); //thong tin bai thi
+  console.log(test);
+  let questionList;
+  let result;
+  if (test.data.TheLoai == "tự luận") {
+    questionList = await getQuestionOfTest(idTest, test.data.TheLoai); //thong tin cac cau hoi
+    result = await getSqlResult(idStudent, idTest); //thong tin ket qua
+  } else {
+    questionList = await getQuestionOfTest2(idTest); //thong tin cac cau hoi
+    questionList.data.sort((a, b) => {
+      if (a.MaCauHoi < b.MaCauHoi) {
+        return -1;
+      }
+      if (a.MaCauHoi > b.MaCauHoi) {
+        return 1;
+      }
+      return 0;
+    });
+    result = await getResultThiByIdStuAndIdTest(idStudent, idTest); //thong tin ket qua
+  }
 
   if (result.data) {
     dataRes.student = student;

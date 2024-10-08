@@ -95,19 +95,35 @@ const getResultByIdTest = async (idTest) => {
   }
 };
 
-const getResultByIdThi = async (idTest) => {
+const getResultByIdThi = async (idTest, theloai) => {
   const data = {
     status: null,
     data: null,
   };
   try {
-    const res = await db.ResultTest.findAll({
-      raw: true,
-      where: {
-        MaBaiThi: idTest,
-      },
-    });
-    ////// console.log(res);
+    let res = [];
+    console.log(theloai);
+    if (theloai != "tự luận") {
+      res = await db.ResultTest.findAll({
+        raw: true,
+        where: {
+          MaBaiThi: idTest,
+        },
+      });
+    } else {
+      res = await db.ResultSql.findAll({
+        raw: true,
+        attributes: [
+          "MSV", // Lấy trường MSV
+          [db.sequelize.fn("COUNT", db.sequelize.col("MSV")), "count"], // Đếm số lượng MSV
+        ],
+        where: {
+          MaBaiThi: idTest, // Điều kiện lọc theo MaBaiThi
+        },
+        group: ["MSV"], // Nhóm theo MSV
+      });
+    }
+    console.log(res);
     if (res) {
       data.status = 200;
       data.data = res;

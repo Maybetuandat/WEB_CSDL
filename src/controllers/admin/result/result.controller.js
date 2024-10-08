@@ -95,13 +95,29 @@ module.exports.detailStudentAndThi = async (req, res) => {
     req.params.studentId,
     req.params.testId
   );
-  res.render("admin/pages/viewResult/studentAndTestDetail.pug", {
-    titlePage: "Kết quả sinh viên",
-    result: result.result.data[0],
-    student: result.student.data[0],
-    test: result.test.data[0],
-    detail: result.detail,
+  console.log(result.result.data);
+  result.result.data.forEach((element) => {
+    element.ThoiGianNopBai = element.ThoiGianNopBai.toISOString()
+      .replace("T", " ")
+      .replace("Z", "");
   });
+  if (result.test.data.TheLoai == "tự luận") {
+    res.render("admin/pages/viewResult/studentAndTestDetail2.pug", {
+      titlePage: "Kết quả sinh viên",
+      result: result.result.data,
+      student: result.student.data[0],
+      test: result.test.data,
+      detail: result.detail,
+    });
+  } else {
+    res.render("admin/pages/viewResult/studentAndTestDetail.pug", {
+      titlePage: "Kết quả sinh viên",
+      result: result.result.data[0],
+      student: result.student.data[0],
+      test: result.test.data,
+      detail: result.detail,
+    });
+  }
 };
 // [GET] /admin/my-account
 module.exports.test = async (req, res) => {
@@ -215,7 +231,10 @@ module.exports.thi = async (req, res) => {
 module.exports.thiWithId = async (req, res) => {
   const testId = req.params.testId;
   const test = await testServices.getTestById(testId);
-  const resultList = await resultServices.getResultByIdThi(testId);
+  const resultList = await resultServices.getResultByIdThi(
+    testId,
+    test.data.TheLoai
+  );
   const studentList = [];
   const find = {};
   if (req.query.keyword && req.query.keyword !== "") {
@@ -236,7 +255,7 @@ module.exports.thiWithId = async (req, res) => {
   // // console.log(resultList)
   res.render("admin/pages/viewResult/thiResultStudent.pug", {
     titlePage: "Kết quả bài thi",
-    test: test.data[0],
+    test: test.data,
     resultList: resultList.data,
     studentList: studentList,
     className: req.query.class || "Tất cả",

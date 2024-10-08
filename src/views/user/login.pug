@@ -27,7 +27,7 @@ html(lang="en")
                 .mb-4
                   
                 h2.text Hệ thống thực hành học phần Cơ sở dữ liệu CNTT - PTIT
-                form(action="checkLoginUser", method="post")
+                form(action="checkLoginUser", method="post", id="loginForm")
                   .form-group.first
                     
                     input(type="text", class="form-control", id="username", name = "msv", placeholder="Tài khoản" Required)
@@ -45,7 +45,16 @@ html(lang="en")
                     span.ml-auto
                       a.forgot-pass(href="forgotPassword") Quên mật khẩu
                   
-                  input(type="submit", value="Đăng Nhập", class="btn btn-block", style="background-color: #c32b2b; color:white;")
+                  input(type="submit", value="Đăng Nhập", class="btn btn-block" id="loginButton", style="background-color: #c32b2b; color:white;")
                   br
                   if data && data.message
-                   p.aler= data.message
+                   p.aler= data.message 
+
+    script.
+      document.getElementById('loginForm').onsubmit = function() {
+        var loginButton = document.getElementById('loginButton');
+        loginButton.disabled = true; // Disable the button
+        setTimeout(function() {
+          loginButton.disabled = false; // Re-enable the button after 3 seconds
+        }, 3000); // 3000 milliseconds = 3 seconds
+      }
