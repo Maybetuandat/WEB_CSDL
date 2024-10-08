@@ -1,6 +1,9 @@
 require("dotenv").config();
 const jwtHelper = require("../helpers/jwt.helper");
-const { getStudentById } = require("../services/student.service");
+const {
+  getStudentById,
+  getStudentByIdForLogin,
+} = require("../services/student.service");
 const testServices = require("../services/test.service");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -66,7 +69,7 @@ const checkLoginUser = async (req, res) => {
     });
   } else {
     // check database
-    let data = await getStudentById(req.body.msv);
+    let data = await getStudentByIdForLogin(req.body.msv);
     //status = 200 -> tim thay sinh vien -> check password
     //status = 404 -> khong tim thay sinh vien -> response failed to login
     //status = 500 -> lỗi trong quá trình xử lý
@@ -89,17 +92,14 @@ const checkLoginUser = async (req, res) => {
         data: response,
       });
     } else if (data.status === 200) {
-      var ok = await bcrypt.compareSync(
-        req.body.password,
-        data.data[0].MatKhau
-      );
+      var ok = await bcrypt.compare(req.body.password, data.data.MatKhau);
       let response = {};
       if (ok) {
         //  console.log(data.data[0]);
         const userData = {
           id: req.body.msv,
           role: req.params.role,
-          email: data.data[0].email,
+          email: data.data.email,
         };
 
         data = await createTokenResponse(userData);

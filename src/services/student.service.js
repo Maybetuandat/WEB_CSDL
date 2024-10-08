@@ -100,6 +100,29 @@ const getStudentById = async (id) => {
   }
 };
 
+const getStudentByIdForLogin = async (id) => {
+  var data = { status: null, data: null };
+  try {
+    const student = await db.Student.findOne({
+      raw: true,
+      where: { MSV: id },
+      attributes: ["MatKhau", "Email"],
+    });
+
+    if (student) {
+      data.status = 200;
+      data.data = student;
+    } else {
+      data.status = 404;
+    }
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    data.status = 500;
+    return data;
+  }
+};
+
 const getStudentByEmail = async (email) => {
   var data = { status: null, data: null };
   try {
@@ -353,6 +376,7 @@ const studentListService = async (students) => {
 module.exports = {
   getAllStudent,
   getStudentById,
+  getStudentByIdForLogin,
   createNewStudent,
   deleteStudentById,
   updateStudentById,
