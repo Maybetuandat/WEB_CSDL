@@ -1,5 +1,5 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 // Test connection
 const connection = mysql.createPool({
@@ -10,14 +10,14 @@ const connection = mysql.createPool({
   port: process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
 });
 
 connection.connect((err) => {
   if (err) {
-    console.error('Error connecting to MySQL:', err);
+    console.error("Error connecting to MySQL:", err);
   } else {
-    console.log('Success: Connected to MySQL database!');
+    // console.log('Success: Connected to MySQL database!');
   }
 });
 

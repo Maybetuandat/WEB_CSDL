@@ -39,7 +39,7 @@ const getAllTest = async () => {
   var data = { status: null, data: null };
   try {
     const tests = await db.Test.findAll({ raw: true });
-    //console.log(tests);
+    //// console.log(tests);
     if (tests.length > 0) {
       data.status = 200;
       data.data = tests;
@@ -61,7 +61,7 @@ const getAllThi = async () => {
         TrangThai: "th",
       },
     });
-    //console.log(tests);
+    //// console.log(tests);
     if (tests.length > 0) {
       data.status = 200;
       data.data = tests;
@@ -99,7 +99,7 @@ const getTestById = async (id) => {
   var data = { status: null, data: null };
   try {
     const tests = await db.Test.findAll({ raw: true, where: { MaBaiThi: id } });
-    // //console.log(tests);
+    // //// console.log(tests);
     if (tests.length > 0) {
       data.status = 200;
       data.data = tests;
@@ -137,7 +137,7 @@ const getThiById = async (id) => {
       ],
     });
 
-    // //console.log(tests);
+    // //// console.log(tests);
     if (tests.length > 0) {
       data.status = 200;
       data.data = tests;
@@ -158,7 +158,7 @@ const createNewTest = async (test, questionList) => {
     // t = await sequelize.transaction();
     // var mbt = "BT111";
 
-    console.log(test);
+    // console.log(test);
 
     // const formattedDate = moment2(test.examDateTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
 
@@ -244,10 +244,10 @@ const updateTestById = async (testId, updateData) => {
       where: { MaBaiThi: testId },
       transaction: t,
     });
-    // //console.log(updateData)
+    // //// console.log(updateData)
     metadata = updateData.metadata;
     data = updateData.data;
-    // //console.log(metadata)
+    // //// console.log(metadata)
 
     test.TenBaiThi = metadata.examName;
     test.ThoiGianBatDau = "2024-11-12 12:00:00";
@@ -310,7 +310,7 @@ const updateTestById = async (testId, updateData) => {
     await t.commit();
     return true;
   } catch (e) {
-    //console.log(e);
+    //// console.log(e);
     await t.rollback();
     return false;
   }
@@ -386,8 +386,8 @@ const getSubmitByStudentId = async (stuID) => {
 
 const getTestWithFindObject = async (find, pagination) => {
   const data = { status: null, data: null };
-  // //console.log(pagination.limit, pagination.offset);
-  // //console.log(find);
+  // //// console.log(pagination.limit, pagination.offset);
+  // //// console.log(find);
   try {
     const tests = await db.Test.findAll({
       where: find,
@@ -410,8 +410,8 @@ const getTestWithFindObject = async (find, pagination) => {
 };
 const getTestWithFindObjectUser = async (find, msv, pagination) => {
   const data = { status: null, data: null };
-  // //console.log(pagination.limit, pagination.offset);
-  // //console.log(find);
+  // //// console.log(pagination.limit, pagination.offset);
+  // //// console.log(find);
   try {
     const tests = await db.Test.findAll({
       where: {
@@ -526,7 +526,7 @@ const getTestByText = async (inputText) => {
 
 const getTestByStudentIdWithPage = async (stuID, pagination) => {
   try {
-    console.log(pagination.limitedItem);
+    // console.log(pagination.limitedItem);
     const data = { status: null, data: [] };
     let listTest = await db.Test.findAll({
       raw: true,
@@ -543,7 +543,7 @@ const getTestByStudentIdWithPage = async (stuID, pagination) => {
 
     let start = pagination.limitedItem * (pagination.currentPage - 1);
     newlist = listTest.slice(start, start + 5);
-    console.log(newlist);
+    // console.log(newlist);
     for (let i = 0; i < newlist.length; i++) {
       if (newlist[i].start != null) {
         newlist[i]["Results.Diem"] = null;
@@ -593,27 +593,27 @@ const getSubmitByStudentIdWithPage = async (stuID, pagination) => {
         },
         (error, response, body) => {
           if (error) {
-            console.log("Connection problem");
+            // console.log("Connection problem");
             reject("Connection problem");
             return;
           }
           // process response
           if (response && response.statusCode === 200) {
             const listSubmit = JSON.parse(response.body).items;
-            // console.log(listSubmit); // list of submissions in JSON
+            // // console.log(listSubmit); // list of submissions in JSON
             data.status = 200;
             data.data = listSubmit;
           } else {
             if (response && response.statusCode === 401) {
-              console.log("Invalid access token");
+              // console.log("Invalid access token");
             } else if (response && response.statusCode === 400) {
               const body = JSON.parse(response.body);
-              console.log(
-                "Error code: " +
-                  body.error_code +
-                  ", details available in the message: " +
-                  body.message
-              );
+              // console.log(
+              //   "Error code: " +
+              //     body.error_code +
+              //     ", details available in the message: " +
+              //     body.message
+              // );
             }
             data.status = 404;
           }
@@ -800,7 +800,7 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
     } else {
       data.status = 404;
     }
-    //console.log(data);
+    //// console.log(data);
     return data;
   } catch (error) {
     console.error("Lỗi khi truy vấn dữ liệu:", error);
@@ -812,7 +812,7 @@ const getTestListForStudentWithFindObject = async (find, pagination) => {
 const getThiList = async (msv) => {
   const data = { status: null, data: null };
   const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
-  console.log(currentTime);
+  // console.log(currentTime);
   try {
     const tests = await db.Test.findAll({
       include: [
@@ -851,7 +851,7 @@ const getThiList = async (msv) => {
     } else {
       data.status = 404;
     }
-    //console.log(data);
+    //// console.log(data);
     return data;
   } catch (error) {
     console.error("Lỗi khi truy vấn dữ liệu:", error);

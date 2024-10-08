@@ -11,7 +11,7 @@ let availableQuesions = [];
 let myArray = new Array(100).fill(0);
 let ansUser = [];
 let questions = [];
-// //console.log(test)
+// //// console.log(test)
 let jsonQuestions =
   "../cauhoi/" + localStorage.getItem("currentSubject") + ".json";
 // localStorage.setItem('setTime', 1)
@@ -19,7 +19,7 @@ let jsonQuestions =
 var data = JSON.parse(
   document.querySelector("script").getAttribute("data-data")
 );
-// //console.log(data);
+// //// console.log(data);
 // fetch(jsonQuestions)
 let offsetHours = 7;
 let currentTime = new Date();
@@ -30,7 +30,7 @@ let adjustedTime = new Date(
 
 let ThoiGianLamBai = adjustedTime.toISOString().slice(0, 19).replace("T", " ");
 
-//console.log(ThoiGianLamBai);
+//// console.log(ThoiGianLamBai);
 
 const CORRECT_BONUS = 10;
 const MAX_QUESTIONS = 3;
@@ -39,7 +39,7 @@ const MAX_QUESTIONS = 3;
 questionCounter = 0;
 // score = 0;
 availableQuesions = [...questions];
-// //console.log(availableQuesions);
+// //// console.log(availableQuesions);
 ansUser = myArray;
 // getNewQuestion();
 
@@ -48,11 +48,11 @@ ansUser = myArray;
 // hiencauhoi = () => {
 let subject = document.getElementById("subject");
 subject.textContent = data.test.TenBaiThi;
-// //console.log(data.test.TenBaiThi)
+// //// console.log(data.test.TenBaiThi)
 
 let cauhoi = document.getElementById("cauhoi");
-// //console.log(cauhoi);
-// //console.log("so cau hoi:", availableQuesions.length);
+// //// console.log(cauhoi);
+// //// console.log("so cau hoi:", availableQuesions.length);
 for (let i = 0; i < data.questions.length; i++) {
   let container_hoitrl = document.createElement("div");
   container_hoitrl.classList.add("container-hoitrl");
@@ -66,7 +66,7 @@ for (let i = 0; i < data.questions.length; i++) {
 
   let container_cauhoi = document.createElement("div");
   container_cauhoi.textContent = data.questions[i].DeBai;
-  //console.log(data.questions[i].DeBai)
+  //// console.log(data.questions[i].DeBai)
   container_cauhoi.classList.add("container-cauhoi");
   container_hoitrl.appendChild(container_cauhoi);
 
@@ -93,7 +93,7 @@ for (let i = 0; i < data.questions.length; i++) {
 trangthai.appendChild(blockDiv);
 
 let choice = Array.from(document.getElementsByClassName("choice"));
-// //console.log('choice: ', choice);
+// //// console.log('choice: ', choice);
 for (let i = 0; i < choice.length; i++) {
   let x = choice[i];
   x.addEventListener("click", (e) => {
@@ -177,7 +177,7 @@ const nopbai = async () => {
         });
 
         const databody = JSON.stringify({ metadata, dataoption });
-        console.log(databody);
+        // console.log(databody);
         const response = await fetch("/result/submit", {
           method: "POST",
           headers: {
@@ -293,7 +293,7 @@ document.addEventListener("scroll", function () {
   var leftDivBottom = leftDiv.getBoundingClientRect().bottom;
   var rightDivBottom = rightDiv.getBoundingClientRect().bottom;
 
-  // //console.log(leftDivBottom + ' ' + rightDivBottom);
+  // //// console.log(leftDivBottom + ' ' + rightDivBottom);
 
   if (leftDivBottom > rightDivBottom) {
     rightDiv.style.top = scrollTop + "px";
@@ -312,7 +312,7 @@ function openDialog(tittle, content, func) {
   btnContinue.onclick = func;
   dialogOverlay.style.display = "block";
   dialogContent.style.display = "block";
-  //console.log('click');
+  //// console.log('click');
 }
 
 // Hàm đóng dialog

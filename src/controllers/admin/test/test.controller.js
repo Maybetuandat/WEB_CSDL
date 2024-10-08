@@ -30,7 +30,7 @@ const testListPaginate = async (req, res) => {
     ];
   }
 
-  // //console.log(find);
+  // //// console.log(find);
   const count = await getCountTestWithFindObject(find);
   const pagination = paginationHelper(
     {
@@ -44,7 +44,7 @@ const testListPaginate = async (req, res) => {
 
   var data = testList.data;
 
-  // //console.log(data);
+  // //// console.log(data);
   if (data != null) {
     for (var i = 0; i < data.length; i++) {
       var y = data[i].ThoiGianBatDau;
@@ -76,7 +76,7 @@ const createNewTestUser = async (req, res) => {
 
 const EditTest = async (req, res) => {
   const testId = req.params.id;
-  // //console.log("id: ", testId);
+  // //// console.log("id: ", testId);
   var metadata = await getTestById(testId);
   var questions = await getQuestionOfTestAdmin(testId);
 
@@ -87,10 +87,10 @@ const EditTest = async (req, res) => {
   const datePart = datetimeString.split("T")[0];
   const timePart = datetimeString.split("T")[1].split(".")[0];
 
-  // //console.log(metadata.data[0].MaBaiThi)
+  // //// console.log(metadata.data[0].MaBaiThi)
   metadata.data[0].date = datePart;
   metadata.data[0].time = timePart;
-  // //console.log(metadata[0].MaBaiThi);
+  // //// console.log(metadata[0].MaBaiThi);
 
   var list = questions.data;
 
@@ -103,7 +103,7 @@ const EditTest = async (req, res) => {
 
 const UserEditTest = async (req, res) => {
   const testId = req.params.id;
-  // //console.log("id: ", testId);
+  // //// console.log("id: ", testId);
   var metadata = await getTestById(testId);
   var questions = await getQuestionOfTest(testId);
 
@@ -114,10 +114,10 @@ const UserEditTest = async (req, res) => {
   const datePart = datetimeString.split("T")[0];
   const timePart = datetimeString.split("T")[1].split(".")[0];
 
-  // //console.log(metadata.data[0].MaBaiThi)
+  // //// console.log(metadata.data[0].MaBaiThi)
   metadata.data[0].date = datePart;
   metadata.data[0].time = timePart;
-  // //console.log(metadata[0].MaBaiThi);
+  // //// console.log(metadata[0].MaBaiThi);
 
   var list = questions.data;
 
@@ -130,7 +130,7 @@ const UserEditTest = async (req, res) => {
 
 const testListPaginateUser = async (req, res) => {
   let msv = req.jwtDecoded.data.id;
-  console.log(msv);
+  // console.log(msv);
   const find = {};
   const ten = req.query.name;
   if (ten) {
@@ -145,7 +145,7 @@ const testListPaginateUser = async (req, res) => {
     ];
   }
 
-  // //console.log(find);
+  // //// console.log(find);
   const count = await getCountTestWithFindObjectUser(find, msv);
   const pagination = paginationHelper(
     {
@@ -159,7 +159,7 @@ const testListPaginateUser = async (req, res) => {
 
   var data = testList.data;
 
-  // //console.log(data);
+  // //// console.log(data);
   if (data != null) {
     for (var i = 0; i < data.length; i++) {
       var y = data[i].ThoiGianBatDau;

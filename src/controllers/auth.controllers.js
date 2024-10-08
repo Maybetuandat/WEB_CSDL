@@ -148,15 +148,15 @@ const createTokenResponse = async (userData) => {
     accessTokenSecret,
     accessTokenLife
   );
-  const refreshToken = await jwtHelper.generateToken(
-    userData,
-    refreshTokenSecret,
-    refreshTokenLife
-  );
+  // const refreshToken = await jwtHelper.generateToken(
+  //   userData,
+  //   refreshTokenSecret,
+  //   refreshTokenLife
+  // );
 
   // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.
-  tokenList[refreshToken] = { accessToken, refreshToken };
-
+  // tokenList[refreshToken] = { accessToken, refreshToken };
+  const refreshToken = "";
   return { accessToken, refreshToken };
 };
 

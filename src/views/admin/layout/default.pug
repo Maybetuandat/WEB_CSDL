@@ -73,13 +73,13 @@ html
     script.
       document.addEventListener("DOMContentLoaded", function () {
         document.addEventListener("mousedown", function (e) {
-         // console.log('click')
+         // // console.log('click')
           createClickEffect(e.pageX, e.pageY);
         });
       });
 
       function createClickEffect(x, y) {
-        //console.log(x + ' ' + y)
+        //// console.log(x + ' ' + y)
         var clickEffect = document.getElementById("clickEffect");
         clickEffect.style.left = x + "px";
         clickEffect.style.top = y + "px";

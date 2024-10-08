@@ -109,7 +109,7 @@ block main
                                 document.getElementById('text-input').innerHTML = result.value;
                             })
                             .catch(function(err){
-                                console.log(err);
+                                // console.log(err);
                             });
                         event.target.value = null
                     });
@@ -320,10 +320,10 @@ block main
                         textContents.push(combinedText.trim());
                         if (status == "question") currentQuestion.question = combinedText.trim();
                         else currentQuestion.answers.push(combinedText.trim());
-                        // console.log(div.style.backgroundColor);
+                        // // console.log(div.style.backgroundColor);
                         if (div.style.backgroundColor === TH1_BACKGROUND_COLOR) {
                             status = "question";
-                            // console.log(currentQuestion);
+                            // // console.log(currentQuestion);
                             questionsAndAnswers.push(currentQuestion);
                             currentQuestion = { question: null, answers: [] };
                         } else {
@@ -356,7 +356,7 @@ block main
                     }
 
                     // Hiển thị kết quả trong console
-                    console.log(questionsAndAnswers);
+                    // console.log(questionsAndAnswers);
                     questionsAndAnswers.shift()
                     render2(questionsAndAnswers)
                     };

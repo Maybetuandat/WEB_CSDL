@@ -1,6 +1,6 @@
 // document.addEventListener("DOMContentLoaded", async function () {
 //     // Lấy token từ localStorage
-//     const token = localStorage.getItem("token-access") 
+//     const token = localStorage.getItem("token-access")
 
 //     // Lấy URL hiện tại
 //     const currentUrl = window.location.href;
@@ -11,7 +11,7 @@
 //     // Lấy phần đuôi (pathname) của URL
 //     const pathname = urlObject.pathname;
 
-//     //console.log(pathname); // In ra "/admin/login"
+//     //// console.log(pathname); // In ra "/admin/login"
 
 //     if (token) {
 //         // Thêm token vào header Authorization của mỗi yêu cầu gửi từ client tới máy chủ
@@ -27,7 +27,7 @@
 //             }
 //         })
 //         .then((data) => {
-            
+
 //         })
 //         .catch((error) => {
 //             console.error("Lỗi khi gửi yêu cầu đến máy chủ", error);

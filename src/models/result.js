@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // //console.log(models.Test)
+      // //// console.log(models.Test)
       Result.hasOne(models.Test, {
         foreignKey: "MaBaiThi",
         targetKey: "MaBaiThi",
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       MaBaiThi: DataTypes.STRING,
       Diem: DataTypes.FLOAT,
       ThoiGianLamBai: DataTypes.STRING,
-      ThoiGianNopBai: DataTypes.STRING
+      ThoiGianNopBai: DataTypes.STRING,
     },
     {
       // options

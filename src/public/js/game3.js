@@ -11,7 +11,7 @@ let availableQuesions = [];
 let myArray = new Array(100).fill(0);
 let ansUser = [];
 let questions = [];
-// //console.log(test)
+// //// console.log(test)
 let jsonQuestions =
   "../cauhoi/" + localStorage.getItem("currentSubject") + ".json";
 // localStorage.setItem('setTime', 1)
@@ -19,19 +19,19 @@ let jsonQuestions =
 var data = JSON.parse(
   document.querySelector("script").getAttribute("data-data")
 );
-// //console.log(data);
+// //// console.log(data);
 // fetch(jsonQuestions)
 let offsetHours = 7;
 let currentTime = new Date();
 
 let adjustedTime = data.time;
-console.log(data.time);
+// console.log(data.time);
 
 // startGame = () => {
 questionCounter = 0;
 // score = 0;
 availableQuesions = [...questions];
-// //console.log(availableQuesions);
+// //// console.log(availableQuesions);
 ansUser = myArray;
 // getNewQuestion();
 
@@ -40,12 +40,12 @@ ansUser = myArray;
 // hiencauhoi = () => {
 let subject = document.getElementById("subject");
 subject.textContent = data.test.TenBaiThi;
-// //console.log(data.test.TenBaiThi)
+// //// console.log(data.test.TenBaiThi)
 
 let cauhoi = document.getElementById("cauhoi");
-// //console.log(cauhoi);
-// //console.log("so cau hoi:", availableQuesions.length);
-console.log(data.result);
+// //// console.log(cauhoi);
+// //// console.log("so cau hoi:", availableQuesions.length);
+// console.log(data.result);
 for (let i = 0; i < data.questions.length; i++) {
   let container_hoitrl = document.createElement("div");
   container_hoitrl.classList.add("container-hoitrl");
@@ -184,7 +184,7 @@ var timer = setInterval(async () => {
   data.time -= 1000;
   var distance = data.time;
 
-  //console.log(startTime / 60000); // Tính toán thời gian còn lại
+  //// console.log(startTime / 60000); // Tính toán thời gian còn lại
   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -210,7 +210,7 @@ document.addEventListener("scroll", function () {
   var leftDivBottom = leftDiv.getBoundingClientRect().bottom;
   var rightDivBottom = rightDiv.getBoundingClientRect().bottom;
 
-  // //console.log(leftDivBottom + ' ' + rightDivBottom);
+  // //// console.log(leftDivBottom + ' ' + rightDivBottom);
 
   if (leftDivBottom > rightDivBottom) {
     rightDiv.style.top = scrollTop + "px";
@@ -229,7 +229,7 @@ function openDialog(tittle, content, func) {
   btnContinue.onclick = func;
   dialogOverlay.style.display = "block";
   dialogContent.style.display = "block";
-  //console.log('click');
+  //// console.log('click');
 }
 
 // Hàm đóng dialog

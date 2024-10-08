@@ -16,7 +16,7 @@ router.post(
       next(new Error("No file uploaded!"));
       return;
     }
-    //console.log(req.file.path);
+    //// console.log(req.file.path);
 
     var response = {
       img_url: req.file.path,

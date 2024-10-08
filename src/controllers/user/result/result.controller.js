@@ -32,7 +32,7 @@ module.exports.student = async (req, res) => {
     find.Lop = lop;
   }
 
-  //console.log(req.query.keyword);
+  //// console.log(req.query.keyword);
 
   if (req.query.keyword) {
     const regexExpression = new RegExp(req.query.keyword, "i").source;
@@ -42,7 +42,7 @@ module.exports.student = async (req, res) => {
     ];
   }
 
-  // //console.log(find);
+  // //// console.log(find);
   const count = await studentServices.getCountStudentWithFindObject(find);
   const pagination = paginationHelper(
     {
@@ -66,7 +66,7 @@ module.exports.student = async (req, res) => {
 };
 module.exports.studentWithId = async (req, res) => {
   const studentId = req.params.studentId;
-  //console.log(studentId);
+  //// console.log(studentId);
   const testList = await testServices.getTestByStudentId(studentId);
   const pagination = paginationHelper(
     {
@@ -136,7 +136,7 @@ module.exports.testWithId = async (req, res) => {
     questions: questions && questions.data ? questions.data : null,
   };
 
-  // console.log(data)
+  // // console.log(data)
   var tmp = "hiep";
   res.render("user/pages/viewResult/testResultStudent.pug", {
     data: data,
@@ -167,7 +167,7 @@ module.exports.testListForStudent = async (req, res) => {
   );
   const testListForStudent =
     await testServices.getTestListForStudentWithFindObject(find, pagination);
-  // console.log(testListForStudent);
+  // // console.log(testListForStudent);
   res.render("user/pages/test_list/testList.pug", {
     titlePage: "Danh sách bài thi",
     tests: testListForStudent.data,
@@ -181,7 +181,7 @@ module.exports.codeListForStudent = async (req, res) => {
   let tmp = "hiep";
   // res.sendFile("D:/CODE/backend_1 - Copy/src/views/user/pages/test_list/codeList.html", tmp);
   let codeList = await testServices.getAllProbPerPage(1);
-  // //console.log(codeList.data)
+  // //// console.log(codeList.data)
   res.render("user/pages/test_list/codeList.pug", {
     codeList: codeList.data,
   });
@@ -199,7 +199,7 @@ module.exports.widgetProb = async (req, res) => {
 
   // Use path.join again to add the filename to the path
   const filePath = path.join(problistPath, filename);
-  console.log(filePath);
+  // console.log(filePath);
   res.sendFile(filePath);
 };
 // [GET] /admin/my-account
@@ -221,7 +221,7 @@ module.exports.resultTestOfStudent = async (req, res) => {
     req.jwtDecoded.data.id,
     pagination
   );
-  // console.log(testListWithPage);
+  // // console.log(testListWithPage);
   res.render("user/pages/viewResult/testResult.pug", {
     titlePage: "Kết quả sinh viên",
     student: student.data && student.data[0] ? student.data[0] : null,
@@ -247,7 +247,7 @@ module.exports.submitOfStudent = async (req, res) => {
     pagination
   );
   // submitListWithPage.data.sort((a, b) => b.id - a.id);
-  //console.log(submitListWithPage);
+  //// console.log(submitListWithPage);
   res.render("user/pages/viewResult/codeResult.pug", {
     titlePage: "Kết quả sinh viên",
     submitList: submitListWithPage.data,
@@ -257,7 +257,7 @@ module.exports.submitOfStudent = async (req, res) => {
 
 module.exports.source = async (req, res) => {
   let url = await testServices.getURL(req.params.idSubmit);
-  //console.log(url)
+  //// console.log(url)
   request(
     {
       url: url,
@@ -265,24 +265,24 @@ module.exports.source = async (req, res) => {
     },
     function (error, response, body) {
       if (error) {
-        console.log("Connection problem");
+        // console.log("Connection problem");
       }
 
       // process response
       if (response) {
         if (response.statusCode === 200) {
-          console.log(response.body);
+          // console.log(response.body);
           let source = response.body;
           res.render("user/pages/viewResult/source.pug", {
             source: source,
           });
         } else {
           if (response.statusCode === 401) {
-            console.log("Invalid access token");
+            // console.log("Invalid access token");
           } else if (response.statusCode === 403) {
-            console.log("Access denied");
+            // console.log("Access denied");
           } else if (response.statusCode === 404) {
-            console.log("Submision not found");
+            // console.log("Submision not found");
           }
         }
       }
@@ -295,7 +295,7 @@ module.exports.detailStudentAndTest = async (req, res) => {
     req.jwtDecoded.data.id,
     req.params.idResult
   );
-  //console.log(result.detail);
+  //// console.log(result.detail);
   if (result && result.result) {
     res.render("user/pages/viewResult/studentAndTestDetail.pug", {
       titlePage: "Kết quả sinh viên",

@@ -20,7 +20,7 @@ const getResultWithIdStuAndIdTest = async (req, res) => {
   const idStu = req.params.id;
   const idTest = req.params.idTest;
   const data = await getResultByIdStuAndIdTest(idStu, idTest);
-  // //console.log(data);
+  // //// console.log(data);
   return res.json(data);
 };
 const getDetailTestWithIdStuAndIdTest = async (idStudent, idTest) => {
@@ -47,7 +47,7 @@ const getDetailTestWithIdStuAndIdTest = async (idStudent, idTest) => {
     dataRes.result = result;
     dataRes.numberTotal = detailList.length;
     var cntCorrect = 0;
-    console.log(detailList);
+    // console.log(detailList);
     for (var i = 0; i < detailList.length; i++) {
       const questionInfor = { question: null, _detail: null };
       questionInfor.question = questionList.data[i];
@@ -94,7 +94,7 @@ const getDetailThiWithIdStuAndIdTest = async (idStudent, idTest) => {
   } else {
     dataRes.status = 404;
   }
-  //console.log(dataRes);
+  //// console.log(dataRes);
   return dataRes;
 };
 
@@ -134,7 +134,7 @@ const getDetailTestWithIdStuAndIdResult = async (idStudent, idResult) => {
     }
     dataRes.result = result;
     dataRes.numberTotal = detailList._detail.length;
-    console.log(result);
+    // console.log(result);
     let cntCorrect = 0;
     for (let i = 0; i < detailList._detail.length; i++) {
       const questionInfor = { question: null, _detail: null };

@@ -11,7 +11,7 @@ const numerousOfPeople = document.querySelector(
 const nameOfTest = document.querySelector(".title-test");
 const subjectTest = document.querySelector(".subject-test");
 
-console.log(timeTest, " ", numerousOfQuestions, " ", numerousOfPeople);
+// console.log(timeTest, " ", numerousOfQuestions, " ", numerousOfPeople);
 const currentUrl = window.location.href;
 const url = window.location.pathname;
 
@@ -19,7 +19,7 @@ const url = window.location.pathname;
 const parts = url.split("/"); // Giả sử URL là dạng "/detail/:testId"
 const idTest = parts[parts.length - 1]; // Phần tử cuối cùng của mảng là testId
 
-console.log("idtest: ", idTest);
+// console.log("idtest: ", idTest);
 var comments = []; // Array to store retrieved comments
 var nameStudent = "";
 const fetchComments = async () => {
@@ -44,7 +44,7 @@ const fetchComments = async () => {
         };
       });
 
-      console.log("Fetched comments:", comments); // Log the fetched comments for debugging
+      // console.log("Fetched comments:", comments); // Log the fetched comments for debugging
       displayComments(); // Call displayComments to render retrieved comments
     })
     .catch((error) => {
@@ -63,7 +63,7 @@ async function fetchTestDetails() {
     })
     .then((data) => {
       // Extract and display test details (assuming structure of the data)
-      console.log(data);
+      // console.log(data);
       const nameTest = data[0].TenBaiThi;
       const subject = data[0].TheLoai;
       const testDuration = data[0].ThoiGianThi; // Replace with appropriate property name
@@ -141,16 +141,16 @@ const displayComments = () => {
     nameUserContainer.classList.add("nameUser");
     getStudentInfo(comment.MaSinhVien) // Replace with actual student ID
       .then((studentInfo) => {
-        console.log(studentInfo);
+        // console.log(studentInfo);
         nameStudent = studentInfo[0].Ten;
-        console.log(nameStudent); // Use the student info
+        // console.log(nameStudent); // Use the student info
         // Add class for user name styling
         nameUserContainer.textContent = nameStudent || "Anonymous"; // Use MaSinhVien if available, otherwise 'Anonymous'
       })
       .catch((error) => {
         console.error("Error fetching student info:", error);
       });
-    console.log(nameStudent);
+    // console.log(nameStudent);
     const commentElement = document.createElement("div");
     commentElement.classList.add("item"); // Add the main comment container class
     const profilePic = document.createElement("div");
@@ -239,7 +239,7 @@ const addComment = async () => {
     });
 };
 
-console.log("commentInput", commentInput);
+// console.log("commentInput", commentInput);
 fetchComments(); // Call fetchComments to retrieve comments on page load
 
 sendButton?.addEventListener("click", addComment);

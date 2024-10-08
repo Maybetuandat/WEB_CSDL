@@ -4,52 +4,54 @@ const { where, Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const getJwtFromDb = async (id) => {
   try {
-    const sessionUser = await db.Student.findAll({
+    const sessionUser = await db.Student.findOne({
       raw: true,
       where: {
         MSV: id,
       },
+      attributes: ["AccessToken"], // Chỉ lấy thuộc tính AccessToken
     });
-    //   console.log("jwt từ db trong service", sessionUser[0].AccessToken);
-    return sessionUser[0].AccessToken;
+
+    // Kiểm tra xem sessionUser có tồn tại không trước khi truy cập AccessToken
+    return sessionUser ? sessionUser.AccessToken : null;
   } catch (error) {
-    console.log("lỗi khi lấy jwt từ db", error);
+    // console.log("lỗi khi lấy jwt từ db", error);
     return null;
   }
 };
 
 const insertJwt = async (data) => {
   //check xem đã tồn tại jwt chưa
-  const sessionUser = await db.Student.findOne({
-    where: {
-      MSV: data.msv,
-    },
-  });
-  if (!sessionUser) {
-    try {
-      await db.Student.create({
-        MSV: data.msv,
+  // const sessionUser = await db.Student.findOne({
+  //   where: {
+  //     MSV: data.msv,
+  //   },
+  // });
+  // if (!sessionUser) {
+  //   try {
+  //     await db.Student.create({
+  //       MSV: data.msv,
+  //       AccessToken: data.accessToken,
+  //     });
+  //   } catch (error) {
+  //     // console.log("lỗi khi insert jwt", error);
+  //   }
+  // } else {
+  try {
+    await db.Student.update(
+      {
         AccessToken: data.accessToken,
-      });
-    } catch (error) {
-      console.log("lỗi khi insert jwt", error);
-    }
-  } else {
-    try {
-      await db.Student.update(
-        {
-          AccessToken: data.accessToken,
+      },
+      {
+        where: {
+          MSV: data.msv,
         },
-        {
-          where: {
-            MSV: data.msv,
-          },
-        }
-      );
-    } catch (error) {
-      console.log("lỗi khi update jwt", error);
-    }
+      }
+    );
+  } catch (error) {
+    // console.log("lỗi khi update jwt", error);
   }
+  // }
 };
 
 const getAllStudent = async () => {
@@ -83,7 +85,7 @@ const getStudentById = async (id) => {
 
     const students = student ? [student] : [];
 
-    // console.log(students)
+    // // console.log(students)
     if (students.length > 0) {
       data.status = 200;
       data.data = students;
@@ -165,7 +167,7 @@ const createNewStudent = async (student) => {
 };
 
 const deleteStudentById = async (data) => {
-  // console.log(id)
+  // // console.log(id)
   try {
     const result = await db.Student.destroy({
       where: {
@@ -181,7 +183,7 @@ const deleteStudentById = async (data) => {
       return false;
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false;
   }
 };
@@ -190,7 +192,7 @@ const updateStudentById = async (id, data) => {
   var student = await db.Student.findByPk(id);
   var existStudent = await db.Student.findByPk(data.msv);
 
-  // //console.log(id)
+  // //// console.log(id)
   if (existStudent) {
     return -1;
   }
@@ -201,13 +203,13 @@ const updateStudentById = async (id, data) => {
     student.TaiKhoan = data.account;
     student.MatKhau = data.password;
 
-    //console.log(student.MSV);
+    //// console.log(student.MSV);
     student.save();
-    //console.log(student.MSV);
+    //// console.log(student.MSV);
 
     return 1;
   } catch (err) {
-    //console.log(err);
+    //// console.log(err);
     return 0;
   }
 };
@@ -216,13 +218,13 @@ const updateStudentById2 = async (id, data) => {
   try {
     var student = await db.Student.findByPk(id);
     if (!student) {
-      console.log("Student not found");
+      // console.log("Student not found");
       return 0;
     }
 
     var existStudent = await db.Student.findByPk(data.MSV);
     if (existStudent) {
-      console.log("Student with the same MSV already exists");
+      // console.log("Student with the same MSV already exists");
     }
 
     student.Ten = data.Ten;
@@ -231,7 +233,7 @@ const updateStudentById2 = async (id, data) => {
     student.TaiKhoan = data.TaiKhoan;
     student.MatKhau = student.MatKhau;
     await student.save();
-    console.log("Student updated successfully");
+    // console.log("Student updated successfully");
     return 1;
   } catch (err) {
     console.error("Error updating student:", err);
@@ -260,14 +262,14 @@ const getStudentCondition = async (condition, keyword) => {
         }
         return data;
       } catch (e) {
-        //console.log(e);
+        //// console.log(e);
         data.status = 500;
         return data;
       }
       break;
     }
     case "name": {
-      //console.log("name");
+      //// console.log("name");
       try {
         const students = await db.Student.findAll({
           raw: true,
@@ -286,7 +288,7 @@ const getStudentCondition = async (condition, keyword) => {
           return data;
         }
       } catch (e) {
-        //console.log(e);
+        //// console.log(e);
         data.status = 500;
         return data;
       }
@@ -295,8 +297,8 @@ const getStudentCondition = async (condition, keyword) => {
 };
 const getStudentWithFindObject = async (find, pagination) => {
   const data = { status: null, data: null };
-  //console.log(pagination.limit, pagination.offset);
-  //console.log(find);
+  //// console.log(pagination.limit, pagination.offset);
+  //// console.log(find);
   try {
     const students = await db.Student.findAll({
       where: find,

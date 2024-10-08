@@ -89,7 +89,7 @@ module.exports.verifyOTP = async (req, res) => {
     req.body.digit4 +
     req.body.digit5 +
     req.body.digit6);
-  // console.log(newotp);
+  // // console.log(newotp);
   // Lấy email và mã OTP đã lưu trữ
   const email = await req.body.email;
   const data = await getOtpWithEmail(email);

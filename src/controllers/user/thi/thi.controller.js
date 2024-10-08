@@ -9,7 +9,7 @@ const jwtHelper = require("../../../helpers/jwt.helper");
 
 module.exports.index = async (req, res) => {
   const thiList = await testServices.getThiList(req.jwtDecoded.data.id);
-  for (let i = 0; i < thiList.data.length; i++) {
+  for (let i = 0; i < (thiList.data ? thiList.data.length : 0); i++) {
     if (thiList.data[i].TheLoai == "tự luận") {
       thiList.data[i].ThoiGianThi =
         (thiList.data[i]["Shifts.end"].getTime() -
@@ -18,7 +18,7 @@ module.exports.index = async (req, res) => {
       thiList.data[i].ThoiGianThi = Math.round(thiList.data[i].ThoiGianThi);
     }
   }
-  console.log(thiList);
+  // console.log(thiList);
   let results = [];
   for (let i = 0; i < (thiList.data ? thiList.data.length : 0); i++) {
     let result = await thiService.getResultThiStuTest(
@@ -27,7 +27,7 @@ module.exports.index = async (req, res) => {
     );
     results.push(result);
   }
-  // console.log(testListForStudent);
+  // // console.log(testListForStudent);
   res.render("user/pages/test_list/thiList.pug", {
     titlePage: "Thực hành",
     tests: thiList.data,
@@ -36,24 +36,24 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.testWithId = async (req, res) => {
-  const testId = req.params.testId;
-  const test = await testServices.getThiById(testId);
-  const currentTime = new Date();
-  // Cộng thêm 7 giờ vào thời gian hiện tại
-  const updatedTime = new Date(currentTime.getTime() + 7 * 60 * 60 * 1000);
-  var questions = null;
-  let result = null;
-  if (test.data[0].TheLoai != "tự luận") {
-    if (test.data) {
-      if (test.data[0].TrangThai == "th") {
+  try {
+    const testId = req.params.testId;
+    const test = await testServices.getThiById(testId);
+    const currentTime = new Date();
+    const updatedTime = new Date(currentTime.getTime() + 7 * 60 * 60 * 1000); // Cộng thêm 7 giờ vào thời gian hiện tại
+    let questions = null;
+    let result = null;
+
+    // Kiểm tra nếu không phải thể loại "tự luận"
+    if (test.data && test.data[0].TheLoai !== "tự luận") {
+      if (test.data[0].TrangThai === "th") {
         questions = await getQuestionOfTest(testId, test.data[0].TheLoai);
-        let maCauHoiString = null;
+
         if (questions.data) {
-          let maCauHoiArray = questions.data.map(
+          const maCauHoiArray = questions.data.map(
             (question) => question.MaCauHoi
           );
-          maCauHoiString = maCauHoiArray.join("");
-          console.log(maCauHoiString);
+          const maCauHoiString = maCauHoiArray.join("");
 
           result = await thiService.getThiResult(
             req.jwtDecoded.data.id,
@@ -62,31 +62,32 @@ module.exports.testWithId = async (req, res) => {
             maCauHoiString
           );
 
-          const dscauArray = result.data.DanhSachCau.match(/C\d{2}/g);
-
+          const dscauArray = result.data?.DanhSachCau.match(/C\d{2}/g);
           if (dscauArray) {
-            // Sắp xếp mảng questions theo thứ tự trong danhSachArray
-            const sortedQuestions = questions.data.sort((a, b) => {
-              return (
+            // Sắp xếp questions theo thứ tự trong dscauArray
+            questions.data.sort(
+              (a, b) =>
                 dscauArray.indexOf(a.MaCauHoi) - dscauArray.indexOf(b.MaCauHoi)
-              );
-            });
+            );
             questions.data = questions.data.map(
               ({ MaCauHoi, ...rest }) => rest
             );
-            //console.log(sortedQuestions);
-          } else {
           }
 
+          // Kiểm tra thời gian làm bài và thời gian nộp bài
           if (
             updatedTime.getTime() - result.data.ThoiGianLamBai.getTime() >
               test.data[0].ThoiGianThi * 60 * 1000 ||
-            result.data.ThoiGianNopBai != null
+            result.data.ThoiGianNopBai !== null
           ) {
-            test.data = null;
+            test.data = null; // Bài thi đã hết hạn hoặc đã nộp bài
           }
         }
-      } else test.data = null;
+      } else {
+        test.data = null;
+      }
+
+      // Điều chỉnh thời gian thi nếu cần
       if (test.data) {
         for (let i = 0; i < test.data.length; i++) {
           if (
@@ -101,45 +102,47 @@ module.exports.testWithId = async (req, res) => {
           }
         }
       }
-    }
 
-    const data = {
-      test: test && test.data ? test.data[0] : null,
-      questions: questions && questions.data ? questions.data : null,
-      time: result && result.data ? result.data.ThoiGianLamBai : null,
-    };
+      const data = {
+        test: test.data ? test.data[0] : null,
+        questions: questions?.data || null,
+        time: result?.data?.ThoiGianLamBai || null,
+      };
 
-    res.render("user/pages/viewResult/thiResultStudent.pug", {
-      data: data,
-    });
-  } else {
-    if (test.data) {
-      if (test.data[0].TrangThai == "th") {
+      return res.render("user/pages/viewResult/thiResultStudent.pug", { data });
+    } else {
+      // Xử lý cho thể loại "tự luận"
+      if (test.data && test.data[0].TrangThai === "th") {
         questions = await getQuestionOfTest(testId, test.data[0].TheLoai);
         result = await thiService.getSqlResult(req.jwtDecoded.data.id, testId);
-      } else test.data = null;
-    }
-    // console.log(result);
-    const data = {
-      test: test && test.data ? test.data[0] : null,
-      questions: questions && questions.data ? questions.data : null,
-      time: test.data[0]["Shifts.end"].getTime() - updatedTime.getTime(),
-      result: result && result.data ? result.data : null,
-    };
+      } else {
+        test.data = null;
+      }
 
-    res.render("user/pages/viewResult/thiResultStudent2.pug", {
-      data: data,
-    });
+      const data = {
+        test: test?.data?.[0] || null,
+        questions: questions?.data || null,
+        time: test?.data?.[0]["Shifts.end"].getTime() - updatedTime.getTime(),
+        result: result?.data || null,
+      };
+
+      return res.render("user/pages/viewResult/thiResultStudent2.pug", {
+        data,
+      });
+    }
+  } catch (error) {
+    console.error("Error in testWithId:", error);
+    return res.status(500).send("Internal Server Error");
   }
 };
 
 module.exports.postSubmit = async (req, res) => {
   let msv = req.jwtDecoded.data.id;
   var reqBody = req.body;
-  //console.log(reqBody)
+  //// console.log(reqBody)
   var test = reqBody.metadata[0];
   var ans = reqBody.option;
-  console.log(reqBody);
+  // console.log(reqBody);
   var result = await thiService.updateDetail(msv, test, ans);
 
   if (result) {
@@ -161,10 +164,10 @@ module.exports.postSubmit = async (req, res) => {
 module.exports.postSubmitSql = async (req, res) => {
   let msv = req.jwtDecoded.data.id;
   var reqBody = req.body;
-  //console.log(reqBody)
+  //// console.log(reqBody)
   // var test = reqBody.metadata;
 
-  console.log(reqBody);
+  // console.log(reqBody);
   var result = await thiService.updateDetailSql(msv, reqBody);
 
   if (result) {

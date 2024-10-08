@@ -67,7 +67,7 @@ document.getElementById("exportButton").addEventListener("click", async () => {
   const a = document.createElement("a");
   a.href = url;
   a.download = nameTest.substring(1, nameTest.length - 1) + ".xlsx";
-  console.log(typeof nameTest);
+  // console.log(typeof nameTest);
   a.click();
   URL.revokeObjectURL(url);
 });
