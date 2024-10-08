@@ -9,6 +9,15 @@ const jwtHelper = require("../../../helpers/jwt.helper");
 
 module.exports.index = async (req, res) => {
   const thiList = await testServices.getThiList(req.jwtDecoded.data.id);
+  for (let i = 0; i < thiList.data.length; i++) {
+    if (thiList.data[i].TheLoai == "tự luận") {
+      thiList.data[i].ThoiGianThi =
+        (thiList.data[i]["Shifts.end"].getTime() -
+          (new Date().getTime() + 7 * 60 * 60 * 1000)) /
+        60000; // Tính chênh lệch
+      thiList.data[i].ThoiGianThi = Math.round(thiList.data[i].ThoiGianThi);
+    }
+  }
   console.log(thiList);
   let results = [];
   for (let i = 0; i < (thiList.data ? thiList.data.length : 0); i++) {
