@@ -12,7 +12,6 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 const addCommentHandler = async (req, res) => {
   const data = req.body;
   const MaSinhVien = req.jwtDecoded?.data.id;
-  // console.log(req.jwtDecoded?.data.id);
 
   try {
     const result = await addComment(

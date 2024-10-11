@@ -82,7 +82,6 @@ const getDetailListWithIdResult = async (idResult) => {
       option.push(optionGroup);
     }
     data._option = option;
-    // console.log(data);
     return data;
   } catch (error) {
     console.error("Error fetching details:", error);

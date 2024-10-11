@@ -140,7 +140,6 @@ const getQuestionOfTest2 = async (id) => {
 };
 
 const getQuestionOfTestAdmin = async (id) => {
-  // console.log("hello");
   var data = { status: null, data: null };
   try {
     var questions = await db.Question.findAll({
@@ -173,7 +172,6 @@ const getQuestionOfTestAdmin = async (id) => {
     if (questions.length > 0) {
       data.status = 200;
       data.data = questions;
-      // console.log(questions);
     } else {
       data.status = 404;
     }

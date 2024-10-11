@@ -19,9 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //(api)
     inputs.forEach(async (input) => {
       formData[input.id] = input.value;
-      //// console.log(input.id, input.value)
     });
-    // // console.log(formData)
 
     await fetch(api, {
       method: "PUT",
@@ -32,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        //// console.log("Profile updated:", data);
         saveBtn.classList.add("hide");
         inputs.forEach((input) => {
           input.setAttribute("readonly", true);

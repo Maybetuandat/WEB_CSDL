@@ -15,7 +15,7 @@ const saltRounds = 10;
 
 const getStudentHandler = async (req, res) => {
   var students = await getAllStudent();
-  // //// console.log(questions)
+
   if (students.status === 200) {
     var hiddenStudents = students.data.map((student) => {
       const { TaiKhoan, MatKhau, ...rest } = student;
@@ -80,7 +80,7 @@ const getStudentByPage = async (req, res) => {
 
 const getStudentByIdHandler = async (req, res) => {
   const id = req.params.id;
-  //// console.log(id)
+
   var student = await getStudentById(id);
 
   // var studentData = student.data;
@@ -140,7 +140,6 @@ const postStudentHandler = async (req, res) => {
 
 const createNewStudentList = async (req, res) => {
   students = req.body;
-  // // console.log(students)
 
   for (let i = 0; i < students.length; i++) {
     students[i].MatKhau = await bcrypt.hashSync(
@@ -166,7 +165,6 @@ const createNewStudentList = async (req, res) => {
 
 const deleteStudentHandler = async (req, res) => {
   studentId = req.params;
-  // console.log(studentId)
   var status = deleteStudentById(studentId);
   if (status) {
     res.status(200).json({
@@ -191,7 +189,6 @@ const updateStudentHandler = async (req, res) => {
     updatedData.password,
     saltRounds
   );
-  // // console.log(updatedData)
 
   const status = await updateStudentById(studentId, updatedData);
 
@@ -219,9 +216,7 @@ const updateStudentHandler = async (req, res) => {
 const updateStudentHandler2 = async (req, res) => {
   const studentId = req.params.id;
   let updatedData = req.body;
-  // console.log(updatedData)
   const status = await updateStudentById2(studentId, updatedData);
-  // console.log("thành công")
 
   if (status == 1) {
     res.status(200).json({
@@ -247,10 +242,8 @@ const updateStudentHandler2 = async (req, res) => {
 const getStudentInresultHandler = async (req, res) => {
   var value = req.query.value;
   var keyword = req.query.keyword;
-  //// console.log(value + " " + keyword);
   var students = await getAllStudent();
   if (value && keyword) students = await getStudentCondition(value, keyword);
-  // //// console.log(questions)
 
   if (students.status === 200) {
     var hiddenStudents = students.data.map((student) => {

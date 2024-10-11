@@ -11,41 +11,27 @@ let availableQuesions = [];
 let myArray = new Array(100).fill(0);
 let ansUser = [];
 let questions = [];
-// //// console.log(test)
 let jsonQuestions =
   "../cauhoi/" + localStorage.getItem("currentSubject") + ".json";
-// localStorage.setItem('setTime', 1)
 
 var data = JSON.parse(
   document.querySelector("script").getAttribute("data-data")
 );
-// //// console.log(data);
-// fetch(jsonQuestions)
+
 let offsetHours = 7;
 let currentTime = new Date();
 
 let adjustedTime = data.time;
-// console.log(data.time);
 
-// startGame = () => {
 questionCounter = 0;
-// score = 0;
 availableQuesions = [...questions];
-// //// console.log(availableQuesions);
 ansUser = myArray;
-// getNewQuestion();
 
-// };
-
-// hiencauhoi = () => {
 let subject = document.getElementById("subject");
 subject.textContent = data.test.TenBaiThi;
-// //// console.log(data.test.TenBaiThi)
 
 let cauhoi = document.getElementById("cauhoi");
-// //// console.log(cauhoi);
-// //// console.log("so cau hoi:", availableQuesions.length);
-// console.log(data.result);
+
 for (let i = 0; i < data.questions.length; i++) {
   let container_hoitrl = document.createElement("div");
   container_hoitrl.classList.add("container-hoitrl");
@@ -86,14 +72,10 @@ for (let i = 0; i < data.questions.length; i++) {
   notification.classList.add("notification");
   container_hoitrl.appendChild(notification);
 
-  // Kiểm tra nếu câu hỏi đã có câu trả lời trong data.result
   const matchedResult = data.result.find((result) => result.Cau === i + 1); // Tìm kết quả dựa trên số câu
 
   if (matchedResult) {
-    // Nếu có kết quả, gán câu trả lời vào textarea
     inputTraLoi.value = matchedResult.ChiTiet;
-
-    // Hiển thị thông báo đã nộp thành công
     notification.textContent = "Đã nộp thành công";
     notification.style.color = "green"; // Màu thông báo thành công là màu xanh
   }
@@ -183,8 +165,6 @@ const process = async (value, i) => {
 var timer = setInterval(async () => {
   data.time -= 1000;
   var distance = data.time;
-
-  //// console.log(startTime / 60000); // Tính toán thời gian còn lại
   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -210,15 +190,12 @@ document.addEventListener("scroll", function () {
   var leftDivBottom = leftDiv.getBoundingClientRect().bottom;
   var rightDivBottom = rightDiv.getBoundingClientRect().bottom;
 
-  // //// console.log(leftDivBottom + ' ' + rightDivBottom);
-
   if (leftDivBottom > rightDivBottom) {
     rightDiv.style.top = scrollTop + "px";
   }
 });
 
 function openDialog(tittle, content, func) {
-  // localStorage.setItem('setTime', 0);
   var dialogOverlay = document.getElementById("dialogOverlay");
   var dialogContent = document.getElementById("dialogContent");
   var content1 = document.getElementById("content-dialog");
@@ -229,12 +206,10 @@ function openDialog(tittle, content, func) {
   btnContinue.onclick = func;
   dialogOverlay.style.display = "block";
   dialogContent.style.display = "block";
-  //// console.log('click');
 }
 
 // Hàm đóng dialog
 function closeDialog() {
-  // localStorage.setItem('setTime', 1);
   var dialogOverlay = document.getElementById("dialogOverlay");
   var dialogContent = document.getElementById("dialogContent");
   dialogOverlay.style.display = "none";

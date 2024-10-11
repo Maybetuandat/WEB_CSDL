@@ -17,7 +17,6 @@ const getResultByIdStuAndIdTest = async (idStu, idTest) => {
         MaBaiThi: idTest,
       },
     });
-    ////// console.log(res);
     if (res) {
       data.status = 200;
       data.data = res;
@@ -26,7 +25,6 @@ const getResultByIdStuAndIdTest = async (idStu, idTest) => {
     }
     return data;
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
     return data;
   }
@@ -48,13 +46,10 @@ const getResultThiByIdStuAndIdTest = async (idStu, idTest) => {
     let numbers = matches.map((match) => parseInt(match.slice(1), 10));
     let anstmpArray = new Array(numbers.length).fill("E"); // Tạo mảng toàn chữ 'E'
     for (let i = 0; i < numbers.length; i++) {
-      // console.log(numbers[i] + " " + res[0].ChiTiet[i]);
       anstmpArray[numbers[i] - 1] = res[0].ChiTiet[i]; // Thay đổi giá trị tại chỉ số tương ứng
     }
     let anstmp = anstmpArray.join(""); // Chuyển mảng thành chuỗi
-    // console.log(anstmp);
     res[0].ChiTiet = anstmp;
-    ////// console.log(res);
     if (res) {
       data.status = 200;
       data.data = res;
@@ -63,7 +58,6 @@ const getResultThiByIdStuAndIdTest = async (idStu, idTest) => {
     }
     return data;
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
     return data;
   }
@@ -80,7 +74,6 @@ const getResultByIdTest = async (idTest) => {
         MaBaiThi: idTest,
       },
     });
-    ////// console.log(res);
     if (res) {
       data.status = 200;
       data.data = res;
@@ -89,7 +82,6 @@ const getResultByIdTest = async (idTest) => {
     }
     return data;
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
     return data;
   }
@@ -102,7 +94,6 @@ const getResultByIdThi = async (idTest, theloai) => {
   };
   try {
     let res = [];
-    console.log(theloai);
     if (theloai != "tự luận") {
       res = await db.ResultTest.findAll({
         raw: true,
@@ -123,7 +114,6 @@ const getResultByIdThi = async (idTest, theloai) => {
         group: ["MSV"], // Nhóm theo MSV
       });
     }
-    console.log(res);
     if (res) {
       data.status = 200;
       data.data = res;
@@ -132,7 +122,6 @@ const getResultByIdThi = async (idTest, theloai) => {
     }
     return data;
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
     return data;
   }
@@ -145,7 +134,6 @@ const getAllResult = async (req, res) => {
   };
   try {
     const res = await db.Result.findAll();
-    // //// console.log(res);
     if (res.length > 0) {
       data.status = 200;
       data.data = res;
@@ -154,7 +142,6 @@ const getAllResult = async (req, res) => {
     }
     return data;
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
     return data;
   }
@@ -173,7 +160,6 @@ const getResultWithIdResult = async (idResult) => {
         MaBaiThi: idResult,
       },
     });
-    ////// console.log(res);
     //neu ton tai -> 200
     // khong ton tai -> 400
     //truy van loi -> 500
@@ -185,7 +171,6 @@ const getResultWithIdResult = async (idResult) => {
       data.data = null;
     }
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
   }
   return data;
@@ -204,7 +189,6 @@ const getResultWithMaKetQua = async (idResult) => {
         MaKetQua: idResult,
       },
     });
-    ////// console.log(res);
     //neu ton tai -> 200
     // khong ton tai -> 400
     //truy van loi -> 500
@@ -216,7 +200,6 @@ const getResultWithMaKetQua = async (idResult) => {
       data.data = null;
     }
   } catch (e) {
-    //// console.log(e);
     data.status = 500;
   }
   return data;
@@ -289,8 +272,7 @@ const tinhdiem = async (questionList, testID, t) => {
     }
     return 0;
   });
-  //// console.log("questionlist: ", questionList);
-  //// console.log("cauhoi: ", cauhoi);
+
   let diem = [];
   for (var i = 0; i < questionList.length; i++) {
     if (questionList[i].maluachon == cauhoi[i].MaLuaChon) {
@@ -312,7 +294,6 @@ const createNewResult = async (msv, test, questionList) => {
       tongdiem += element;
     });
     tongdiem = ((tongdiem / diem.length) * 10).toFixed(2);
-    //// console.log(tongdiem);
     let result = await db.Result.create(
       {
         MSV: msv,
@@ -323,7 +304,6 @@ const createNewResult = async (msv, test, questionList) => {
       },
       { transaction: t }
     );
-    //// console.log('result:', result.dataValues.MaKetQua)
 
     // for (var i = 0; i < questionList.length; i++) {
     //   if(questionList[i].maluachon != 'E') {
@@ -355,7 +335,6 @@ const createSubmitCode = async (
   uri
 ) => {
   try {
-    // //// console.log(status)
     let submit = await db.Submit.create({
       MaSubmit: submitid,
       MSV: msv,
@@ -363,17 +342,11 @@ const createSubmitCode = async (
       TrangThai: namestatus,
       Source: uri,
     });
-    //// console.log(submit)
-  } catch (error) {
-    //// console.log(error)
-  }
+  } catch (error) {}
 };
 
 const tinhdiem2 = async (questionList, dsCau, cauhoi) => {
-  //// console.log("questionlist: ", questionList);
-  //// console.log("cauhoi: ", cauhoi);
   let diem = 0;
-  //// console.log(questionList);
   if (dsCau != null) {
     const dscauArray = dsCau.match(/C\d{2}/g);
 
@@ -382,17 +355,14 @@ const tinhdiem2 = async (questionList, dsCau, cauhoi) => {
       const sortedQuestions = cauhoi.sort((a, b) => {
         return dscauArray.indexOf(a.MaCauHoi) - dscauArray.indexOf(b.MaCauHoi);
       });
-      //// console.log(sortedQuestions);
     } else {
     }
   }
-  // // console.log(cauhoi);
   for (var i = 0; i < (questionList != null ? questionList.length : 0); i++) {
     if (questionList[i] == cauhoi[i].MaLuaChon) {
       diem += 10 / questionList.length;
     }
   }
-  // // console.log(diem);
   return diem;
 };
 
@@ -434,7 +404,6 @@ const resultAllThi = async (mbt) => {
     //   }
     //   return 0;
     // });
-    //// console.log(cauhoi);
     for (let i = 0; i < results.length; i++) {
       let diem = await tinhdiem2(
         results[i].ChiTiet,
@@ -497,7 +466,6 @@ const getOptions = async (mbt) => {
     }
     return 0;
   });
-  // console.log(cauhoi);
 
   return cauhoi;
 };

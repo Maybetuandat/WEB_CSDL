@@ -12,20 +12,17 @@ document.getElementById("fileOption").addEventListener("change", function () {
 
 // Hiển thị trạng thái loading khi bắt đầu yêu cầu
 function showLoading() {
-  // console.log("mở");
   var loading = document.getElementById("loading");
   loading.style.display = "block";
 }
 
 // Ẩn trạng thái loading khi kết thúc yêu cầu
 function hideLoading() {
-  // console.log("đóng");
   var loading = document.getElementById("loading");
   loading.style.display = "none";
 }
 
 function render(questions) {
-  // // console.log(questions.length)
   var numQuestions = questions.length;
   var questionsContainer = document.getElementById("questionsContainer");
 
@@ -94,8 +91,6 @@ function render(questions) {
       answerInput.name = "question" + i + "answer" + j;
       answerInput.id = "question" + i + "answer" + j;
       answerInput.value = questions[i - 1].LuaChon[j - 1].NoiDung;
-
-      // // console.log(questions[i - 1].LuaChon[j - 1])
 
       if (questions[i - 1].LuaChon[j - 1].Dung == 1) {
         answerCheckbox.classList.add("checked");
@@ -220,7 +215,6 @@ function formatDatetime(date) {
 }
 
 async function Save(id) {
-  // console.log("1")
   const currentDatetime = new Date();
   const formattedDatetime = formatDatetime(currentDatetime);
 
@@ -235,7 +229,6 @@ async function Save(id) {
   };
 
   if (!formData.numQuestions || !formData.examTime || !formData.examName) {
-    // console.log("2")
     showAlert("Vui lòng điền đầy đủ thông tin cho bài thi");
     return;
   } else {
@@ -252,9 +245,7 @@ async function Save(id) {
       var answer = [];
       var check = "";
       var questionContent = document.getElementById("question" + i).value;
-      // console.log(questionContent)
       if (questionContent === "") {
-        // console.log("3")
         showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
         return;
       }
@@ -268,7 +259,6 @@ async function Save(id) {
         }
         var ans = document.getElementById("question" + i + "answer" + j).value;
         if (ans === "") {
-          // console.log("4")
           showAlert("Bạn chưa nhập đáp án cho câu hỏi " + i);
           return;
         }
@@ -276,7 +266,6 @@ async function Save(id) {
       }
 
       if (check === "") {
-        // console.log("5")
         showAlert("Bạn chưa chọn đáp án đúng cho câu hỏi " + i);
         return;
       }
@@ -316,9 +305,6 @@ async function Save(id) {
 
     const backendURL = "/api/update-test/" + id;
 
-    // //// console.log(questions)
-    // //// console.log(formData);
-
     const options = {
       method: "PUT",
       headers: {
@@ -327,7 +313,6 @@ async function Save(id) {
       body: JSON.stringify({ metadata: formData, data: questions }),
     };
 
-    // //// console.log(options)
     showLoading();
     await fetch(backendURL, options)
       .then((response) => {
@@ -338,7 +323,6 @@ async function Save(id) {
       })
 
       .then((data) => {
-        //// console.log('Dữ liệu đã được gửi thành công đến backend:', data);
         hideLoading();
         let currentUrl = window.location.href;
 
@@ -357,7 +341,6 @@ async function Save(id) {
 
 function DeleteQuestion(id) {
   var element = document.getElementById(id);
-  //// console.log(element);
   UpDateIdForQuestion(id);
   element.remove();
 }

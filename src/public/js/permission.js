@@ -46,7 +46,6 @@ function SaveEditAdmin(id) {
     Password: document.getElementById("edit-password-admin").value,
     Role: document.getElementById("edit-role").value,
   };
-  // //// console.log(formData);
   if (!formData.UserName || !formData.Password || !formData.Role) {
     showAlert("Vui lòng điền đầy đủ thông tin!");
     return;
@@ -73,9 +72,7 @@ function SaveEditAdmin(id) {
       window.location.href = "/admin/permission";
       return response.json();
     })
-    .then((data) => {
-      //// console.log(data);
-    })
+    .then((data) => {})
     .catch((error) => {
       showAlert("Đã xảy ra lỗi khi cập nhật tài khoản!");
       console.error(error);
@@ -102,12 +99,9 @@ function getAdminData(id, username) {
     })
     .then((data) => {
       var admin = data.data;
-      // //// console.log("a", admin);
       document.getElementById("edit-username").value = admin.UserName;
       document.getElementById("edit-password-admin").value = "";
       document.getElementById("edit-role").value = admin.Role_id;
-
-      // //// console.log(data.data[0]);
     })
     .catch((error) => {
       console.error("There was an error with the fetch operation:", error);

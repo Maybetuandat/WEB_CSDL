@@ -174,7 +174,6 @@ const LaySoLuongSinhVienTheoThang = async () => {
     });
     if (result.length > 0) {
       data.status = 200;
-      // console.log(result[0].month);
       result.sort(function (a, b) {
         return a.month - b.month;
       });

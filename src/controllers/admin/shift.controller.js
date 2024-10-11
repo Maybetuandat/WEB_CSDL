@@ -32,7 +32,7 @@ const shiftListPaginate = async (req, res) => {
     req.query,
     count.data ? count.data.length : 0
   );
-  // // console.log(pagination);
+
   //limit data để phân trang
 
   var data = [];
@@ -78,7 +78,6 @@ const editShift = async (req, res) => {
   const id = req.params.id;
 
   const tests = await getAllTest();
-  //// console.log(tests);
   var shift = await getShiftById(id);
 
   var startTime = new Date(shift.data.start);
@@ -115,8 +114,6 @@ const updateShift = async (req, res) => {
     start: start,
     end: end,
   };
-
-  // console.log(data);
 
   const result = await updateShiftById(data);
 
@@ -186,7 +183,6 @@ const createShift = async (req, res) => {
 
 const deleteShift = async (req, res) => {
   const id = parseInt(req.body.id, 10);
-  // console.log(id);
   const deleteShift = await deleteShiftById(id);
   if (deleteShift.status === 200) {
     res.status(200).json({

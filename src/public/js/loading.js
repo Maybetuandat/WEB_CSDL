@@ -25,7 +25,6 @@ window.addEventListener("pageshow", function () {
 function showLoading() {
   var loading = document.getElementById("loading");
   if (loading) {
-    //// console.log("mở");
     loading.style.display = "block";
   }
 }
@@ -33,7 +32,6 @@ function showLoading() {
 function hideLoading() {
   var loading = document.getElementById("loading");
   if (loading) {
-    //// console.log("đóng");
     loading.style.display = "none";
   }
 }

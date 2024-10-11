@@ -32,7 +32,6 @@ module.exports.checkLoginAdmin = async (req, res) => {
     });
   } else {
     const admin = data.data[0];
-    // console.log(admin.Pass, password);
     if (admin.Pass == password) {
       const userData = {
         id: req.body.username,

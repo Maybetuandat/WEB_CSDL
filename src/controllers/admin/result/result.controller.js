@@ -20,8 +20,6 @@ module.exports.student = async (req, res) => {
     find.Lop = lop;
   }
 
-  //// console.log(req.query.keyword);
-
   if (req.query.keyword && req.query.keyword !== "") {
     const regexExpression = new RegExp(req.query.keyword, "i").source;
     find[Op.or] = [
@@ -30,7 +28,6 @@ module.exports.student = async (req, res) => {
     ];
   }
 
-  //// console.log(find);
   const count = await studentServices.getCountStudentWithFindObject(find);
   const pagination = paginationHelper(
     {
@@ -54,7 +51,6 @@ module.exports.student = async (req, res) => {
 };
 module.exports.studentWithId = async (req, res) => {
   const studentId = req.params.studentId;
-  //// console.log(studentId);
   const testList = await testServices.getTestByStudentId(studentId);
   const pagination = paginationHelper(
     {
@@ -69,7 +65,6 @@ module.exports.studentWithId = async (req, res) => {
     studentId,
     pagination
   );
-  // //// console.log(testListWithPage)
   res.render("admin/pages/viewResult/studentDetail.pug", {
     titlePage: "Kết quả sinh viên",
     student: student.data[0],
@@ -95,7 +90,6 @@ module.exports.detailStudentAndThi = async (req, res) => {
     req.params.studentId,
     req.params.testId
   );
-  console.log(result.result.data);
   result.result.data.forEach((element) => {
     element.ThoiGianNopBai = element.ThoiGianNopBai.toISOString()
       .replace("T", " ")
@@ -123,7 +117,6 @@ module.exports.detailStudentAndThi = async (req, res) => {
 module.exports.test = async (req, res) => {
   const find = {};
   if (req.query.keyword && req.query.keyword !== "") {
-    // console.log(req.query.keyword);
     const regexExpression = new RegExp(req.query.keyword, "i").source;
     find[Op.or] = [
       { TenBaiThi: { [Op.regexp]: regexExpression } },
@@ -143,10 +136,7 @@ module.exports.test = async (req, res) => {
     find,
     pagination
   );
-  // console.log(find);
-  // console.log(testListWithPage);
-  // let token
-  // if(req.token) token = req.token
+
   res.render("admin/pages/viewResult/test.pug", {
     // token: token,
     titlePage: "Kết quả bài thi",
@@ -198,7 +188,6 @@ module.exports.chamThi = async (req, res) => {
 module.exports.thi = async (req, res) => {
   const find = {};
   if (req.query.keyword && req.query.keyword !== "") {
-    // console.log(req.query.keyword);
     const regexExpression = new RegExp(req.query.keyword, "i").source;
     find[Op.or] = [{ TenBaiThi: { [Op.regexp]: regexExpression } }];
   }
@@ -215,10 +204,7 @@ module.exports.thi = async (req, res) => {
     find,
     pagination
   );
-  // console.log(find);
-  // console.log(testListWithPage);
-  // let token
-  // if(req.token) token = req.token
+
   res.render("admin/pages/viewResult/thi.pug", {
     // token: token,
     titlePage: "Kết quả bài thi",
@@ -251,8 +237,6 @@ module.exports.thiWithId = async (req, res) => {
     if (student.data) studentList.push(student.data[0]);
   }
 
-  // // console.log(studentList)
-  // // console.log(resultList)
   res.render("admin/pages/viewResult/thiResultStudent.pug", {
     titlePage: "Kết quả bài thi",
     test: test.data,

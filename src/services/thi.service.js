@@ -18,7 +18,6 @@ const getThiResult = async (msv, mbt, time, dscau) => {
       },
       raw: true,
     });
-    //// console.log(tests);
     if (result != null) {
       data.status = 200;
       data.data = result;
@@ -34,7 +33,6 @@ const getThiResult = async (msv, mbt, time, dscau) => {
     }
     return data;
   } catch (error) {
-    // console.log(error);
     data.status = 500;
     return data;
   }
@@ -50,14 +48,12 @@ const getSqlResult = async (msv, mbt) => {
       },
       raw: true,
     });
-    //// console.log(tests);
 
     data.status = 200;
     data.data = result;
 
     return data;
   } catch (error) {
-    // console.log(error);
     data.status = 500;
     return data;
   }
@@ -111,7 +107,6 @@ const updateDetail = async (msv, test, ans) => {
 
     return result;
   } catch (error) {
-    // console.log(error);
     return result;
   }
 };
@@ -150,7 +145,6 @@ const updateDetailSql = async (msv, test) => {
 
     return result;
   } catch (error) {
-    // console.log(error);
     return result;
   }
 };

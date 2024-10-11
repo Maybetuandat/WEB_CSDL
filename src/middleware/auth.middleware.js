@@ -14,10 +14,8 @@ const isAuth = async (req, res, next) => {
       accessTokenSecret
     );
     req.jwtDecoded = decoded;
-    //// console.log("jwt duoc giai ma", decoded);
     const getJwt = await getJwtFromDb(decoded.data.id);
-    //  // console.log("jwt tu db", getJwt);
-    //// console.log("jwt tu client", tokenFromClient);
+
     if (tokenFromClient !== getJwt) {
       return res.redirect("/login");
     }
@@ -33,14 +31,14 @@ const isAuth = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
   const tokenFromClient = req.cookies.jwt;
-  // // console.log(tokenFromClient)
+
   if (tokenFromClient) {
     try {
       const decoded = await jwtHelper.verifyToken(
         tokenFromClient,
         accessTokenSecret
       );
-      // console.log(decoded);
+
       if (decoded.data.role === "1") {
         next();
       } else {

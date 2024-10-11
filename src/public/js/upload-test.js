@@ -266,7 +266,6 @@ document
       excelData.forEach(function (row, index) {
         for (var i = 1; i <= 4; i++) {
           if (row["correct"] == i) {
-            // //// console.log(i);
             toggleCheckbox(parseInt(index + 1) + "checkbox" + i);
           }
         }
@@ -476,7 +475,6 @@ async function Save() {
     "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg";
   var fileInput = document.getElementById("image-file");
   var file = fileInput.files[0];
-  // console.log(file);
   if (file) {
     var formImg = new FormData();
     formImg.append("file", file);
@@ -490,14 +488,12 @@ async function Save() {
       loading.style.display = "block";
       const data = await uploadImageWithRetry(url, options);
       const newImageUrl = data.img_url;
-      // console.log(newImageUrl);
       formData.imageUrl = newImageUrl;
     } catch (error) {
       console.error("Error:", error);
       // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi cho người dùng
     }
   }
-  //// console.log(newImageUrl)
 
   const backendURL = "/api/new-test";
   const options = {
@@ -520,14 +516,11 @@ async function Save() {
     });
     clearTimeout(timeoutId);
 
-    // // console.log("response:", response);
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
     hideLoading();
-    // console.log("phản hồi: ", data);
     if (data.code == 2) {
       openDialog("Bài thi chứa từ ngữ không hợp lệ, vui lòng kiểm tra lại !!!");
     } else window.location.href = "/admin/test";
@@ -547,10 +540,8 @@ async function Save() {
     }
     // Xử lý sự kiện click vào từ không hợp lệ
     invalidWordsList.addEventListener("click", function (event) {
-      // console.log(event.target.tagName);
       if (event.target.tagName === "P") {
         const word = event.target.getAttribute("data-word");
-        // console.log("word:", word);
         const contentElements = document.querySelectorAll(
           'textarea, input[type="text"]'
         );
@@ -579,7 +570,6 @@ async function Save() {
 
 function DeleteQuestion(id) {
   var element = document.getElementById(id);
-  //// console.log(element);
   UpDateIdForQuestion(id);
   element.remove();
 }
@@ -617,7 +607,6 @@ function openDialog(content) {
   // btnContinue.onclick = func;
   dialogOverlay.style.display = "block";
   dialogContent.style.display = "flex";
-  //// console.log('click');
 }
 
 // Hàm đóng dialog

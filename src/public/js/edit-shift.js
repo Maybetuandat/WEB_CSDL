@@ -29,8 +29,6 @@ async function editShiftSubmit() {
     end: endISO,
   };
 
-  // console.log("Form Data:", data);
-
   await fetch("/admin/shift/api/edit-shift", {
     method: "POST",
     headers: {
@@ -40,7 +38,6 @@ async function editShiftSubmit() {
   })
     .then((response) => response.json())
     .then((result) => {
-      // console.log("Success:", result);
       if (result.status == 200) {
         alert("Cập nhật thành công!");
         window.location.href = "/admin/shift";
@@ -49,7 +46,6 @@ async function editShiftSubmit() {
       }
     })
     .catch((error) => {
-      // console.error('Error:', error);
       alert("Có lỗi xảy ra. Vui lòng thử lại.");
     });
 }
@@ -82,8 +78,6 @@ async function createShiftSubmit() {
     end: endISO,
   };
 
-  // console.log("Form Data:", data);
-
   await fetch("/admin/shift/api/new-shift", {
     method: "POST",
     headers: {
@@ -93,7 +87,6 @@ async function createShiftSubmit() {
   })
     .then((response) => response.json())
     .then((result) => {
-      // // console.log('Success:', result);
       if (result.status == 200) {
         alert("Cập nhật thành công!");
         window.location.href = "/admin/shift";
@@ -102,7 +95,6 @@ async function createShiftSubmit() {
       }
     })
     .catch((error) => {
-      // console.error('Error:', error);
       alert("Có lỗi xảy ra. Vui lòng thử lại.");
     });
 }

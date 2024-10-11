@@ -18,7 +18,7 @@ module.exports.index = async (req, res) => {
       thiList.data[i].ThoiGianThi = Math.round(thiList.data[i].ThoiGianThi);
     }
   }
-  // console.log(thiList);
+
   let results = [];
   for (let i = 0; i < (thiList.data ? thiList.data.length : 0); i++) {
     let result = await thiService.getResultThiStuTest(
@@ -27,7 +27,7 @@ module.exports.index = async (req, res) => {
     );
     results.push(result);
   }
-  // // console.log(testListForStudent);
+
   res.render("user/pages/test_list/thiList.pug", {
     titlePage: "Thực hành",
     tests: thiList.data,
@@ -139,10 +139,10 @@ module.exports.testWithId = async (req, res) => {
 module.exports.postSubmit = async (req, res) => {
   let msv = req.jwtDecoded.data.id;
   var reqBody = req.body;
-  //// console.log(reqBody)
+
   var test = reqBody.metadata[0];
   var ans = reqBody.option;
-  // console.log(reqBody);
+
   var result = await thiService.updateDetail(msv, test, ans);
 
   if (result) {
@@ -164,10 +164,7 @@ module.exports.postSubmit = async (req, res) => {
 module.exports.postSubmitSql = async (req, res) => {
   let msv = req.jwtDecoded.data.id;
   var reqBody = req.body;
-  //// console.log(reqBody)
-  // var test = reqBody.metadata;
 
-  // console.log(reqBody);
   var result = await thiService.updateDetailSql(msv, reqBody);
 
   if (result) {

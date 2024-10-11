@@ -14,7 +14,6 @@ const codeSubmit = async (req, res) => {
   let submissionId = req.body.submissionid;
   let msv = req.jwtDecoded.data.id;
 
-  // // //// console.log(id)
   request(
     {
       url:
@@ -28,18 +27,15 @@ const codeSubmit = async (req, res) => {
     },
     async (error, response, body) => {
       if (error) {
-        //// console.log('Connection problem');
       }
 
       // process response
       if (response) {
         if (response.statusCode === 200) {
-          //// console.log(JSON.parse(response.body)); // submission data in JSON
           var responseData = JSON.parse(response.body);
           var output = responseData.result.testcases;
-          //// console.log(typeof responseData.problem.name, typeof responseData.result.status.name)
           let namestatus = responseData.result.status.name;
-          // //// console.log(status)
+
           await createSubmitCode(
             msv,
             submissionId,
@@ -49,11 +45,8 @@ const codeSubmit = async (req, res) => {
           );
         } else {
           if (response.statusCode === 401) {
-            //// console.log('Invalid access token');
           } else if (response.statusCode === 403) {
-            //// console.log('Access denied');
           } else if (response.statusCode === 404) {
-            //// console.log('Submision not found');
           }
         }
       }

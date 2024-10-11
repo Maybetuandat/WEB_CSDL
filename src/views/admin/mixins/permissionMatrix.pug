@@ -10,7 +10,6 @@ mixin permission-matrix(roles, permissions, perMatrix)
                 each permission in permissions
                     tr
                         td=permission.Name
-                        //- - //// console.log(permission)
                         each role in roles
                             td.text-center
                                 - const roleId = parseInt(role.Id)

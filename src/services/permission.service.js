@@ -15,7 +15,6 @@ const getAllRole = async () => {
     }
     return data;
   } catch (error) {
-    //// console.log(error);
     data.status = 500;
     return data;
   }
@@ -46,7 +45,6 @@ const getHasPermission = async (role_id, permission_id) => {
         Permission_id: permission_id,
       },
     });
-    // //// console.log(status)
     if (status.length > 0) {
       return true;
     } else {
@@ -97,8 +95,6 @@ const getAllAdminList = async () => {
         }
       }
 
-      // //// console.log(data.data)
-
       return data;
     } else {
       data.status = 404;
@@ -124,7 +120,6 @@ const updateAdminById = async (body) => {
   // else {
   //     return { status: 500, message: "error" };
   // }
-  // //// console.log(roles)
   try {
     const result = await db.Admin.update(
       {
@@ -204,7 +199,6 @@ const getAdminById = async (id) => {
 
 const checkPermission = async (permissionUrl, role) => {
   try {
-    // //// console.log(role)
     const permission = await db.Permission.findOne(
       {
         where: {
@@ -213,7 +207,6 @@ const checkPermission = async (permissionUrl, role) => {
       },
       { raw: true }
     );
-    // //// console.log(permission)
     const status = await db.HasPermission.findAll({
       where: {
         Role_id: role,

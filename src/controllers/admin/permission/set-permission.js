@@ -22,7 +22,6 @@ const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 
 const getPermissions = async (req, res) => {
-  //// console.log(req.originalUrl)
   try {
     const find = {};
     var map = {
@@ -47,9 +46,6 @@ const getPermissions = async (req, res) => {
     const roles = await getAllRole();
     const permissions = await getAllPermissions();
 
-    // //// console.log(roles.data)
-    // //// console.log(permissions.data)
-
     var perMatrix = [];
     for (var i = 0; i < roles.data.length; i++) {
       perMatrix[i] = [];
@@ -62,8 +58,6 @@ const getPermissions = async (req, res) => {
       }
     }
 
-    //// console.log(adminList.data);
-
     res.render("admin/pages/permissison/viewPermission.pug", {
       roles: roles.data,
       permissions: permissions.data,
@@ -72,7 +66,6 @@ const getPermissions = async (req, res) => {
       adminList: adminList.data,
     });
   } catch (error) {
-    //// console.log(error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -124,7 +117,7 @@ const savePermissions = async (req, res) => {
       break;
     }
   }
-  //// console.log(status);
+
   if (status) {
     res.status(200).send("Permissions Saved Successfully");
   } else {
@@ -134,10 +127,9 @@ const savePermissions = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
   // var username = req.params.username
-  // //// console.log(username);
   const data = req.body;
   const admin = await updateAdminById(data);
-  // //// console.log(admin)
+
   if (admin.status == 200) {
     res.status(200).send({ mesage: "Admin Updated Successfully" });
   } else {
@@ -148,7 +140,6 @@ const updateAdmin = async (req, res) => {
 const getAdminData = async (req, res) => {
   var id = req.params.username;
   const data = await getAdminById(id);
-  // //// console.log("b", data);
   if (data.status === 200) {
     res.status(200).send(data);
   } else if (data.status === 404) {

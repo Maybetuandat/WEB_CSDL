@@ -25,7 +25,6 @@ function closePopUp(id) {
 }
 
 async function submitForm(id) {
-  // //// console.log("hello")
   var details = document.getElementById(id);
 
   var formData = {
@@ -71,7 +70,6 @@ async function submitForm(id) {
     .then((data) => {
       // Xử lý phản hồi từ backend nếu cần
       window.location.href = "/admin/account";
-      //// console.log(data);
     })
     .catch((error) => {
       console.error("There was an error with the fetch operation:", error);
@@ -91,7 +89,6 @@ async function deleteAccount(id) {
       },
     });
     const data = await response.json();
-    // console.log(data)
     if (data.status === 200) {
       window.location.href = "/admin/account";
     } else {
@@ -136,8 +133,6 @@ async function getStudentData(id, msv, role) {
       document.getElementById("edit-class").value = student.Lop;
       document.getElementById("edit-email").value = student.Email;
       document.getElementById("edit-password").value = "";
-
-      // //// console.log(data.data[0]);
     })
     .catch((error) => {
       console.error("There was an error with the fetch operation:", error);
@@ -153,7 +148,6 @@ function finishEdit(id) {
     email: document.getElementById("edit-email").value,
     password: document.getElementById("edit-password").value,
   };
-  //// console.log(formData);
 
   if (
     !formData.name ||
@@ -166,7 +160,6 @@ function finishEdit(id) {
   }
 
   var url = "/api/update-student/" + document.getElementById("edit-msv").value;
-  //// console.log(url);
   fetch(url, {
     method: "PUT",
     headers: {
@@ -188,7 +181,6 @@ function finishEdit(id) {
     .then((data) => {
       window.location.href = "/admin/account";
       // Xử lý phản hồi từ backend nếu cần
-      //// console.log(data);
     })
     .catch((error) => {
       showAlert("Đã xảy ra lỗi khi cập nhật tài khoản!");
@@ -202,7 +194,6 @@ async function handleFile(event) {
   const input = event.target;
 
   if (input.files.length === 0) {
-    // console.log('No file selected.');
     return;
   }
 
@@ -213,20 +204,15 @@ async function handleFile(event) {
   reader.onload = async function (e) {
     try {
       const data = new Uint8Array(e.target.result);
-      // // console.log('File data:', data);
 
       const workbook = XLSX.read(data, { type: "array" });
-      // // console.log('Workbook:', workbook);
 
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
-      // // console.log('Worksheet:', worksheet);
 
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      // // console.log('JSON Data:', jsonData);
 
       if (jsonData.length === 0) {
-        // console.log('No data found in sheet.');
         return;
       }
 
@@ -243,8 +229,6 @@ async function handleFile(event) {
         }))
         .filter((row) => row.MSV !== undefined);
 
-      // console.log('Five Columns Data:', fiveColumnsData);
-
       const chunkArray = (array, chunkSize) => {
         const chunks = [];
         for (let i = 0; i < array.length; i += chunkSize) {
@@ -257,7 +241,6 @@ async function handleFile(event) {
 
       for (var i = 0; i < chunks.length; i++) {
         await fetchNewAccApi(chunks[i], i, chunks.length);
-        // console.log(i);
       }
       // reloadPage()
     } catch (error) {
@@ -278,7 +261,6 @@ function reloadPage() {
 
 async function fetchNewAccApi(accList, step, n) {
   try {
-    // console.log("loading")
     const response = await fetch("/api/new-student-list", {
       method: "POST",
       headers: {
@@ -291,7 +273,6 @@ async function fetchNewAccApi(accList, step, n) {
       showAlert("Đã xảy ra lỗi khi thêm tài khoản!");
       throw new Error(`HTTP error! status: ${response.status}`);
     } else {
-      // console.log(response.status);
     }
 
     if (step === n - 1) reloadPage();

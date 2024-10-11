@@ -59,7 +59,6 @@ const {
 //Guest
 
 const increaseTimeout = (req, res, next) => {
-  // console.log("Setting timeout for request");
   req.setTimeout(300000); // 5 minutes
   res.setTimeout(300000); // 5 minutes
   next();

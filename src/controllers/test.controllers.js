@@ -89,7 +89,7 @@ const getProbByPage = async (req, res) => {
 const getSearchTest = async (req, res) => {
   const inputText = req.query.text;
   let tests = await getTestByText(inputText);
-  // //// console.log(questions)
+
   if (tests) {
     const response = {
       code: 1,
@@ -167,7 +167,7 @@ const getQuestionByTestHandler = async (req, res) => {
   const testId = req.params.id;
   var metadata = await getTestById(testId);
   var questions = await getQuestionOfTest(testId);
-  // //// console.log(questions)
+
   if (metadata.status === 200) {
     const response = {
       code: 1,
@@ -201,7 +201,7 @@ const getQuestionHandlernoAns = async (req, res) => {
   const testId = req.params.id;
   var metadata = await getTestById(testId);
   var questions = await getQuestionOfTestUser(testId);
-  // //// console.log(questions)
+
   if (questions) {
     const response = {
       code: 1,
@@ -318,15 +318,9 @@ const invalidWords = ["phản động", "hehe", "câu xyz", "khiêu dâm", "gi�
 
 const postTestHandler = async (req, res) => {
   var reqBody = req.body;
-  //// console.log(reqBody)
+
   var test = reqBody.metadata;
   var questionList = reqBody.data;
-  // console.log(req.jwtDecoded);
-  //let msv = req.jwtDecoded.data.id;
-
-  //test.TacGia = msv;
-  // console.log("test: ", test);
-  // console.log("questionList: ", questionList);
 
   var status = await createNewTest(test, questionList);
   if (status) {
@@ -365,7 +359,7 @@ const deleteTestHandler = async (req, res) => {
 const updateTestHandler = async (req, res) => {
   var testId = req.params.id;
   var updateData = req.body;
-  // // console.log(updateData)
+
   var status = await updateTestById(testId, updateData);
   if (status) {
     res.status(200).json({
@@ -414,7 +408,6 @@ const searchTestHandler = async (req, res) => {
 
 const getTestWithStudent = async (req, res) => {
   const id = req.params.id;
-  //// console.log(id);
   const data = { status: null, stuInfor: null, testList: null };
   const dataTest = await getTestByStudentId(id);
   data.status = dataTest.status;
@@ -427,7 +420,6 @@ const getTestWithStudent = async (req, res) => {
 const postSubmit = async (req, res) => {
   let msv = req.jwtDecoded.data.id;
   var reqBody = req.body;
-  //// console.log(reqBody)
   var test = reqBody.metadata;
   var questionList = reqBody.dataoption;
 

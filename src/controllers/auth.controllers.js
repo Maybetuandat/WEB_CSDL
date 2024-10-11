@@ -54,8 +54,6 @@ const refreshToken = async (req, res) => {
 };
 
 const checkLoginUser = async (req, res) => {
-  // //console.log(req.params.role)
-  // if (req.params.role === 'user') {
   //check valid user and password
   if (!req.body.msv || !req.body.password) {
     const response = {
@@ -95,7 +93,6 @@ const checkLoginUser = async (req, res) => {
       var ok = await bcrypt.compare(req.body.password, data.data.MatKhau);
       let response = {};
       if (ok) {
-        //  console.log(data.data[0]);
         const userData = {
           id: req.body.msv,
           role: req.params.role,
@@ -141,8 +138,6 @@ const checkLoginUser = async (req, res) => {
 };
 
 const createTokenResponse = async (userData) => {
-  // //console.log(userData);
-
   const accessToken = await jwtHelper.generateToken(
     userData,
     accessTokenSecret,

@@ -95,7 +95,6 @@ btnDetailThiStu.forEach(function (btn) {
     url.searchParams.delete("page");
     url.searchParams.delete("class");
     url.href += `/${studentId}`;
-    //// console.log(url.href);
     window.location.href = url;
   });
 });
@@ -106,7 +105,6 @@ const btnDetailTestList = document.querySelectorAll(
 btnDetailTestList.forEach(function (btn) {
   btn.addEventListener("click", function () {
     const testId = btn.getAttribute("idTest");
-    //// console.log(testId);
     const url = new URL(window.location.href);
     url.searchParams.delete("keyword");
     url.searchParams.delete("page");
@@ -122,7 +120,6 @@ const btnDetailResult = document.querySelectorAll(
 btnDetailResult.forEach(function (btn) {
   btn.addEventListener("click", function () {
     const idResult = btn.getAttribute("idResult");
-    //// console.log(idResult);
     const url = new URL(window.location.href);
     url.searchParams.delete("keyword");
     url.searchParams.delete("page");
@@ -136,7 +133,6 @@ const btnDetailSubmit = document.querySelectorAll("[btn-detail-submit]");
 btnDetailSubmit.forEach(function (btn) {
   btn.addEventListener("click", function () {
     const idSubmit = btn.getAttribute("idSubmit");
-    //// console.log(idSubmit);
     const url = new URL(window.location.href);
     url.searchParams.delete("keyword");
     url.searchParams.delete("page");
@@ -150,7 +146,6 @@ const btnWidget = document.querySelectorAll("[btn-widget]");
 btnWidget.forEach(function (btn) {
   btn.addEventListener("click", function () {
     const idProb = btn.getAttribute("idProb");
-    //// console.log(idProb);
     const url = new URL(window.location.href);
     url.searchParams.delete("keyword");
     url.searchParams.delete("page");
@@ -219,7 +214,6 @@ const btnDetailTestUser = document.querySelectorAll("[btn-detail-test-user]");
 btnDetailTestUser.forEach(function (btn) {
   btn.addEventListener("click", function () {
     const testId = btn.getAttribute("idTest");
-    //// console.log(testId);
     const url = new URL(window.location.href);
     url.searchParams.delete("keyword");
     url.searchParams.delete("page");
@@ -308,7 +302,6 @@ sidebar_toggle.addEventListener("click", function () {
 });
 //.slidebar-menu
 const slideBarMenu = document.querySelector(".sidebar-menu");
-//// console.log(slideBarMenu);
 slideBarMenu.addEventListener("mouseleave", function () {
   if (body.classList.contains("is-collapsed")) {
     const dropdowns = document.querySelectorAll(".show");
@@ -327,11 +320,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const btnAdmin = document.querySelectorAll("[admin-btn]");
-//// console.log(btnAdmin);
 const dropdownAdminProfile = document.querySelectorAll(
   "[dropdown-admin-profile]"
 );
-//// console.log(dropdownAdminProfile);
 btnAdmin.forEach(function (btn) {
   btn.addEventListener("click", function () {
     dropdownAdminProfile.forEach(function (dropdown) {
@@ -345,7 +336,6 @@ btnAdmin.forEach(function (btn) {
       !dropdownAdminProfile[0].contains(event.target)
     ) {
       dropdownAdminProfile.forEach(function (dropdown) {
-        //// console.log("Test");
         dropdown.classList.remove("show");
       });
     }
@@ -355,10 +345,8 @@ const btn_dark_bg_slide = document.querySelector("[btn-bg-slide-dark]");
 const btn_white_bg_slide = document.querySelector("[btn-bg-slide-white]");
 const nameAdmin = document.querySelector("[name-admin]");
 const slideBg = document.querySelector("[slide-bar-item]");
-//// console.log(slideBg);
 btn_dark_bg_slide.addEventListener("click", function () {
   localStorage.setItem("backSlideBar", "black-bg");
-  //// console.log("test black");
   if (!slideBg.classList.contains("black-bg")) {
     slideBg.classList.add("black-bg");
     nameAdmin.style.color = "white";
@@ -369,7 +357,6 @@ btn_dark_bg_slide.addEventListener("click", function () {
 });
 btn_white_bg_slide.addEventListener("click", function () {
   localStorage.setItem("backSlideBar", "white-bg");
-  //// console.log("test white");
   if (!slideBg.classList.contains("white-bg")) {
     slideBg.classList.add("white-bg");
     nameAdmin.style.color = "black";
@@ -379,7 +366,6 @@ btn_white_bg_slide.addEventListener("click", function () {
   }
 });
 
-//// console.log(localStorage.getItem("backSlideBar"));
 if (localStorage.getItem("backSlideBar") !== null) {
   slideBg.classList.add(localStorage.getItem("backSlideBar"));
   if (localStorage.getItem("backSlideBar") === "black-bg") {
@@ -397,18 +383,14 @@ var indexSlider = sessionStorage.getItem("indexSlider");
 if (indexSlider === null) {
   indexSlider = 0;
 }
-//// console.log("indexSlider: " + indexSlider);
 listBtnNav[indexSlider].classList.add("active-item-nav");
 var parent = listBtnNav[indexSlider].querySelector(".btn-nav");
 parent.classList.add(localStorage.getItem("sidebarColor"));
-//// console.log(listBtnNav);
 for (var i = 0; i < listBtnNav.length; i++) {
   const btn = listBtnNav[i];
   let ind = i;
   btn.addEventListener("click", function () {
-    //// console.log(ind);
     sessionStorage.setItem("indexSlider", ind.toString());
-    //// console.log("Set indexSlider: " + ind.toString());
     btn.classList.add("active-item-nav");
     var parent = btn.querySelector(".btn-nav");
     parent.classList.add(localStorage.getItem("sidebarColor"));
@@ -447,7 +429,6 @@ function sidebarColor(a) {
   var parent = document.querySelector(".active-item-nav .btn-nav");
 
   //lay the a trong parent1
-  //// console.log(parent);
   var color = a.getAttribute("data-color");
   //luu vao local storage
   localStorage.setItem("sidebarColor", "bg-gradient-" + color);
@@ -494,7 +475,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (startTextElement && endTextElement) {
     // Lấy dữ liệu từ các thuộc tính data-datetime
-    //// console.log("start: " + startTextElement.dataset.datetime);
     const startDate = new Date(startTextElement.dataset.datetime);
     const endDate = new Date(endTextElement.dataset.datetime);
 
