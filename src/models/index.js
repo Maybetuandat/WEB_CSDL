@@ -11,14 +11,25 @@ const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    ...config,
+    pool: {
+      max: 50, // Số lượng kết nối tối đa là 50
+      min: 5, // Số lượng kết nối tối thiểu
+      acquire: 60000, // Thời gian tối đa (ms) để lấy một kết nối trước khi bỏ cuộc (50 giây)
+      idle: 10000, // Thời gian tối đa (ms) để một kết nối có thể nhàn rỗi trước khi bị đóng
+    },
+  });
 } else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    ...config,
+    pool: {
+      max: 50, // Số lượng kết nối tối đa là 50
+      min: 5, // Số lượng kết nối tối thiểu
+      acquire: 60000, // Thời gian tối đa (ms) để lấy một kết nối trước khi bỏ cuộc (50 giây)
+      idle: 10000, // Thời gian tối đa (ms) để một kết nối có thể nhàn rỗi trước khi bị đóng
+    },
+  });
 }
 
 fs.readdirSync(__dirname)
