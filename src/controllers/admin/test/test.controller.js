@@ -78,21 +78,21 @@ const EditTest = async (req, res) => {
   var metadata = await getTestById(testId);
   var questions = await getQuestionOfTestAdmin(testId);
 
-  const startTime = metadata.data[0].ThoiGianBatDau;
+  const startTime = metadata.data.ThoiGianBatDau;
 
   const datetimeString = startTime.toISOString();
 
   const datePart = datetimeString.split("T")[0];
   const timePart = datetimeString.split("T")[1].split(".")[0];
 
-  metadata.data[0].date = datePart;
-  metadata.data[0].time = timePart;
+  metadata.data.date = datePart;
+  metadata.data.time = timePart;
 
   var list = questions.data;
 
   res.render("admin/pages/viewTest/editTest.pug", {
     titlePage: "Chỉnh sửa bài thi",
-    metadata: metadata.data[0],
+    metadata: metadata.data,
     questions: list,
   });
 };
