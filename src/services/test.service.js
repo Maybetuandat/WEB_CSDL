@@ -97,7 +97,7 @@ const getTestById = async (id) => {
   var data = { status: null, data: null };
   try {
     const test = await db.Test.findOne({ raw: true, where: { MaBaiThi: id } });
-
+    console.log(test);
     if (test) {
       data.status = 200;
       data.data = test;

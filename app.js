@@ -13,7 +13,8 @@ const apiRoutes = require("./src/routes/api.route");
 const adminRoutes = require("./src/routes/admin/index.router");
 const userRoutes = require("./src/routes/user/index.router");
 const errorRoutes = require("./src/routes/pageError/index.router");
-const { connection } = require("./src/config/connectDB");
+const queryRoutes = require("./src/test/routes/index.router");
+const { connection, connection2 } = require("./src/config/connectDB");
 
 const bodyParserErrorHandler = require("express-body-parser-error-handler");
 
@@ -49,8 +50,10 @@ const server = app.listen(port, "127.0.0.1", () => {
 });
 
 connection();
+connection2();
 
 adminRoutes(app);
 userRoutes(app);
 errorRoutes(app);
 mainRoutes(app);
+queryRoutes(app);

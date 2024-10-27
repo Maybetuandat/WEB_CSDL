@@ -87,9 +87,141 @@ for (let i = 0; i < data.questions.length; i++) {
 
     try {
       const result = await process(inputTraLoi.value, i); // Call the process function
+      // const notification = document.getElementById("notification");
+
+      // Xóa thông báo trước đó
+      notification.textContent = "";
+
+      // Xóa bảng cũ nếu đã tồn tại
+      let existingTable = document.getElementById("dataTable");
+      if (existingTable) {
+        existingTable.remove();
+      }
+      let rightAnswerText = document.getElementById("rightAnswerText");
+      if (rightAnswerText) {
+        rightAnswerText.remove();
+      }
+      let existingTable2 = document.getElementById("dataTable2");
+      if (existingTable2) {
+        existingTable2.remove();
+      }
+
       if (result.success) {
-        notification.textContent = "Nộp thành công"; // Success notification
-        notification.style.color = "green"; // Set notification text color to green
+        if (result.status) {
+          notification.textContent = "Đúng"; // Success notification
+          notification.style.color = "green"; // Set notification text color to green
+        } else {
+          if (result.data.length == 0)
+            notification.textContent = "Sai.Không có bản ghi nào";
+          // Success notification\
+          else notification.textContent = "Sai"; // Success notification
+          notification.style.color = "red"; // Set notification text color to green
+        }
+
+        // Tạo bảng mới
+        const dataTable = document.createElement("table");
+        dataTable.id = "dataTable";
+        dataTable.style.borderCollapse = "collapse"; // Collapse borders
+        dataTable.style.width = "100%"; // Set table width to 100%
+
+        // Tạo tiêu đề bảng
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        // Lấy các trường từ đối tượng đầu tiên trong dữ liệu để tạo tiêu đề
+        const headers =
+          result.data && result.data.length > 0
+            ? Object.keys(result.data[0])
+            : [];
+
+        // Tạo các tiêu đề
+        headers.forEach((headerText) => {
+          const th = document.createElement("th");
+          th.textContent = headerText; // Tiêu đề từ các trường trong dữ liệu
+          th.style.border = "1px solid #ccc"; // Thêm border cho tiêu đề
+          th.style.padding = "8px"; // Thêm padding
+          th.style.textAlign = "left"; // Căn trái cho tiêu đề
+          headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+        dataTable.appendChild(thead);
+
+        // Tạo phần thân bảng
+        const tbody = document.createElement("tbody");
+
+        // Duyệt qua từng đối tượng trong dữ liệu để tạo hàng
+        result.data.forEach((item) => {
+          const row = document.createElement("tr");
+
+          // Duyệt qua từng trường của đối tượng và tạo ô
+          headers.forEach((header) => {
+            const cell = document.createElement("td");
+            cell.textContent = item[header]; // Lấy giá trị từ trường tương ứng
+            cell.style.border = "1px solid #ccc"; // Thêm border cho ô
+            cell.style.padding = "8px"; // Thêm padding
+            row.appendChild(cell);
+          });
+
+          // Thêm hàng vào phần thân bảng
+          tbody.appendChild(row);
+        });
+
+        dataTable.appendChild(tbody);
+        // Tạo bảng đáp án đúng
+        const dataTable2 = document.createElement("table");
+        dataTable2.id = "dataTable2";
+        dataTable2.style.borderCollapse = "collapse"; // Collapse borders
+        dataTable2.style.width = "100%"; // Set table width to 100%
+
+        // Tạo tiêu đề bảng
+        const thead2 = document.createElement("thead");
+        const headerRow2 = document.createElement("tr");
+
+        // Lấy các trường từ đối tượng đầu tiên trong dữ liệu để tạo tiêu đề
+        const headers2 = Object.keys(result.right[0]);
+
+        // Tạo các tiêu đề
+        headers2.forEach((headerText) => {
+          const th = document.createElement("th");
+          th.textContent = headerText; // Tiêu đề từ các trường trong dữ liệu
+          th.style.border = "1px solid #ccc"; // Thêm border cho tiêu đề
+          th.style.padding = "8px"; // Thêm padding
+          th.style.textAlign = "left"; // Căn trái cho tiêu đề
+          headerRow2.appendChild(th);
+        });
+
+        thead2.appendChild(headerRow2);
+        dataTable2.appendChild(thead2);
+
+        // Tạo phần thân bảng
+        const tbody2 = document.createElement("tbody");
+
+        // Duyệt qua từng đối tượng trong dữ liệu để tạo hàng
+        result.right.forEach((item) => {
+          const row = document.createElement("tr");
+
+          // Duyệt qua từng trường của đối tượng và tạo ô
+          headers2.forEach((header) => {
+            const cell = document.createElement("td");
+            cell.textContent = item[header]; // Lấy giá trị từ trường tương ứng
+            cell.style.border = "1px solid #ccc"; // Thêm border cho ô
+            cell.style.padding = "8px"; // Thêm padding
+            row.appendChild(cell);
+          });
+
+          // Thêm hàng vào phần thân bảng
+          tbody2.appendChild(row);
+        });
+
+        dataTable2.appendChild(tbody2);
+        // Thêm bảng vào DOM
+        container_hoitrl.appendChild(dataTable);
+        let rightAnswer = document.createElement("div");
+        rightAnswer.textContent = "Đáp án đúng:";
+        rightAnswer.id = "rightAnswerText";
+        container_hoitrl.appendChild(rightAnswer);
+        container_hoitrl.appendChild(dataTable2);
       } else {
         notification.textContent = "Nộp thất bại"; // Failure notification
         notification.style.color = "red"; // Set notification text color to red
@@ -99,7 +231,8 @@ for (let i = 0; i < data.questions.length; i++) {
       notification.textContent = "Nộp thất bại"; // Failure notification if there's an error
       notification.style.color = "red"; // Set notification text color to red
     }
-    buttonNopBai.disabled = false; // Re-enable the button after 3 seconds
+
+    buttonNopBai.disabled = false; // Re-enable the button
     buttonNopBai.textContent = "Nộp bài"; // Update button text back to original
   });
 
@@ -139,6 +272,7 @@ const process = async (value, i) => {
   // Send request and race it against the timeout
   try {
     const response = await Promise.race([
+      // fetch("/thi/submitsql", {
       fetch("/thi/submitsql", {
         method: "POST",
         headers: {
@@ -153,9 +287,15 @@ const process = async (value, i) => {
     if (!response.ok) {
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
-
+    const responseData = await response.json();
+    console.log("Response data:", responseData);
     // Return success if no error
-    return { success: true };
+    return {
+      success: true,
+      data: responseData.result,
+      right: responseData.rightAnswer,
+      status: responseData.status,
+    };
   } catch (error) {
     console.error("There was a problem with the fetch operation:", error);
     return { success: false }; // Return failure

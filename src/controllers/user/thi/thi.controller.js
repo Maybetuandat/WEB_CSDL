@@ -6,6 +6,7 @@ const {
 
 const thiService = require("../../../services/thi.service");
 const jwtHelper = require("../../../helpers/jwt.helper");
+const queryServices = require("../../../test/services/query.services");
 
 module.exports.index = async (req, res) => {
   const thiList = await testServices.getThiList(req.jwtDecoded.data.id);
@@ -162,23 +163,30 @@ module.exports.postSubmit = async (req, res) => {
 };
 
 module.exports.postSubmitSql = async (req, res) => {
-  let msv = req.jwtDecoded.data.id;
-  var reqBody = req.body;
-
-  var result = await thiService.updateDetailSql(msv, reqBody);
-
-  if (result) {
-    res.status(200).json({
-      code: 1,
-      error: 200,
-      message: "Tạo thành công!",
-      data: result,
-    });
-  } else {
-    res.status(500).json({
-      code: 0,
-      status: 500,
-      message: "Tạo thất bại!",
-    });
+  try {
+    const query = req.body;
+    console.log(query);
+    let msv = req.jwtDecoded.data.id;
+    // Sử dụng Promise.all để chạy song song
+    const [update, result, rightAnswer] = await Promise.all([
+      thiService.updateDetailSql(msv, query),
+      queryServices.executeUserQuery(query.chitiet),
+      queryServices.getAnswerSql(query.mabaithi, query.macauhoi),
+    ]);
+    let status;
+    if (JSON.stringify(result) === JSON.stringify(rightAnswer)) {
+      console.log("true");
+      status = true;
+    } else {
+      console.log("false");
+      status = false;
+    }
+    console.log(result);
+    console.log(rightAnswer);
+    if (!update) res.status(500).json({ message: "Internal Server Error" });
+    res.status(200).json({ rightAnswer, result, status });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
