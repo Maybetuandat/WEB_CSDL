@@ -485,7 +485,7 @@ async function Save() {
   if (createTestSuccess == true) {
     hideLoading();
     showAlert("Đã lưu danh sách câu hỏi thành công !!!", "#cce5ff");
-    window.location.href = "/test";
+    window.location.href = "/admin/test";
   }
 }
 

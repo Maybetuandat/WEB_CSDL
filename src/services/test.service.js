@@ -409,6 +409,7 @@ const getTestWithFindObject = async (find, pagination) => {
       where: find,
       limit: pagination.limitedItem,
       offset: pagination.limitedItem * (pagination.currentPage - 1),
+      order: [["MaBaiThi", "DESC"]],
       raw: true,
     });
     if (tests.length > 0) {
