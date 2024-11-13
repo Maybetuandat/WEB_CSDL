@@ -218,6 +218,31 @@ const createNewTest = async (test, questionList) => {
   }
 };
 
+const createNewTest2 = async (test) => {
+  console.log(test);
+  try {
+    var newTest = await db.Test.create({
+      // MaBaiThi: mbt,
+      TenBaiThi: test.examName,
+      ThoiGianBatDau: "2024-11-12 12:00:00",
+      ThoiGianThi: parseInt(test.examTime),
+      SoLuongCau: test.numQuestions,
+      TheLoai: test.examDescription,
+      TrangThai: test.examStatus,
+      img_url: test.imageUrl,
+      TacGia: "B21DCCN343",
+    });
+
+    var mbt = newTest.dataValues.MaBaiThi;
+
+    return mbt;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    // await t.rollback();
+    return null;
+  }
+};
+
 const deleteTestById = async (testId) => {
   try {
     db.Test.destroy({
@@ -840,6 +865,7 @@ module.exports = {
   getAllTest,
   getTestById,
   createNewTest,
+  createNewTest2,
   deleteTestById,
   updateTestById,
   getTestByStudentId,

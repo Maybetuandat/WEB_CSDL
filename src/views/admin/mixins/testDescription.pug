@@ -10,6 +10,12 @@ mixin test-description(metadata)
                         .col-md-6
                             form#description-form
                                 .form-group
+                                    label(for='examName') Mã bài thi:
+                                    if metadata
+                                        input.form-control(type='text' id="examID" value=metadata.TenBaiThi required)
+                                    else
+                                        input.form-control(type='text' id="examID" value="" readonly)
+                                .form-group
                                     label(for='examName') Tên bài thi:
                                     if metadata
                                         input.form-control(type='text' id="examName" value=metadata.TenBaiThi required)
@@ -20,25 +26,14 @@ mixin test-description(metadata)
                                     if metadata
                                         input.form-control(type='number' id='examTime' value = metadata.ThoiGianThi required)
                                     else
-                                        input.form-control(type='number' id='examTime'  required)
-                                .form-group 
-                                    label(for="examDate") Ngày thi:
-                                    if metadata
-                                        input.form-control(type="date" id="examDate" value = metadata.date)
-                                    else
-                                        input.form-control(type="date" id="examDate" required)
-                                .form-group
-                                    label(for="") Giờ thi:
-                                    if metadata
-                                        input.form-control(type="time" id="timeStart" value = metadata.time)
-                                    else 
-                                        input.form-control(type="time" id="timeStart")
-                                .form-group
-                                    label(for='numQuestions') Số lượng câu hỏi:
-                                    if metadata
-                                        input.form-control(type='number'  id='numQuestions' value = metadata.SoLuongCau )
-                                    else
-                                        input.form-control(type='number'  id='numQuestions' )
+                                        input.form-control(type='number' id='examTime' required)
+                               
+                                //- .form-group
+                                //-     label(for='numQuestions') Số lượng câu hỏi:
+                                //-     if metadata
+                                //-         input.form-control(type='number'  id='numQuestions' value = metadata.SoLuongCau )
+                                //-     else
+                                //-         input.form-control(type='number'  id='numQuestions' value = 0  readonly )
                         .col-md-6
                             form#option-form
                                 .form-group
@@ -50,29 +45,18 @@ mixin test-description(metadata)
                                         input.form-control(type='text' id="examStatus" value=metadata.TrangThai required)
                                     else
                                         input.form-control(type='text' id="examStatus" required)
-                                .form-group
-                                    label(for='fileOption') Hình thức: 
-                                    select.form-control#fileOption
-                                        option(value='new') Nhập thủ công
-                                        option(value='upload') Tải lên file
-                                .form-group#fileUpload(style)
-                                    label(for='excelFile') Tải lên tệp (Excel):
-                                    input.form-control-file(type='file', id='excel-file', name='excelFile', accept='.xls,.xlsx')
-                                .form-group 
-                                    label(for='testImage') Ảnh bài thi:   
-                                    input.form-control-file(type='file', id='image-file', name='imageFile', accept='.jpg,.png')
-                                .form-group
-                                    if metadata
-                                        img(src=metadata.img_url, height="120")
-                                    else 
-                                        img(src='https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg', height="120")
-            .form-group.ml-5.d-flex
-                button.btn.ptit-color.text-white.mr-5.btn-responsive(type='submit', onclick='render()') Tạo bài thi
-                if metadata
-                    button.btn.ptit-color.text-white.px-4.btn-responsive(onclick=`Save('${metadata.MaBaiThi}')`)
-                        i.ti-save
-                else 
-                    button.btn.ptit-color.text-white.px-4.btn-responsive(onclick='Save()')
-                        i.ti-save
+                                
+                                
+                                
+            .form-group.d-flex.align-items-center
+                div.flex-grow-1
+                button.btn.ptit-color.text-white.btn-responsive(type='submit', onclick='Save2()' id="createExamBtn") Tạo bài thi
+
+                //- if metadata
+                //-     button.btn.ptit-color.text-white.px-4.btn-responsive(onclick=`Save('${metadata.MaBaiThi}')`)
+                //-         i.ti-save
+                //- else 
+                //-     button.btn.ptit-color.text-white.px-4.btn-responsive(onclick='Save()') Lưu danh sách câu hỏi
+                        
 
                     

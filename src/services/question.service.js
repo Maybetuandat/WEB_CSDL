@@ -183,37 +183,51 @@ const getQuestionOfTestAdmin = async (id) => {
   }
 };
 
-const createNewQuestion = async (question, testId, index, t) => {
+const createNewQuestion = async (question, testId) => {
   try {
-    await db.Question.create(
-      {
-        MaCauHoi: "C" + String(index).padStart(2, "0"),
+    let cauhoi = await db.Test.findOne({
+      where: {
         MaBaiThi: testId,
-        DeBai: question.questionContent,
-        SoThuTu: index,
-        TheLoai: "Trắc nghiệm",
       },
-      { transaction: t }
-    );
+      //lấy ra 1 trường chỉ định
+      attributes: ["SoLuongCau"],
+    });
+    let index = cauhoi.SoLuongCau + 1;
+    await db.Question.create({
+      MaCauHoi: "C" + String(index).padStart(2, "0"),
+      MaBaiThi: testId,
+      DeBai: question.questionContent,
+      SoThuTu: index,
+      TheLoai: "Trắc nghiệm",
+    });
     for (var i = 1; i <= 4; i++) {
       var answerProperty = "answer" + i;
       var correct = 0;
       if (question.check == i) {
         correct = 1;
       }
-      await db.Option.create(
-        {
-          MaCauHoi: "C" + String(index).padStart(2, "0"),
-          MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i - 1),
-          MaBaiThi: testId,
-          Dung: correct,
-          NoiDung: question[answerProperty],
-        },
-        { transaction: t }
-      );
+      await db.Option.create({
+        MaCauHoi: "C" + String(index).padStart(2, "0"),
+        MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i - 1),
+        MaBaiThi: testId,
+        Dung: correct,
+        NoiDung: question[answerProperty],
+      });
     }
+    db.Test.update(
+      {
+        SoLuongCau: index,
+      },
+      {
+        where: {
+          MaBaiThi: testId,
+        },
+      }
+    );
+    return true;
   } catch (error) {
-    t.rollback();
+    console.error(error);
+    return false;
   }
 };
 const getQuestionOfTestUser = async (id) => {

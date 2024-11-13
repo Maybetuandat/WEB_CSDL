@@ -12,18 +12,9 @@ var currentNumber = 1;
 // });
 
 function render() {
-  var num = document.getElementById("numQuestions").value;
-  if (num === "") {
-    showAlert("Bạn chưa nhập số câu hỏi");
-    return;
-  }
-  var numQuestions = parseInt(num);
+  var numQuestions = 1;
 
   var questionsContainer = document.getElementById("questionsContainer");
-
-  // Xóa các câu hỏi cũ trước khi tạo mới
-  questionsContainer.innerHTML = "";
-  currentNumber = numQuestions + 1;
 
   // Tạo các ô input cho câu hỏi và đáp án
   for (var i = 1; i <= numQuestions; i++) {
@@ -52,7 +43,7 @@ function render() {
 
     //old
     var questionLabel = document.createElement("label");
-    questionLabel.textContent = "Câu hỏi " + i + ":";
+    questionLabel.textContent = "Câu hỏi " + ":";
 
     var questionInput = document.createElement("textarea");
     questionInput.cols = 140;
@@ -92,6 +83,9 @@ function render() {
       questionsContainer.appendChild(questionContent);
     }
   }
+
+  document.getElementById("numQuestions").value =
+    parseInt(document.getElementById("numQuestions").value) + 1;
 }
 
 function render2(questionsAndAnswers) {
@@ -219,8 +213,7 @@ document
 
         //old
         var questionLabel = document.createElement("label");
-        questionLabel.textContent =
-          "Câu hỏi " + (parseInt(index + 1) + parseInt(1)) + ":";
+        questionLabel.textContent = "Câu hỏi " + ":";
 
         var questionInput = document.createElement("textarea");
         questionInput.cols = 140;
@@ -270,8 +263,8 @@ document
           }
         }
       });
+      document.getElementById("numQuestions").value = excelData.length;
     };
-
     reader.readAsArrayBuffer(file); //đọc xong mới xử lý onload()
   });
 
@@ -361,10 +354,11 @@ function hideAlert() {
   document.getElementById("myAlert").style.display = "none";
 }
 
-function showAlert(content) {
+function showAlert(content, color = "#f8d7da") {
   document.getElementById("alertContent").textContent = content;
   document.getElementById("myAlert").style.display = "block";
-  setTimeout(hideAlert, 3000);
+  document.getElementById("myAlert").style.backgroundColor = color;
+  setTimeout(hideAlert, 5000);
 }
 
 async function uploadImageWithRetry(url, options, retries = 3, delay = 3000) {
@@ -403,37 +397,15 @@ function formatDatetime(date) {
 }
 
 async function Save() {
-  const currentDate = document.getElementById("examDate").value;
-  const currentDateTime = document.getElementById("timeStart").value;
-
-  const formattedDatetime = formatDatetime(
-    new Date(currentDate + "T" + currentDateTime)
-  );
-
-  var formData = {
-    examName: document.getElementById("examName").value,
-    examDateTime: formattedDatetime,
-    examTime: document.getElementById("examTime").value,
-    numQuestions: document.getElementById("numQuestions").value,
-    imageUrl:
-      "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg",
-    examDescription: document.getElementById("examDescription").value,
-    examStatus: document.getElementById("examStatus").value,
-  };
-
-  if (!formData.numQuestions || !formData.examTime || !formData.examName) {
-    showAlert("Vui lòng điền đầy đủ thông tin cho bài thi");
-    return;
-  }
-
-  var questions = [];
-
-  var questionNum = formData.numQuestions;
-  if (questionNum === 0) {
+  let createTestSuccess = true;
+  const backendURL = "/api/new-question";
+  const mbt = document.getElementById("examID").value;
+  var questionNum = parseInt(document.getElementById("numQuestions").value);
+  if (questionNum == 0) {
     showAlert("Số câu hỏi đang là 0");
     return;
   }
-
+  showLoading();
   for (var i = 1; i <= questionNum; i++) {
     var answer = [];
     var check = "";
@@ -461,47 +433,96 @@ async function Save() {
       showAlert("Bạn chưa chọn đáp án đúng cho câu hỏi " + i);
       return;
     }
-    questions.push({
+    let question = {
       questionContent: questionContent,
       answer1: answer[0],
       answer2: answer[1],
       answer3: answer[2],
       answer4: answer[3],
       check: check,
-    });
-  }
-
-  var newImageUrl =
-    "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg";
-  var fileInput = document.getElementById("image-file");
-  var file = fileInput.files[0];
-  if (file) {
-    var formImg = new FormData();
-    formImg.append("file", file);
-    const url = "/test/cloudinary-upload1";
-    const options = {
-      method: "POST",
-      body: formImg,
     };
-    try {
-      var loading = document.getElementById("loading");
-      loading.style.display = "block";
-      const data = await uploadImageWithRetry(url, options);
-      const newImageUrl = data.img_url;
-      formData.imageUrl = newImageUrl;
-    } catch (error) {
-      console.error("Error:", error);
-      // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi cho người dùng
+    let options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ mbt, question }),
+    };
+
+    let retry = 3;
+    let createQuestionSuccess = false;
+    while (retry--) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+        const response = await fetch(backendURL, {
+          ...options,
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // const data = await response.json();
+        // hideLoading();
+        // window.location.href = "/test";
+        createQuestionSuccess = true;
+        break; // Thoát vòng lặp nếu thành công
+      } catch (error) {
+        console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
+      }
+    }
+    if (createQuestionSuccess == false) {
+      createTestSuccess = false;
+      hideLoading();
+      showAlert("Đã xảy ra lỗi, hãy tạo bài thi mới !!!");
+      break;
     }
   }
+  if (createTestSuccess == true) {
+    hideLoading();
+    showAlert("Đã lưu danh sách câu hỏi thành công !!!", "#cce5ff");
+    window.location.href = "/test";
+  }
+}
 
-  const backendURL = "/api/new-test";
+async function Save2() {
+  const buttonCreateExam = document.getElementById("createExamBtn");
+  buttonCreateExam.disabled = true;
+  setTimeout(() => {
+    // Khôi phục lại nút bấm sau 3 giây
+    buttonCreateExam.disabled = false;
+  }, 2000);
+
+  if (
+    !document.getElementById("examName").value ||
+    !document.getElementById("examTime").value
+  ) {
+    showAlert("Vui lòng nhập đủ tên bài thi và thời gian làm bài !!!");
+    return;
+  }
+
+  var formData = {
+    examDateTime: "2024-12-31 23:59:59",
+    examName: document.getElementById("examName").value,
+    examTime: document.getElementById("examTime").value,
+    numQuestions: 0,
+    imageUrl:
+      "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg",
+    examDescription: document.getElementById("examDescription").value,
+    examStatus: document.getElementById("examStatus").value,
+  };
+
+  const backendURL = "/api/new-test2";
   const options = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ metadata: formData, data: questions }),
+    body: JSON.stringify({ metadata: formData }),
   };
 
   const controller = new AbortController();
@@ -520,47 +541,15 @@ async function Save() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    console.log(data);
     hideLoading();
-    if (data.code == 2) {
-      openDialog("Bài thi chứa từ ngữ không hợp lệ, vui lòng kiểm tra lại !!!");
-    } else window.location.href = "/admin/test";
-    const invalidWordsList = document.getElementById("invalidWordsList");
-    invalidWordsList.textContent = null;
-    data.data.forEach((word) => {
-      const wordElement = document.createElement("p");
-      wordElement.textContent = word;
-      wordElement.setAttribute("data-word", word);
-      invalidWordsList.appendChild(wordElement);
-    });
-    const contentElements = document.querySelectorAll(
-      'textarea, input[type="text"]'
-    );
-    for (const element of contentElements) {
-      element.style.backgroundColor = "";
-    }
-    // Xử lý sự kiện click vào từ không hợp lệ
-    invalidWordsList.addEventListener("click", function (event) {
-      if (event.target.tagName === "P") {
-        const word = event.target.getAttribute("data-word");
-        const contentElements = document.querySelectorAll(
-          'textarea, input[type="text"]'
-        );
-        let scroll = false;
-        for (const element of contentElements) {
-          element.style.backgroundColor = "";
-          if (
-            element.textContent.includes(word) ||
-            (element.value && element.value.includes(word))
-          ) {
-            if (scroll == false) {
-              element.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
-            element.style.backgroundColor = "yellow"; // Tô màu nền để dễ thấy
-            scroll = true;
-          }
-        }
-      }
-    });
+    showAlert("Đã lưu bài thi thành công !!!", "#cce5ff");
+    document.getElementById("examID").value = data.mabaithi;
+    document.getElementById("examName").disabled = true;
+    document.getElementById("examTime").disabled = true;
+    document.getElementById("examDescription").disabled = true;
+    document.getElementById("examStatus").disabled = true;
+
     // window.location.href = "/test";
   } catch (error) {
     showAlert("Đã xảy ra lỗi !!!");

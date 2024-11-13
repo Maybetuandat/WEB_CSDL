@@ -2,6 +2,7 @@ const {
   getAllTest,
   getTestById,
   createNewTest,
+  createNewTest2,
   deleteTestById,
   updateTestById,
   searchTestByName,
@@ -13,6 +14,7 @@ const {
 const {
   getQuestionOfTest,
   getQuestionOfTestUser,
+  createNewQuestion,
 } = require("../services/question.service");
 const { getStudentById } = require("../services/student.service");
 const {
@@ -338,6 +340,50 @@ const postTestHandler = async (req, res) => {
   }
 };
 
+const postTestHandler2 = async (req, res) => {
+  var reqBody = req.body;
+
+  var test = reqBody.metadata;
+
+  var status = await createNewTest2(test);
+  if (status) {
+    res.status(200).json({
+      mabaithi: status,
+      code: 1,
+      error: 200,
+      message: "Tạo bài thi thành công!",
+    });
+  } else {
+    res.status(500).json({
+      code: 0,
+      status: 500,
+      message: "Tạo bài thi thất bại!",
+    });
+  }
+};
+
+const postQuestionHandler = async (req, res) => {
+  var reqBody = req.body;
+  var test = reqBody.question;
+  let mbt = reqBody.mbt;
+
+  var status = await createNewQuestion(test, mbt);
+  if (status) {
+    res.status(200).json({
+      code: 1,
+      error: 200,
+      message: "Tạo câu hỏi thành công!",
+    });
+  } else {
+    console.log("buc vcl");
+    res.status(500).json({
+      code: 0,
+      status: 500,
+      message: "Tạo câu hỏi thất bại!",
+    });
+  }
+};
+
 const deleteTestHandler = async (req, res) => {
   var testId = req.params.id;
   var status = await deleteTestById(testId);
@@ -444,6 +490,8 @@ module.exports = {
   getTestList,
   getQuestionByTestHandler,
   postTestHandler,
+  postTestHandler2,
+  postQuestionHandler,
   deleteTestHandler,
   updateTestHandler,
   searchTestHandler,

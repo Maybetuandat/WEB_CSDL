@@ -8,6 +8,8 @@ const {
   getTestByPage,
   getQuestionByTestHandler,
   postTestHandler,
+  postTestHandler2,
+  postQuestionHandler,
   deleteTestHandler,
   getTestByIdHandler,
   updateTestHandler,
@@ -67,6 +69,8 @@ const increaseTimeout = (req, res, next) => {
 router.post("/login/:role", checkLoginUser);
 router.post("/createNewstudent", createNewStudentHandler);
 router.post("/new-test", isAdmin, increaseTimeout, postTestHandler);
+router.post("/new-test2", isAdmin, postTestHandler2);
+router.post("/new-question", isAdmin, postQuestionHandler);
 router.delete("/delete-test/:id", isAdmin, deleteTestHandler);
 router.post("/new-student", postStudentHandler);
 router.post("/new-student-list", createNewStudentList);
