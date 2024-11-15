@@ -15,6 +15,7 @@ const {
   getQuestionOfTest,
   getQuestionOfTestUser,
   createNewQuestion,
+  updateQuestionById,
 } = require("../services/question.service");
 const { getStudentById } = require("../services/student.service");
 const {
@@ -384,6 +385,26 @@ const postQuestionHandler = async (req, res) => {
   }
 };
 
+const putQuestionHandler = async (req, res) => {
+  var testId = req.params.id;
+  var questionId = req.params.idQuestion;
+  var updateData = req.body;
+
+  var status = await updateQuestionById(testId, questionId, updateData);
+  if (status) {
+    res.status(200).json({
+      code: 1,
+      error: 200,
+      message: "Cập nhật thành công!",
+    });
+  } else {
+    res.status(500).json({
+      code: 0,
+      message: "Cập nhật thất bại!",
+    });
+  }
+};
+
 const deleteTestHandler = async (req, res) => {
   var testId = req.params.id;
   var status = await deleteTestById(testId);
@@ -492,6 +513,7 @@ module.exports = {
   postTestHandler,
   postTestHandler2,
   postQuestionHandler,
+  putQuestionHandler,
   deleteTestHandler,
   updateTestHandler,
   searchTestHandler,

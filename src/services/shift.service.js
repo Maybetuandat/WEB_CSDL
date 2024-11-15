@@ -19,6 +19,7 @@ const getCountShiftWithFindObject = async (find) => {
           required: true,
         },
       ],
+      order: [["MaCaThi", "DESC"]],
     });
     if (tests.length > 0) {
       data.status = 200;

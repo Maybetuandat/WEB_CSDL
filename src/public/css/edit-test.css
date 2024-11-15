@@ -1,119 +1,156 @@
 .empty-text {
-    font-size: 24px;
-    font-weight: 600;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .yellow-text {
-    color: red;
+  color: red;
 }
 
 .green-text {
-    color: #008000;
+  color: #008000;
 }
 
 .checkedColor {
-    background-color: #c32b2b !important;
-    /* color: #ffff; */
+  background-color: #c32b2b !important;
+  /* color: #ffff; */
 }
 
 .question-content {
-    /* display: flex; */
-    border: 1px solid #c32b2b;
-    border-radius: 2px;
-    padding: 10px 10px;
-    margin-bottom: 50px;
+  /* display: flex; */
+  border: 1px solid #c32b2b;
+  border-radius: 2px;
+  padding: 10px 10px;
+  margin-bottom: 50px;
 }
 
 .question-container {
-    margin-left: 60px;
+  margin-left: 60px;
 }
 
 .question-container label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 10px;
-    font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 
 .answer-container {
-    margin-left: 50px;
-    display: flex;
-    margin: 10px;
+  margin-left: 50px;
+  display: flex;
+  margin: 10px;
 }
 
 .checked {
-    background-color: #c32b2b !important;
-    color: #ffff !important;
+  background-color: #c32b2b !important;
+  color: #ffff !important;
 }
 
 .add-btn {
-    background-color: #c32b2b;
-    width: 40px;
-    height: 40px;
-    border-radius: 50% !important;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: #c32b2b;
+  width: 40px;
+  height: 40px;
+  border-radius: 50% !important;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .delete-question {
-    position: absolute;
-    margin-top: 50px;
-    right: 60px;
-    display: flex;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #c32b2b;
-    background-color: #ffff;
-    color: #c32b2b;
-    cursor: pointer;
-    border-radius: 50%;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin-right: 15px;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ff4d4d; /* Màu viền đỏ nhạt */
+  background-color: #ffe6e6; /* Màu nền đỏ nhạt */
+  color: #d63031; /* Màu chữ đỏ đậm */
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .delete-question:hover {
-    background-color: #555;
+  background-color: #ff4d4d; /* Màu nền đỏ đậm khi hover */
+  color: #fff; /* Màu chữ trắng khi hover */
+}
+
+.open-edit-question {
+  margin-right: 15px;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ffa502; /* Màu viền vàng nhạt */
+  background-color: #ffedcc; /* Màu nền vàng nhạt */
+  color: #e67e22; /* Màu chữ vàng đậm */
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.open-edit-question:hover {
+  background-color: #ffa502; /* Màu nền vàng đậm khi hover */
+  color: #fff; /* Màu chữ trắng khi hover */
+}
+
+.save-edit-question {
+  margin-right: 15px;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #1e90ff; /* Màu viền xanh nhạt */
+  background-color: #d6ecff; /* Màu nền xanh nhạt */
+  color: #3498db; /* Màu chữ xanh đậm */
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.save-edit-question:hover {
+  background-color: #1e90ff; /* Màu nền xanh đậm khi hover */
+  color: #fff; /* Màu chữ trắng khi hover */
 }
 
 .question-title {
-    display: block;
+  display: block;
 }
 
 .submit-btn {
-    color: #ffff !important;
+  color: #ffff !important;
 }
 
 .question-title textarea {
-    flex: 1;
-    width: 89%;
-    box-sizing: border-box;
+  flex: 1;
+  width: 89%;
+  box-sizing: border-box;
 }
 
-
 .checkbox {
-    display: flex;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #c32b2b;
-    cursor: pointer;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #c32b2b;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 }
 
 /* Thêm responsive */
 @media (max-width: 768px) {
-    .question-container {
-        margin-left: 0;
-    }
+  .question-container {
+    margin-left: 0;
+  }
 
-    .answer-container {
-        margin-left: 0;
-    }
+  .answer-container {
+    margin-left: 0;
+  }
 }

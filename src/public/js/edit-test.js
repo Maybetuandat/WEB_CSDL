@@ -43,17 +43,48 @@ function render(questions) {
     questionTitle.className = "question-title";
 
     // new
+    var actionBar = document.createElement("div");
+    actionBar.style.display = "flex";
+    actionBar.style.flexDirection = "row";
     var deleteQuestionButton = document.createElement("div");
     deleteQuestionButton.className = "delete-question";
 
     var iconDelete = document.createElement("i");
-    iconDelete.className = "ti-close";
+    iconDelete.textContent = "Xóa";
     deleteQuestionButton.appendChild(iconDelete);
+
+    var openEditQuestionButton = document.createElement("div");
+    openEditQuestionButton.className = "open-edit-question";
+
+    var iconOpen = document.createElement("i");
+    iconOpen.textContent = "Sửa";
+    openEditQuestionButton.appendChild(iconOpen);
+
+    var saveEditQuestionButton = document.createElement("div");
+    saveEditQuestionButton.className = "save-edit-question";
+    saveEditQuestionButton.id = "save-edit-question";
+
+    var iconSave = document.createElement("i");
+    iconSave.textContent = "Lưu";
+    saveEditQuestionButton.appendChild(iconSave);
+
     deleteQuestionButton.onclick = function () {
       DeleteQuestion(this.parentNode.parentNode.id);
     };
+    openEditQuestionButton.onclick = function () {
+      openEdit(this.parentNode.parentNode.parentNode.id);
+    };
+    saveEditQuestionButton.onclick = function () {
+      SaveEditQuestion(
+        document.getElementById("examID").value,
+        this.parentNode.parentNode.parentNode.id
+      );
+    };
 
-    questionDiv.appendChild(deleteQuestionButton);
+    // actionBar.appendChild(deleteQuestionButton);
+    actionBar.appendChild(openEditQuestionButton);
+    actionBar.appendChild(saveEditQuestionButton);
+    questionDiv.appendChild(actionBar);
 
     //old
     var questionLabel = document.createElement("label");
@@ -64,6 +95,7 @@ function render(questions) {
     questionInput.rows = 3;
     questionInput.id = "question" + i;
     questionInput.value = questions[i - 1].DeBai;
+    questionInput.disabled = true;
 
     questionTitle.appendChild(questionLabel);
     questionTitle.appendChild(questionInput);
@@ -84,8 +116,10 @@ function render(questions) {
       answerCheckbox.textContent = String.fromCharCode(
         "A".charCodeAt(0) + j - 1
       );
+      answerCheckbox.style.pointerEvents = "none";
 
       var answerInput = document.createElement("textarea");
+      answerInput.disabled = true;
       answerInput.cols = "140";
       answerInput.rows = "1";
       answerInput.name = "question" + i + "answer" + j;
@@ -174,17 +208,14 @@ function Add() {
 
 function toggleCheckbox(idElement) {
   var element = document.getElementById(idElement);
-  if (!element.classList.contains("checked")) {
-    element.classList.add("checked");
-  } else {
-    element.classList.remove("checked");
+  for (let i = 1; i <= 4; i++) {
+    let otherElement = document.getElementById(
+      idElement.substring(0, idElement.length - 1) + i.toString()
+    );
+    otherElement.classList.remove("checked");
+    otherElement.style.backgroundColor = "transparent";
   }
-
-  if (element.style.backgroundColor === "green") {
-    element.style.backgroundColor = "transparent";
-  } else {
-    element.style.backgroundColor = "green";
-  }
+  element.classList.add("checked");
 }
 
 function hideAlert() {
@@ -214,128 +245,120 @@ function formatDatetime(date) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-async function Save(id) {
-  const currentDatetime = new Date();
-  const formattedDatetime = formatDatetime(currentDatetime);
+async function SaveEdit(id) {
+  const buttonCreateExam = document.getElementById("editExamBtn");
+  buttonCreateExam.disabled = true;
+  setTimeout(() => {
+    // Khôi phục lại nút bấm sau 3 giây
+    buttonCreateExam.disabled = false;
+  }, 2000);
 
   var formData = {
     examName: document.getElementById("examName").value,
-    examDateTime: formattedDatetime,
     examTime: document.getElementById("examTime").value,
-    numQuestions: document.getElementById("numQuestions").value,
-    imageUrl:
-      "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg",
     examDescription: document.getElementById("examDescription").value,
+    examStatus: document.getElementById("examStatus").value,
   };
 
-  if (!formData.numQuestions || !formData.examTime || !formData.examName) {
+  if (!formData.examName || !formData.examTime) {
     showAlert("Vui lòng điền đầy đủ thông tin cho bài thi");
     return;
-  } else {
-    var questions = [];
+  }
 
-    var questionNum = formData.numQuestions;
+  const backendURL = "/api/update-test/" + id;
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ metadata: formData }),
+  };
 
-    if (questionNum === 0) {
-      alert("Số câu hỏi đang là 0");
-      return;
-    }
+  const controller = new AbortController();
+  const timeout = 300000; // 5 minutes
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-    for (var i = 1; i <= questionNum; i++) {
-      var answer = [];
-      var check = "";
-      var questionContent = document.getElementById("question" + i).value;
-      if (questionContent === "") {
-        showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
-        return;
-      }
-      for (var j = 1; j <= 4; j++) {
-        if (
-          document
-            .getElementById(i + "checkbox" + j)
-            .classList.contains("checked")
-        ) {
-          check = j;
-        }
-        var ans = document.getElementById("question" + i + "answer" + j).value;
-        if (ans === "") {
-          showAlert("Bạn chưa nhập đáp án cho câu hỏi " + i);
-          return;
-        }
-        answer.push(ans);
-      }
-
-      if (check === "") {
-        showAlert("Bạn chưa chọn đáp án đúng cho câu hỏi " + i);
-        return;
-      }
-
-      questions.push({
-        questionContent: questionContent,
-        answer1: answer[0],
-        answer2: answer[1],
-        answer3: answer[2],
-        answer4: answer[3],
-        check: check,
-      });
-    }
-
-    var newImageUrl =
-      "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg";
-    var fileInput = document.getElementById("image-file");
-    var file = fileInput.files[0];
-
-    if (file) {
-      var formImg = new FormData();
-      formImg.append("file", file);
-
-      try {
-        const response = await fetch("/admin/test/cloudinary-upload", {
-          method: "POST",
-          body: formImg,
-        });
-        const data = await response.json();
-        newImageUrl = data.img_url;
-      } catch (error) {
-        console.error("Error:", error);
-      }
-
-      formData.imageUrl = newImageUrl;
-    }
-
-    const backendURL = "/api/update-test/" + id;
-
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ metadata: formData, data: questions }),
-    };
-
+  try {
     showLoading();
-    await fetch(backendURL, options)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Có lỗi xảy ra khi gửi yêu cầu: " + response.status);
-        }
-        return response.json(); // Trả về phản hồi dưới dạng JSON
-      })
+    const response = await fetch(backendURL, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
 
-      .then((data) => {
-        hideLoading();
-        let currentUrl = window.location.href;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+    hideLoading();
+    showAlert("Đã lưu bài thi thành công !!!", "#cce5ff");
+  } catch (error) {
+    showAlert("Đã xảy ra lỗi !!!");
+    console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
+  }
+}
 
-        if (currentUrl.includes("admin")) {
-          window.location.href = "/admin/test";
-        } else {
-          window.location.href = "/test";
-        }
-      })
-      .catch((error) => {
-        showAlert("Đã xảy ra lỗi");
-        console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
-      });
+async function SaveEditQuestion(testId, questionId) {
+  const buttonCreateExam = document.getElementById("save-edit-question");
+  buttonCreateExam.disabled = true;
+  setTimeout(() => {
+    // Khôi phục lại nút bấm sau 3 giây
+    buttonCreateExam.disabled = false;
+  }, 2000);
+
+  const question = document.getElementById("question" + questionId).value;
+  const options = [];
+  for (let i = 1; i <= 4; i++) {
+    let ans = document.getElementById(
+      "question" + questionId + "answer" + i.toString()
+    ).value;
+    let right = 0;
+    if (
+      document
+        .getElementById(questionId + "checkbox" + i.toString())
+        .classList.contains("checked")
+    ) {
+      right = 1;
+    }
+    const op = { ans, right };
+    options.push(op);
+  }
+
+  const backendURL = "/api/update-test/" + testId + "/" + questionId;
+  const option = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ question, options }),
+  };
+
+  const controller = new AbortController();
+  const timeout = 300000; // 5 minutes
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    showLoading();
+    const response = await fetch(backendURL, {
+      ...option,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    hideLoading();
+    var element = document.getElementById(questionId);
+    var questionInputs = element.querySelectorAll("textarea");
+    for (var i = 0; i < questionInputs.length; i++) {
+      questionInputs[i].disabled = true;
+    }
+  } catch (error) {
+    showAlert("Đã xảy ra lỗi !!!");
+    console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
   }
 }
 
@@ -343,6 +366,18 @@ function DeleteQuestion(id) {
   var element = document.getElementById(id);
   UpDateIdForQuestion(id);
   element.remove();
+}
+
+function openEdit(id) {
+  var element = document.getElementById(id);
+  var questionInputs = element.querySelectorAll("textarea");
+  for (var i = 0; i < questionInputs.length; i++) {
+    questionInputs[i].disabled = false;
+  }
+  var checkboxes = element.querySelectorAll(".checkbox");
+  for (var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].style.pointerEvents = "auto";
+  }
 }
 
 function UpDateIdForQuestion(id) {

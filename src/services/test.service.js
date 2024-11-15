@@ -257,78 +257,21 @@ const deleteTestById = async (testId) => {
 };
 
 const updateTestById = async (testId, updateData) => {
-  var t;
   try {
-    t = await sequelize.transaction();
-    var test = await db.Test.findOne({
-      where: { MaBaiThi: testId },
-      transaction: t,
-    });
-    metadata = updateData.metadata;
-    data = updateData.data;
+    let updated = {
+      TenBaiThi: updateData.metadata.examName,
+      ThoiGianThi: parseInt(updateData.metadata.examTime),
+      TheLoai: updateData.metadata.examDescription,
+      TrangThai: updateData.metadata.examStatus,
+    };
 
-    test.TenBaiThi = metadata.examName;
-    test.ThoiGianBatDau = "2024-11-12 12:00:00";
-    test.ThoiGianThi = parseInt(metadata.examTime);
-    test.SoLuongCau = parseInt(data.length);
-    if (metadata.imageUrl != "") {
-      test.img_url = metadata.imageUrl;
-    }
-
-    await test.save({ transaction: t });
-
-    var len = data.length;
-
-    //delete all question and option
-    await db.Question.destroy({
+    await db.Test.update(updated, {
       where: {
         MaBaiThi: testId,
       },
-
-      transaction: t,
     });
-
-    await db.Option.destroy({
-      where: {
-        MaBaiThi: testId,
-      },
-      transaction: t,
-    });
-
-    //create new question and option using bulk
-    var bulkQuestions = [];
-    var bulkOptions = [];
-
-    for (var i = 0; i < len; i++) {
-      bulkQuestions.push({
-        MaCauHoi: "C" + String(i + 1).padStart(2, "0"),
-        MaBaiThi: testId,
-        DeBai: data[i].questionContent,
-        SoThuTu: i + 1,
-        TheLoai: "Trắc nghiệm",
-      });
-
-      for (var j = 1; j <= 4; j++) {
-        var answerProperty = "answer" + j;
-        var answerId = String.fromCharCode("A".charCodeAt(0) + j - 1);
-
-        bulkOptions.push({
-          MaCauHoi: "C" + String(i + 1).padStart(2, "0"),
-          MaLuaChon: answerId,
-          MaBaiThi: testId,
-          NoiDung: data[i][answerProperty],
-          Dung: data[i]["check"] == j ? 1 : 0,
-        });
-      }
-    }
-
-    await db.Question.bulkCreate(bulkQuestions, { transaction: t });
-    await db.Option.bulkCreate(bulkOptions, { transaction: t });
-
-    await t.commit();
     return true;
   } catch (e) {
-    await t.rollback();
     return false;
   }
 };

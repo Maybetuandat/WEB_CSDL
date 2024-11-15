@@ -1,6 +1,7 @@
 const { default: Transaction } = require("sequelize/lib/transaction");
 const db = require("../models/index");
 const _ = require("lodash");
+const { where } = require("sequelize");
 
 const getAllQuestion = async () => {
   var data = { status: null, data: null };
@@ -255,11 +256,56 @@ const getQuestionOfTestUser = async (id) => {
   }
 };
 
+const updateQuestionById = async (testId, questionId, updateData) => {
+  const question = {
+    DeBai: updateData.question,
+  };
+  const options = [];
+  updateData.options.forEach((option) => {
+    options.push({ NoiDung: option.ans, Dung: parseInt(option.right) });
+  });
+  const promises = [];
+
+  // Cập nhật câu hỏi
+  promises.push(
+    db.Question.update(question, {
+      where: {
+        MaBaiThi: testId,
+        MaCauHoi: "C" + String(questionId).padStart(2, "0"),
+      },
+    })
+  );
+
+  // Cập nhật các lựa chọn
+  for (let i = 0; i < 4; i++) {
+    console.log(options[i].NoiDung);
+
+    promises.push(
+      db.Option.update(options[i], {
+        where: {
+          MaBaiThi: testId,
+          MaCauHoi: "C" + String(questionId).padStart(2, "0"),
+          MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i), // Tăng dần từ 'A'
+        },
+      })
+    );
+  }
+
+  try {
+    Promise.all(promises);
+    return true;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    return false;
+  }
+};
+
 module.exports = {
   getAllQuestion,
   getQuestionOfTest,
   getQuestionOfTest2,
   createNewQuestion,
+  updateQuestionById,
   getQuestionOfTestUser,
   getQuestionOfTestAdmin,
 };

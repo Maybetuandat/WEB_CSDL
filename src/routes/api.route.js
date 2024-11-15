@@ -10,6 +10,7 @@ const {
   postTestHandler,
   postTestHandler2,
   postQuestionHandler,
+  putQuestionHandler,
   deleteTestHandler,
   getTestByIdHandler,
   updateTestHandler,
@@ -101,6 +102,7 @@ router.get("/search-test", isAuth, searchTestHandler);
 router.get("/get-detail-test/:id", isAuth, getTestByIdHandler);
 
 router.put("/update-test/:id", isAdmin, updateTestHandler);
+router.put("/update-test/:id/:idQuestion", isAdmin, putQuestionHandler);
 
 //vu2
 router.get("/get-student", isAdmin, getStudentHandler);

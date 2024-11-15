@@ -1,0 +1,62 @@
+mixin test-description2(metadata)
+    .container-fluid.mt-4
+    .card.mb-4
+        .card-header.pb-0.ptit-color.c-white
+            h5.mb-10 Thông tin bài thi
+        .card-body
+            .container
+                .option-container#option-container
+                    .test-description.row
+                        .col-md-6
+                            form#description-form
+                                .form-group
+                                    label(for='examName') Mã bài thi:
+                                    if metadata
+                                        input.form-control(type='text' id="examID" value=metadata.MaBaiThi required readonly)
+                                    else
+                                        input.form-control(type='text' id="examID" value="" readonly)
+                                .form-group
+                                    label(for='examName') Tên bài thi:
+                                    if metadata
+                                        input.form-control(type='text' id="examName" value=metadata.TenBaiThi required)
+                                    else
+                                        input.form-control(type='text' id="examName" required)
+                                .form-group
+                                    label(for='specificExamTime') Thời gian (phút):
+                                    if metadata
+                                        input.form-control(type='number' id='examTime' value = metadata.ThoiGianThi required)
+                                    else
+                                        input.form-control(type='number' id='examTime' required)
+                               
+                                .form-group
+                                    label(for='numQuestions') Số lượng câu hỏi:
+                                    if metadata
+                                        input.form-control(type='number'  id='numQuestions' value = metadata.SoLuongCau  readonly)
+                                    else
+                                        input.form-control(type='number'  id='numQuestions' value = 0  readonly )
+                        .col-md-6
+                            form#option-form
+                                .form-group
+                                    label(for='examDescription') Mô tả:
+                                    textarea.form-control#examDescription(cols='40', rows='2')
+                                .form-group
+                                    label(for='examName') Luyện tập/ Thực hành(th):
+                                    if metadata
+                                        input.form-control(type='text' id="examStatus" value=metadata.TrangThai required)
+                                    else
+                                        input.form-control(type='text' id="examStatus" required)
+                                
+                                
+                                
+            .form-group.d-flex.align-items-center
+                div.flex-grow-1
+                button.btn.ptit-color.text-white.btn-responsive(type='submit', onclick=`SaveEdit('${metadata.MaBaiThi}')` id="editExamBtn") Lưu thay đổi
+
+                //- if metadata
+                //-     button.btn.ptit-color.text-white.px-4.btn-responsive(onclick=`Save('${metadata.MaBaiThi}')`)
+                //-         i.ti-save
+                //- else 
+                //-     button.btn.ptit-color.text-white.px-4.btn-responsive(onclick='Save()') Lưu danh sách câu hỏi
+                        
+
+                    

@@ -18,6 +18,7 @@ mixin test-table(tests, pagination)
                             th ID
                             th Tên bài thi
                             th Thời lượng
+                            th Số câu
                             th Thể loại
                             th Trạng thái
                             th Chỉnh sửa
@@ -27,8 +28,9 @@ mixin test-table(tests, pagination)
                         each test, index in tests
                             tr.tb-round-test(id=test.MaBaiThi)
                                 td.fw-600=test.MaBaiThi
-                                td=test.TenBaiThi
+                                td.fw-600=test.TenBaiThi
                                 td=test.ThoiGianThi + ' phút'
+                                td=test.SoLuongCau
                                 td=test.TheLoai
                                 td=test.TrangThai
                                 td
