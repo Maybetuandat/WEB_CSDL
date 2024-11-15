@@ -356,6 +356,10 @@ async function SaveEditQuestion(testId, questionId) {
     for (var i = 0; i < questionInputs.length; i++) {
       questionInputs[i].disabled = true;
     }
+    var checkboxes = element.querySelectorAll(".checkbox");
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].style.pointerEvents = "none";
+    }
   } catch (error) {
     showAlert("Đã xảy ra lỗi !!!");
     console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
