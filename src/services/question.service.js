@@ -218,13 +218,13 @@ const createNewQuestion = async (question, testId) => {
     });
     let index = baithi.SoLuongCau + 1;
 
-    const fileName = `${testId}_${index}.webp`;
-    const filePath = path.join(uploadDir, fileName);
-    // console.log(filePath);
-    let imagePath = null;
-    if (fs.existsSync(filePath)) {
-      imagePath = fileName; // Gắn tên file vào trường HinhAnh
-    }
+    // const fileName = `${testId}_${index}.webp`;
+    // const filePath = path.join(uploadDir, fileName);
+    // // console.log(filePath);
+    // let imagePath = null;
+    // if (fs.existsSync(filePath)) {
+    //   imagePath = fileName; // Gắn tên file vào trường HinhAnh
+    // }
     await db.Question.create({
       MaCauHoi: "C" + String(index).padStart(2, "0"),
       MaBaiThi: testId,
@@ -234,7 +234,7 @@ const createNewQuestion = async (question, testId) => {
         !question.type || question.type.trim() == ""
           ? "Trắc nghiệm"
           : question.type,
-      HinhAnh: imagePath,
+      // HinhAnh: imagePath,
     });
     if (baithi.TheLoai == "trắc nghiệm") {
       for (var i = 1; i <= 4; i++) {
@@ -243,22 +243,22 @@ const createNewQuestion = async (question, testId) => {
         if (question.check == i) {
           correct = 1;
         }
-        let fileNameOption = `${testId}_${index}_${i}.webp`;
-        let filePathOption = path.join(uploadDir, fileNameOption);
+        // let fileNameOption = `${testId}_${index}_${i}.webp`;
+        // let filePathOption = path.join(uploadDir, fileNameOption);
 
-        let imagePathOption = null;
-        if (fs.existsSync(filePathOption)) {
-          imagePathOption = fileNameOption; // Gắn tên file vào trường HinhAnh
-        }
-        console.log("wtf: ", imagePathOption);
-        console.log("wtf2: ", fileNameOption);
+        // let imagePathOption = null;
+        // if (fs.existsSync(filePathOption)) {
+        //   imagePathOption = fileNameOption; // Gắn tên file vào trường HinhAnh
+        // }
+        // console.log("wtf: ", imagePathOption);
+        // console.log("wtf2: ", fileNameOption);
         await db.Option.create({
           MaCauHoi: "C" + String(index).padStart(2, "0"),
           MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i - 1),
           MaBaiThi: testId,
           Dung: correct,
           NoiDung: question[answerProperty],
-          HinhAnh: imagePathOption,
+          // HinhAnh: imagePathOption,
         });
       }
     } else {
@@ -282,6 +282,39 @@ const createNewQuestion = async (question, testId) => {
     return index;
   } catch (error) {
     console.error(error);
+    return false;
+  }
+};
+const updateImageQuestion = async (imageUrl, mbt, mch) => {
+  try {
+    await db.Question.update(
+      { HinhAnh: imageUrl },
+      {
+        where: {
+          MaBaiThi: mbt,
+          MaCauHoi: mch,
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Lỗi khi cập nhật hình ảnh:", error);
+    return false;
+  }
+};
+const updateImageOption = async (imageUrl, mbt, mch, mlc) => {
+  try {
+    await db.Option.update(
+      { HinhAnh: imageUrl },
+      {
+        where: {
+          MaBaiThi: mbt,
+          MaCauHoi: mch,
+          MaLuaChon: mlc,
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Lỗi khi cập nhật hình ảnh:", error);
     return false;
   }
 };
@@ -360,6 +393,8 @@ module.exports = {
   getQuestionOfTest2,
   createNewQuestion,
   updateQuestionById,
+  updateImageOption,
+  updateImageQuestion,
   getQuestionOfTestUser,
   getQuestionOfTestAdmin,
   getOneQuestion,

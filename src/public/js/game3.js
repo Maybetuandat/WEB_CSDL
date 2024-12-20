@@ -52,8 +52,9 @@ for (let i = 0; i < data.questions.length; i++) {
 
   if (data.questions[i].HinhAnh != null) {
     let image_cauhoi = document.createElement("img");
-    let baseURL = window.location.origin + "/images/";
-    image_cauhoi.src = baseURL + data.questions[i].HinhAnh;
+    // let baseURL = window.location.origin + "/images/";
+    // image_cauhoi.src = baseURL + data.questions[i].HinhAnh;
+    image_cauhoi.src = data.questions[i].HinhAnh;
     image_cauhoi.alt = "Hình ảnh câu hỏi";
     image_cauhoi.style.maxWidth = "100%";
     // image_cauhoi.height = 150;

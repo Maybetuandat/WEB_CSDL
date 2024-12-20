@@ -5,6 +5,10 @@ const path = require("path");
 const fs = require("fs");
 
 const { checkLoginUser } = require("../controllers/auth.controllers");
+const {
+  updateImageQuestion,
+  updateImageOption,
+} = require("../services/question.service");
 
 const {
   getTestList,
@@ -64,6 +68,7 @@ const {
   getReplyCommentHandler,
 } = require("../controllers/comment.controller");
 
+const uploadCloud = require("../config/cloudinary.config");
 //Guest
 
 const increaseTimeout = (req, res, next) => {
@@ -108,6 +113,26 @@ router.post(
     });
   }
 );
+
+router.post("/upload-image2", uploadCloud.single("image"), (req, res) => {
+  // 'image' là tên field trong form gửi ảnh lên
+  console.log(req.body.mbt);
+  console.log(req.body.mch);
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  // Sau khi ảnh được upload lên Cloudinary, bạn có thể truy xuất URL ảnh từ `req.file.path`
+  res.json({
+    message: "Image uploaded successfully",
+    imageUrl: req.file.path, // Đây là URL ảnh mà Cloudinary trả về
+  });
+  console.log(req.file.path);
+  if (req.body.mlc) {
+    console.log("mlc: ", req.body.mlc);
+    updateImageOption(req.file.path, req.body.mbt, req.body.mch, req.body.mlc);
+  } else updateImageQuestion(req.file.path, req.body.mbt, req.body.mch);
+});
 
 router.post("/login/:role", checkLoginUser);
 router.post("/createNewstudent", createNewStudentHandler);
