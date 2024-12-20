@@ -27,8 +27,10 @@ questionCounter = 0;
 availableQuesions = [...questions];
 ansUser = myArray;
 
-let subject = document.getElementById("subject");
-subject.textContent = data.test.TenBaiThi;
+document.addEventListener("DOMContentLoaded", function () {
+  let subject = document.getElementById("subject");
+  subject.textContent = data.test.TenBaiThi;
+});
 
 let cauhoi = document.getElementById("cauhoi");
 
