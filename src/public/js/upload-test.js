@@ -499,7 +499,7 @@ async function Save() {
   if (createTestSuccess) {
     hideLoading();
     // showAlert("Đã lưu danh sách câu hỏi thành công !!!", "#cce5ff");
-    // window.location.href = "/admin/test";
+    window.location.href = "/admin/test";
   }
 }
 
