@@ -234,7 +234,7 @@ const createNewQuestion = async (question, testId) => {
         !question.type || question.type.trim() == ""
           ? "Trắc nghiệm"
           : question.type,
-      // HinhAnh: imagePath,
+      HinhAnh: question.urlQuestion,
     });
     if (baithi.TheLoai == "trắc nghiệm") {
       for (var i = 1; i <= 4; i++) {
@@ -257,8 +257,8 @@ const createNewQuestion = async (question, testId) => {
           MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i - 1),
           MaBaiThi: testId,
           Dung: correct,
-          NoiDung: question[answerProperty],
-          // HinhAnh: imagePathOption,
+          NoiDung: question[answerProperty].content,
+          HinhAnh: question[answerProperty].url,
         });
       }
     } else {

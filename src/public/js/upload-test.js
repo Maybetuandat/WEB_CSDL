@@ -494,55 +494,12 @@ async function Save() {
       showAlert("Đã xảy ra lỗi khi lưu câu hỏi, hãy thử lại !!!");
       break;
     }
-
-    // Sau khi câu hỏi được tạo thành công, upload ảnh
-    let imageIds = [`image_${i}`]; // Bắt đầu với ảnh của câu hỏi
-    for (let j = 1; j <= 4; j++) {
-      const answerImageId = `image_${i}_${j}`;
-      if (document.getElementById(answerImageId)) {
-        imageIds.push(answerImageId); // Thêm ảnh của các câu trả lời
-      }
-    }
-
-    let allImageUploadsSuccess = true;
-    let uploadedImageUrls = [];
-    for (const imageId of imageIds) {
-      const imageSrc = document.getElementById(imageId)?.src;
-      if (imageSrc) {
-        const cleanId = imageId.split("_").slice(1).join("_"); // Lấy phần sau của "image_"
-        const imageFile = dataURLtoFile(imageSrc, `${mbt}_${cleanId}.webp`);
-
-        const uploadSuccess = await uploadImage(imageFile, mbt, imageId); // Upload ảnh
-        if (uploadSuccess) {
-          uploadedImageUrls.push(uploadSuccess); // Lưu URL ảnh đã upload thành công
-        } else {
-          allImageUploadsSuccess = false;
-          break;
-        }
-      }
-    }
-
-    // Nếu ảnh upload thành công, gắn ảnh vào câu hỏi đã tạo
-    if (allImageUploadsSuccess) {
-      // Cập nhật câu hỏi với URL ảnh
-      // Bạn có thể thêm logic ở đây để gắn ảnh vào câu hỏi đã tạo, ví dụ:
-      // options.body = JSON.stringify({
-      //   ...question,
-      //   imageUrls: uploadedImageUrls,
-      // });
-      // console.log("Ảnh đã upload thành công và được gắn vào câu hỏi");
-    } else {
-      createTestSuccess = false;
-      hideLoading();
-      showAlert("Đã xảy ra lỗi khi tải ảnh, hãy thử lại !!!");
-      break;
-    }
   }
 
   if (createTestSuccess) {
     hideLoading();
     // showAlert("Đã lưu danh sách câu hỏi thành công !!!", "#cce5ff");
-    window.location.href = "/admin/test";
+    // window.location.href = "/admin/test";
   }
 }
 
@@ -554,15 +511,47 @@ const getQuestion = async (i) => {
     showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
     return;
   }
+  var urlQuestion = null;
+  let imageId = "image_" + i;
+  if (document.getElementById(imageId)) {
+    var imageSrc = document.getElementById(imageId)?.src;
+    if (imageSrc) {
+      var cleanId = imageId.split("_").slice(1).join("_"); // Lấy phần sau của "image_"
+      var imageFile = dataURLtoFile(imageSrc, `${cleanId}.webp`);
+      urlQuestion = await uploadImage(imageFile); // Upload ảnh
+    }
+  }
+  if (urlQuestion == false) {
+    showAlert("Lỗi tải ảnh cho câu " + i);
+    return;
+  }
   for (var j = 1; j <= 4; j++) {
     if (
       document.getElementById(i + "checkbox" + j).classList.contains("checked")
     ) {
       check = j;
     }
-    var ans = document.getElementById("question" + i + "answer" + j).value;
-    if (ans === "") {
+    var ans = {
+      content: document.getElementById("question" + i + "answer" + j).value,
+      url: null,
+    };
+    if (ans.content === "") {
       showAlert("Bạn chưa nhập đáp án cho câu hỏi " + i);
+      return;
+    }
+    var urlOption = null;
+    var imageId2 = "image_" + i + "_" + j;
+    if (document.getElementById(imageId2)) {
+      var imageSrc = document.getElementById(imageId2)?.src;
+      if (imageSrc) {
+        var cleanId = imageId2.split("_").slice(1).join("_"); // Lấy phần sau của "image_"
+        var imageFile = dataURLtoFile(imageSrc, `${cleanId}.webp`);
+        urlOption = await uploadImage(imageFile); // Upload ảnh
+      }
+    }
+    if (urlOption) ans.url = urlOption;
+    if (urlOption == false) {
+      showAlert("Lỗi tải ảnh cho câu " + i + ", đáp án thứ " + j);
       return;
     }
     answer.push(ans);
@@ -572,6 +561,7 @@ const getQuestion = async (i) => {
     return;
   }
   let question = {
+    urlQuestion: urlQuestion == false ? null : urlQuestion,
     questionContent: questionContent,
     answer1: answer[0],
     answer2: answer[1],
@@ -603,7 +593,23 @@ const getQuestion2 = async (i) => {
     return;
   }
 
+  var urlQuestion = null;
+  let imageId = "image_" + i;
+  if (document.getElementById(imageId)) {
+    var imageSrc = document.getElementById(imageId)?.src;
+    if (imageSrc) {
+      var cleanId = imageId.split("_").slice(1).join("_"); // Lấy phần sau của "image_"
+      var imageFile = dataURLtoFile(imageSrc, `${cleanId}.webp`);
+      urlQuestion = await uploadImage(imageFile); // Upload ảnh
+    }
+  }
+  if (urlQuestion == false) {
+    showAlert("Lỗi tải ảnh cho câu " + i);
+    return;
+  }
+
   let question = {
+    urlQuestion: urlQuestion == false ? null : urlQuestion,
     questionContent: questionContent,
     answer: ans,
     type: type,
@@ -849,38 +855,32 @@ const convertToWebP = async (imageSrc) => {
   });
 };
 
-async function uploadImage(file, mbt, mch) {
+async function uploadImage(file) {
   // Hàm để tách 'mch' thành i và j, và thêm trường 'mlc' nếu có
-  const parseMch = (mch) => {
-    const [_, i, j] = mch.split("_");
-    const formattedMch = `C${i.padStart(2, "0")}`;
-    return j
-      ? { mch: formattedMch, mlc: ["A", "B", "C", "D"][j - 1] }
-      : { mch: formattedMch };
-  };
-
-  const { mch: parsedMch, mlc } = parseMch(mch);
 
   const formData = new FormData();
-  formData.append("image", file);
-  formData.append("mbt", mbt);
-  formData.append("mch", parsedMch);
-  if (mlc) formData.append("mlc", mlc);
+  formData.append("file", file); // Gửi ảnh lên Cloudinary
+  formData.append("upload_preset", "free_upload"); // Đảm bảo bạn đã tạo upload preset trên Cloudinary
+  formData.append("cloud_name", "dditosqku"); // Điền tên cloud của bạn ở đây
 
   const maxRetries = 3; // Số lần thử lại tối đa
   const retryDelay = 2000; // Thời gian delay giữa các lần thử lại (2 giây)
-  const timeoutDuration = 60000; // Thời gian timeout (10 giây)
+  const timeoutDuration = 60000; // Thời gian timeout (60 giây)
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     const controller = new AbortController(); // Tạo một AbortController để xử lý timeout
     const timeoutId = setTimeout(() => controller.abort(), timeoutDuration); // Đặt timeout
 
     try {
-      const response = await fetch("/api/upload-image2", {
-        method: "POST",
-        body: formData,
-        signal: controller.signal, // Gửi tín hiệu abort vào fetch
-      });
+      // Gửi ảnh lên Cloudinary
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dditosqku/upload",
+        {
+          method: "POST",
+          body: formData,
+          signal: controller.signal, // Gửi tín hiệu abort vào fetch
+        }
+      );
 
       clearTimeout(timeoutId); // Hủy timeout khi fetch thành công
 
@@ -888,8 +888,13 @@ async function uploadImage(file, mbt, mch) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      console.log("Ảnh đã được tải lên thành công");
-      return true; // Nếu thành công, trả về true
+      // Lấy URL của ảnh từ phản hồi của Cloudinary
+      const data = await response.json();
+      const imageUrl = data.secure_url; // Lấy URL ảnh từ Cloudinary
+      console.log(imageUrl);
+
+      console.log("Ảnh đã được tải lên và URL đã được gửi thành công.");
+      return imageUrl; // Nếu thành công, trả về true
     } catch (error) {
       clearTimeout(timeoutId); // Hủy timeout nếu có lỗi
 
