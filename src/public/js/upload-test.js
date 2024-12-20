@@ -185,154 +185,183 @@ document
       // questionInput.value = row.question;
       // answerInput.value = row['answer' + j];
       currentNumber = excelData.length + 1;
-
-      // Xử lý dữ liệu từ tệp Excel và tạo các trường input câu hỏi và đáp án
-      excelData.forEach(function (row, index) {
-        var questionContent = document.createElement("div");
-        questionContent.className = "question-content";
-        questionContent.id = parseInt(index + 1) + 1;
-
-        var questionDiv = document.createElement("div");
-        questionDiv.className = "question-container";
-
-        var questionTitle = document.createElement("div");
-        questionTitle.className = "question-title";
-
-        // new
-        var deleteQuestionButton = document.createElement("div");
-        deleteQuestionButton.className = "delete-question";
-
-        var iconDelete = document.createElement("i");
-        iconDelete.className = "ti-close";
-        deleteQuestionButton.appendChild(iconDelete);
-        deleteQuestionButton.onclick = function () {
-          DeleteQuestion(this.parentNode.parentNode.id);
-        };
-
-        questionDiv.appendChild(deleteQuestionButton);
-
-        //old
-        var questionLabel = document.createElement("label");
-        questionLabel.textContent = "Câu hỏi " + ":";
-
-        var questionInput = document.createElement("textarea");
-        questionInput.cols = 140;
-        questionInput.rows = 3;
-        questionInput.value = row.question;
-        questionInput.id = "question" + parseInt(index + 1);
-
-        questionTitle.appendChild(questionLabel);
-        questionTitle.appendChild(questionInput);
-        questionDiv.appendChild(questionTitle);
-        questionContent.appendChild(questionDiv);
-        // Tạo 4 ô input cho 4 đáp án và checkbox cho đáp án đúng
-
-        for (var j = 1; j <= 4; j++) {
-          var answerDiv = document.createElement("div");
-          answerDiv.className = "answer-container";
-
-          var answerCheckbox = document.createElement("div");
-          answerCheckbox.className = "checkbox";
-          answerCheckbox.id = parseInt(index + 1) + "checkbox" + j;
-          answerCheckbox.onclick = function () {
-            toggleCheckbox(this.id);
-          };
-          answerCheckbox.textContent = String.fromCharCode(
-            "A".charCodeAt(0) + j - 1
-          );
-
-          var answerInput = document.createElement("textarea");
-          answerInput.cols = "140";
-          answerInput.rows = "1";
-          answerInput.value = row["answer" + j];
-          answerInput.id = "question" + parseInt(index + 1) + "answer" + j;
-          answerInput.name = "question" + parseInt(index + 1) + "answer" + j;
-
-          answerDiv.appendChild(answerCheckbox);
-          answerDiv.appendChild(answerInput);
-
-          questionContent.appendChild(answerDiv);
-          questionsContainer.appendChild(questionContent);
+      if (document.getElementById("examDescription").value === "") {
+        showAlert("Vui lòng chọn loại bài thi !!!");
+      } else {
+        if (
+          document.getElementById("examDescription").value === "trắc nghiệm"
+        ) {
+          workerData(questionsContainer, excelData);
+        } else {
+          workerData2(questionsContainer, excelData);
         }
-      });
-
-      excelData.forEach(function (row, index) {
-        for (var i = 1; i <= 4; i++) {
-          if (row["correct"] == i) {
-            toggleCheckbox(parseInt(index + 1) + "checkbox" + i);
-          }
-        }
-      });
-      document.getElementById("numQuestions").value = excelData.length;
+      }
     };
     reader.readAsArrayBuffer(file); //đọc xong mới xử lý onload()
   });
 
-function Add() {
-  var questionsContainer = document.getElementById("questionsContainer");
+function workerData(questionsContainer, excelData) {
+  excelData.forEach(function (row, index) {
+    var questionContent = document.createElement("div");
+    questionContent.className = "question-content";
+    questionContent.id = parseInt(index + 1);
 
-  var questionContent = document.createElement("div");
-  questionContent.className = "question-content";
-  questionContent.id = currentNumber;
+    var questionDiv = document.createElement("div");
+    questionDiv.className = "question-container";
 
-  var questionDiv = document.createElement("div");
-  questionDiv.className = "question-container";
+    var questionTitle = document.createElement("div");
+    questionTitle.className = "question-title";
 
-  var questionTitle = document.createElement("div");
-  questionTitle.className = "question-title";
+    //old
+    var questionLabel = document.createElement("label");
+    questionLabel.textContent = "Câu hỏi " + ":";
 
-  // new
-  var deleteQuestionButton = document.createElement("div");
-  deleteQuestionButton.className = "delete-question";
+    var questionInput = document.createElement("textarea");
+    questionInput.cols = 140;
+    questionInput.rows = 3;
+    questionInput.value = row.question;
+    questionInput.id = "question" + parseInt(index + 1);
 
-  var iconDelete = document.createElement("i");
-  iconDelete.className = "ti-close";
-  deleteQuestionButton.appendChild(iconDelete);
-  deleteQuestionButton.onclick = function () {
-    DeleteQuestion(this.parentNode.parentNode.id);
-  };
+    questionTitle.appendChild(questionLabel);
+    questionTitle.appendChild(questionInput);
+    questionDiv.appendChild(questionTitle);
+    questionContent.appendChild(questionDiv);
+    // Tạo 4 ô input cho 4 đáp án và checkbox cho đáp án đúng
 
-  questionDiv.appendChild(deleteQuestionButton);
+    for (var j = 1; j <= 4; j++) {
+      var answerDiv = document.createElement("div");
+      answerDiv.className = "answer-container";
 
-  var questionLabel = document.createElement("label");
-  questionLabel.textContent = "Câu hỏi " + currentNumber + ":";
+      var answerCheckbox = document.createElement("div");
+      answerCheckbox.className = "checkbox";
+      answerCheckbox.id = parseInt(index + 1) + "checkbox" + j;
+      answerCheckbox.onclick = function () {
+        toggleCheckbox(this.id);
+      };
+      answerCheckbox.textContent = String.fromCharCode(
+        "A".charCodeAt(0) + j - 1
+      );
 
-  var questionInput = document.createElement("textarea");
-  questionInput.cols = 70;
-  questionInput.rows = 4;
+      var answerInput = document.createElement("textarea");
+      answerInput.cols = "140";
+      answerInput.rows = "1";
+      answerInput.value = row["answer" + j];
+      answerInput.id = "question" + parseInt(index + 1) + "answer" + j;
+      answerInput.name = "question" + parseInt(index + 1) + "answer" + j;
 
-  questionTitle.appendChild(questionLabel);
-  questionTitle.appendChild(questionInput);
+      answerDiv.appendChild(answerCheckbox);
+      answerDiv.appendChild(answerInput);
 
-  questionDiv.appendChild(questionTitle);
-  questionContent.appendChild(questionDiv);
-  // Tạo 4 ô input cho 4 đáp án và checkbox cho đáp án đúng
+      questionContent.appendChild(answerDiv);
+      questionsContainer.appendChild(questionContent);
+    }
+  });
 
-  for (var j = 1; j <= 4; j++) {
+  excelData.forEach(function (row, index) {
+    for (var i = 1; i <= 4; i++) {
+      if (row["correct"] == i) {
+        toggleCheckbox(parseInt(index + 1) + "checkbox" + i);
+      }
+    }
+  });
+  createImageButton();
+  document.getElementById("numQuestions").value = excelData.length;
+}
+
+function workerData2(questionsContainer, excelData) {
+  excelData.forEach(function (row, index) {
+    var questionContent = document.createElement("div");
+    questionContent.className = "question-content";
+    questionContent.id = parseInt(index + 1);
+
+    var questionDiv = document.createElement("div");
+    questionDiv.className = "question-container";
+
+    var questionTitle = document.createElement("div");
+    questionTitle.className = "question-title";
+
+    //old
+    var questionLabel = document.createElement("label");
+    questionLabel.textContent = "Câu hỏi " + ":";
+
+    var questionInput = document.createElement("textarea");
+    questionInput.cols = 140;
+    questionInput.rows = 5;
+    questionInput.value = row.question;
+    questionInput.id = "question" + parseInt(index + 1);
+
+    var questionType = document.createElement("div");
+    questionType.id = "question" + parseInt(index + 1) + "type";
+    questionType.textContent = row["type"];
+
+    var labelDiv = document.createElement("div");
+    labelDiv.appendChild(questionLabel);
+    labelDiv.appendChild(questionType);
+    labelDiv.style.display = "flex";
+    labelDiv.style.cssText = `
+  display: flex;
+  gap: 10px;
+`;
+
+    questionLabel.style.cssText = `
+  font-size: 16px;
+`;
+
+    questionType.style.cssText = `
+  font-size: 16px;
+  color: #007bff;
+`;
+
+    // questionTitle.appendChild(questionLabel);
+    // questionTitle.appendChild(questionType);
+    questionTitle.appendChild(labelDiv);
+    questionTitle.appendChild(questionInput);
+    questionTitle.style.display = "flex";
+    questionTitle.style.flexDirection = "column";
+
+    questionDiv.appendChild(questionTitle);
+    questionContent.appendChild(questionDiv);
+    // Tạo 4 ô input cho 4 đáp án và checkbox cho đáp án đúng
+
     var answerDiv = document.createElement("div");
     answerDiv.className = "answer-container";
 
-    var answerCheckbox = document.createElement("div");
-    answerCheckbox.className = "checkbox";
-    answerCheckbox.id = currentNumber + "checkbox" + j;
-    answerCheckbox.onclick = function () {
-      toggleCheckbox(this.id);
-    };
-    answerCheckbox.textContent = String.fromCharCode("A".charCodeAt(0) + j - 1);
-
     var answerInput = document.createElement("textarea");
-    answerInput.cols = "70";
-    answerInput.rows = "1";
-    answerInput.name = "question" + currentNumber + "answer" + j;
+    answerInput.cols = "140";
+    answerInput.rows = "3";
+    answerInput.value = row["answer"];
+    answerInput.id = "question" + parseInt(index + 1) + "answer";
+    answerInput.name = "question" + parseInt(index + 1) + "answer";
 
+    var answerCheckbox = document.createElement("div");
+    // answerCheckbox.className = "checkbox";
+    answerCheckbox.innerText = "Đáp án đúng";
+
+    if (
+      questionType.textContent == "delete" ||
+      questionType.textContent == "create" ||
+      questionType.textContent == "update"
+    ) {
+      var tableDestination = document.createElement("textarea");
+      tableDestination.id = "question" + parseInt(index + 1) + "table";
+      tableDestination.cols = "140";
+      tableDestination.rows = "1";
+      tableDestination.innerText = row["table"];
+
+      var answerCheckbox2 = document.createElement("div");
+      answerCheckbox2.innerText = "Bảng mục tiêu";
+
+      answerDiv.appendChild(answerCheckbox2);
+      answerDiv.appendChild(tableDestination);
+    }
     answerDiv.appendChild(answerCheckbox);
     answerDiv.appendChild(answerInput);
-
+    answerDiv.style.flexDirection = "column";
     questionContent.appendChild(answerDiv);
-  }
-
-  questionsContainer.appendChild(questionContent);
-  currentNumber++;
+    questionsContainer.appendChild(questionContent);
+  });
+  createImageButton();
+  document.getElementById("numQuestions").value = excelData.length;
 }
 
 function toggleCheckbox(idElement) {
@@ -401,46 +430,24 @@ async function Save() {
   const backendURL = "/api/new-question";
   const mbt = document.getElementById("examID").value;
   var questionNum = parseInt(document.getElementById("numQuestions").value);
+  if (document.getElementById("examID").value == "") {
+    showAlert("Vui lòng tạo bài thi trước khi tạo câu hỏi !!!");
+    return;
+  }
   if (questionNum == 0) {
     showAlert("Số câu hỏi đang là 0");
     return;
   }
   showLoading();
   for (var i = 1; i <= questionNum; i++) {
-    var answer = [];
-    var check = "";
-    var questionContent = document.getElementById("question" + i).value;
-    if (questionContent === "") {
-      showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
+    let question =
+      document.getElementById("examDescription").value == "trắc nghiệm"
+        ? await getQuestion(i)
+        : await getQuestion2(i);
+    if (!question) {
+      hideLoading();
       return;
     }
-    for (var j = 1; j <= 4; j++) {
-      if (
-        document
-          .getElementById(i + "checkbox" + j)
-          .classList.contains("checked")
-      ) {
-        check = j;
-      }
-      var ans = document.getElementById("question" + i + "answer" + j).value;
-      if (ans === "") {
-        showAlert("Bạn chưa nhập đáp án cho câu hỏi " + i);
-        return;
-      }
-      answer.push(ans);
-    }
-    if (check === "") {
-      showAlert("Bạn chưa chọn đáp án đúng cho câu hỏi " + i);
-      return;
-    }
-    let question = {
-      questionContent: questionContent,
-      answer1: answer[0],
-      answer2: answer[1],
-      answer3: answer[2],
-      answer4: answer[3],
-      check: check,
-    };
     let options = {
       method: "POST",
       headers: {
@@ -449,13 +456,38 @@ async function Save() {
       body: JSON.stringify({ mbt, question }),
     };
 
+    // Lấy danh sách các ảnh (câu hỏi và câu trả lời)
+    let imageIds = [`image_${i}`]; // Bắt đầu với ảnh của câu hỏi
+    for (let j = 1; j <= 4; j++) {
+      const answerImageId = `image_${i}_${j}`;
+      if (document.getElementById(answerImageId)) {
+        imageIds.push(answerImageId); // Thêm ảnh của các câu trả lời
+      }
+    }
+
+    // Xử lý từng ảnh
+    let allImageUploadsSuccess = true;
+    for (const imageId of imageIds) {
+      const imageSrc = document.getElementById(imageId)?.src;
+      if (imageSrc) {
+        const cleanId = imageId.split("_").slice(1).join("_"); // Lấy phần sau của "image_"
+        const imageFile = dataURLtoFile(imageSrc, `${mbt}_${cleanId}.webp`);
+
+        const uploadSuccess = await uploadImage(imageFile, mbt, imageId);
+        if (!uploadSuccess) {
+          allImageUploadsSuccess = false;
+          break; // Thoát vòng lặp nếu tải ảnh thất bại
+        }
+      }
+    }
+
+    // Kiểm tra thành công việc tải ảnh trước khi gửi câu hỏi
     let retry = 3;
     let createQuestionSuccess = false;
-    while (retry--) {
+    while (retry-- && allImageUploadsSuccess) {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 60000);
-
         const response = await fetch(backendURL, {
           ...options,
           signal: controller.signal,
@@ -466,28 +498,93 @@ async function Save() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // const data = await response.json();
-        // hideLoading();
-        // window.location.href = "/test";
         createQuestionSuccess = true;
         break; // Thoát vòng lặp nếu thành công
       } catch (error) {
         console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
       }
     }
-    if (createQuestionSuccess == false) {
+
+    if (!createQuestionSuccess || !allImageUploadsSuccess) {
       createTestSuccess = false;
       hideLoading();
       showAlert("Đã xảy ra lỗi, hãy tạo bài thi mới !!!");
       break;
     }
   }
+
   if (createTestSuccess == true) {
     hideLoading();
     showAlert("Đã lưu danh sách câu hỏi thành công !!!", "#cce5ff");
     window.location.href = "/admin/test";
   }
 }
+
+const getQuestion = async (i) => {
+  var answer = [];
+  var check = "";
+  var questionContent = document.getElementById("question" + i).value;
+  if (questionContent === "") {
+    showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
+    return;
+  }
+  for (var j = 1; j <= 4; j++) {
+    if (
+      document.getElementById(i + "checkbox" + j).classList.contains("checked")
+    ) {
+      check = j;
+    }
+    var ans = document.getElementById("question" + i + "answer" + j).value;
+    if (ans === "") {
+      showAlert("Bạn chưa nhập đáp án cho câu hỏi " + i);
+      return;
+    }
+    answer.push(ans);
+  }
+  if (check === "") {
+    showAlert("Bạn chưa chọn đáp án đúng cho câu hỏi " + i);
+    return;
+  }
+  let question = {
+    questionContent: questionContent,
+    answer1: answer[0],
+    answer2: answer[1],
+    answer3: answer[2],
+    answer4: answer[3],
+    check: check,
+  };
+  console.log(question);
+  return question;
+};
+
+const getQuestion2 = async (i) => {
+  var questionContent = document.getElementById("question" + i).value;
+  if (questionContent === "") {
+    showAlert("Vui lòng nhập đề bài cho câu hỏi " + i);
+    return;
+  }
+  var ans = document.getElementById("question" + i + "answer").value;
+  var type = document.getElementById("question" + i + "type").textContent;
+  var table = document.getElementById("question" + i + "table")
+    ? document.getElementById("question" + i + "table").value
+    : null;
+  if (
+    (ans === "" || type == "") &&
+    document.getElementById("examDescription").value === "sql"
+  ) {
+    if (ans == "") showAlert("Chưa có đáp án cho câu hỏi " + i);
+    if (type == "") showAlert("Chưa có loại cho câu hỏi " + i);
+    return;
+  }
+
+  let question = {
+    questionContent: questionContent,
+    answer: ans,
+    type: type,
+    table: table,
+  };
+  return question;
+};
 
 async function Save2() {
   const buttonCreateExam = document.getElementById("createExamBtn");
@@ -505,6 +602,15 @@ async function Save2() {
     return;
   }
 
+  if (
+    document.getElementById("examDescription").value == "sql" &&
+    (!document.getElementById("schemaRun").value ||
+      !document.getElementById("schemaTestcase").value)
+  ) {
+    showAlert("Vui lòng nhập đủ thông tin cho bài thi sql !!!");
+    return;
+  }
+
   var formData = {
     examDateTime: "2024-12-31 23:59:59",
     examName: document.getElementById("examName").value,
@@ -514,6 +620,8 @@ async function Save2() {
       "https://res.cloudinary.com/dyc1c2elf/image/upload/v1714894653/hpz5yqojda1ajpnrpkvv.jpg",
     examDescription: document.getElementById("examDescription").value,
     examStatus: document.getElementById("examStatus").value,
+    schemaRun: document.getElementById("schemaRun").value,
+    schemaTestcase: document.getElementById("schemaTestcase").value,
   };
 
   const backendURL = "/api/new-test2";
@@ -555,12 +663,6 @@ async function Save2() {
     showAlert("Đã xảy ra lỗi !!!");
     console.error("Đã xảy ra lỗi khi gửi dữ liệu đến backend:", error);
   }
-}
-
-function DeleteQuestion(id) {
-  var element = document.getElementById(id);
-  UpDateIdForQuestion(id);
-  element.remove();
 }
 
 function UpDateIdForQuestion(id) {
@@ -607,25 +709,190 @@ function closeDialog() {
   dialogContent.style.display = "none";
 }
 
-// Xử lý sự kiện click vào nút dropdown
-document.querySelector(".dropbtn").addEventListener("click", function () {
-  const dropdownContent = document.querySelector(".dropdown-content");
-  if (dropdownContent.style.display === "block") {
-    dropdownContent.style.display = "none";
-  } else {
-    dropdownContent.style.display = "block";
-  }
-});
+function createImageButton() {
+  const questionContainers = Array.from(
+    document.getElementsByClassName("question-content")
+  );
 
-// Ẩn dropdown nếu click ra ngoài
-window.addEventListener("click", function (event) {
-  if (!event.target.matches(".dropbtn")) {
-    const dropdowns = document.getElementsByClassName("dropdown-content");
-    for (let i = 0; i < dropdowns.length; i++) {
-      const openDropdown = dropdowns[i];
-      if (openDropdown.style.display === "block") {
-        openDropdown.style.display = "none";
+  questionContainers.forEach((container, i) => {
+    const questionTitle = container.querySelector(".question-title");
+    const answerContainers = Array.from(
+      container.getElementsByClassName("answer-container")
+    );
+
+    // Thêm upload input cho question-title
+    if (questionTitle) {
+      createUploadInput(questionTitle, i + 1);
+    }
+
+    // Thêm upload input cho mỗi answer-container
+    answerContainers.forEach((answerContainer, index) => {
+      createUploadInput(answerContainer, i + 1, index + 1);
+    });
+  });
+
+  function createUploadInput(element, i = null, index = null) {
+    const uploadInput = document.createElement("input");
+    uploadInput.type = "file";
+    uploadInput.accept = "image/*";
+    uploadInput.textContent = "Upload ảnh";
+
+    const displayImage = document.createElement("button");
+    displayImage.textContent = "Xem ảnh";
+    displayImage.onclick = function () {
+      const image = document.getElementById(
+        `image_${i}${index ? "_" + index : ""}`
+      );
+      if (image.style.display === "none") {
+        this.textContent = "Ẩn ảnh";
+        image.style.display = "block";
+      } else {
+        this.textContent = "Xem ảnh";
+        image.style.display = "none";
       }
+    };
+
+    uploadInput.addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const webpDataURL = await convertToWebP(e.target.result);
+          const webpImage = document.createElement("img");
+          webpImage.src = webpDataURL;
+          webpImage.alt = "WebP Image";
+          webpImage.style.maxWidth = "100%";
+          webpImage.style.display = "none";
+          webpImage.id = `image_${i}${index ? "_" + index : ""}`;
+          webpImage.classList.add = "image_i";
+
+          let imageContainer = document.getElementById(
+            `imageContainer_${i}${index ? "_" + index : ""}`
+          );
+          if (!imageContainer) {
+            imageContainer = document.createElement("div");
+            imageContainer.id = `imageContainer_${i}${
+              index ? "_" + index : ""
+            }`;
+            imageContainer.style.width = "100%";
+          }
+          imageContainer.innerHTML = "";
+          imageContainer.appendChild(webpImage);
+          element.appendChild(imageContainer);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    element.appendChild(uploadInput);
+    element.appendChild(displayImage);
+  }
+}
+
+function toggleFields() {
+  const examDescription = document.getElementById("examDescription").value;
+  const schemaRunField = document.getElementById("schemaRunField");
+  const schemaTestcaseField = document.getElementById("schemaTestcaseField");
+
+  // Nếu chưa chọn gì (giá trị là chuỗi rỗng), ẩn cả hai ô nhập liệu
+  if (examDescription === "" || examDescription === "trắc nghiệm") {
+    schemaRunField.style.display = "none";
+    schemaTestcaseField.style.display = "none";
+  } else if (examDescription === "sql") {
+    // Hiển thị ô "Schema testcase" cho sql
+    schemaRunField.style.display = "block";
+    schemaTestcaseField.style.display = "block";
+  }
+}
+
+const convertToWebP = async (imageSrc) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = imageSrc;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      // Chuyển đổi sang định dạng WebP (chất lượng 0.8)
+      const webpDataURL = canvas.toDataURL("image/webp", 0.8);
+      resolve(webpDataURL);
+    };
+  });
+};
+
+async function uploadImage(file, mbt, mch) {
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("mbt", mbt);
+  formData.append("mch", mch);
+
+  const maxRetries = 3; // Số lần thử lại tối đa
+  const retryDelay = 2000; // Thời gian delay giữa các lần thử lại (2 giây)
+  const timeoutDuration = 10000; // Thời gian timeout (10 giây)
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    const controller = new AbortController(); // Tạo một AbortController để xử lý timeout
+    const timeoutId = setTimeout(() => controller.abort(), timeoutDuration); // Đặt timeout
+
+    try {
+      const response = await fetch("/api/upload-image", {
+        method: "POST",
+        body: formData,
+        signal: controller.signal, // Gửi tín hiệu abort vào fetch
+      });
+
+      clearTimeout(timeoutId); // Hủy timeout khi fetch thành công
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      console.log("Ảnh đã được tải lên thành công");
+      return true; // Nếu thành công, trả về true
+    } catch (error) {
+      clearTimeout(timeoutId); // Hủy timeout nếu có lỗi
+
+      // Kiểm tra nếu là lỗi timeout
+      if (error.name === "AbortError") {
+        console.error("Yêu cầu đã bị timeout.");
+      } else {
+        console.error(`Lần thử thứ ${attempt} thất bại: ${error.message}`);
+      }
+
+      // Nếu là lần thử cuối cùng, không retry nữa
+      if (attempt === maxRetries) {
+        console.error("Đã đạt tối đa số lần thử, không thể tải ảnh lên.");
+        return false; // Nếu hết số lần thử, trả về false
+      }
+
+      // Đợi một khoảng thời gian trước khi thử lại
+      console.log(`Đang đợi ${retryDelay / 1000} giây trước khi thử lại...`);
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
     }
   }
-});
+}
+
+function dataURLtoFile(dataURL, filename) {
+  const [metadata, base64Data] = dataURL.split(",");
+  const mimeType = metadata.match(/:(.*?);/)[1];
+  const byteCharacters = atob(base64Data); // Chuyển từ base64 thành chuỗi byte
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+    const slice = byteCharacters.slice(offset, offset + 512);
+    const byteNumbers = new Array(slice.length);
+
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const file = new Blob(byteArrays, { type: mimeType });
+  return new File([file], filename, { type: mimeType });
+}

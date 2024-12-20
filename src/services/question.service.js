@@ -2,6 +2,10 @@ const { default: Transaction } = require("sequelize/lib/transaction");
 const db = require("../models/index");
 const _ = require("lodash");
 const { where } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
+
+const uploadDir = path.join(__dirname, "../../images/test");
 
 const getAllQuestion = async () => {
   var data = { status: null, data: null };
@@ -40,6 +44,22 @@ function shuffleLast10KeepRest(array) {
   return array;
 }
 
+const getOneQuestion = async (mbt, mch) => {
+  try {
+    let question = await db.Question.findOne({
+      where: {
+        MaBaiThi: mbt,
+        MaCauHoi: "C" + String(mch).padStart(2, "0"),
+      },
+      raw: true,
+    });
+    return question;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 const getQuestionOfTest = async (id, theloai) => {
   var data = { status: null, data: null };
   try {
@@ -49,7 +69,7 @@ const getQuestionOfTest = async (id, theloai) => {
       },
       raw: true,
     });
-    if (theloai == "tự luận") {
+    if (theloai == "sql" || theloai == "tự luận") {
       if (questions.length > 0) {
         data.status = 200;
         data.data = questions;
@@ -59,6 +79,9 @@ const getQuestionOfTest = async (id, theloai) => {
       return data;
     }
     var allOptions = await db.Option.findAll({
+      where: {
+        MaBaiThi: id,
+      },
       attributes: {
         exclude: ["Dung"], // Loại trừ cột `Dung`
       },
@@ -186,36 +209,67 @@ const getQuestionOfTestAdmin = async (id) => {
 
 const createNewQuestion = async (question, testId) => {
   try {
-    let cauhoi = await db.Test.findOne({
+    let baithi = await db.Test.findOne({
       where: {
         MaBaiThi: testId,
       },
       //lấy ra 1 trường chỉ định
-      attributes: ["SoLuongCau"],
+      attributes: ["SoLuongCau", "TheLoai"],
     });
-    let index = cauhoi.SoLuongCau + 1;
+    let index = baithi.SoLuongCau + 1;
+
+    const fileName = `${testId}_${index}.webp`;
+    const filePath = path.join(uploadDir, fileName);
+    // console.log(filePath);
+    let imagePath = null;
+    if (fs.existsSync(filePath)) {
+      imagePath = fileName; // Gắn tên file vào trường HinhAnh
+    }
     await db.Question.create({
       MaCauHoi: "C" + String(index).padStart(2, "0"),
       MaBaiThi: testId,
       DeBai: question.questionContent,
       SoThuTu: index,
-      TheLoai: "Trắc nghiệm",
+      TheLoai:
+        !question.type || question.type.trim() == ""
+          ? "Trắc nghiệm"
+          : question.type,
+      HinhAnh: imagePath,
     });
-    for (var i = 1; i <= 4; i++) {
-      var answerProperty = "answer" + i;
-      var correct = 0;
-      if (question.check == i) {
-        correct = 1;
+    if (baithi.TheLoai == "trắc nghiệm") {
+      for (var i = 1; i <= 4; i++) {
+        var answerProperty = "answer" + i;
+        var correct = 0;
+        if (question.check == i) {
+          correct = 1;
+        }
+        let fileNameOption = `${testId}_${index}_${i}.webp`;
+        let filePathOption = path.join(uploadDir, fileNameOption);
+
+        let imagePathOption = null;
+        if (fs.existsSync(filePathOption)) {
+          imagePathOption = fileNameOption; // Gắn tên file vào trường HinhAnh
+        }
+        console.log("wtf: ", imagePathOption);
+        console.log("wtf2: ", fileNameOption);
+        await db.Option.create({
+          MaCauHoi: "C" + String(index).padStart(2, "0"),
+          MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i - 1),
+          MaBaiThi: testId,
+          Dung: correct,
+          NoiDung: question[answerProperty],
+          HinhAnh: imagePathOption,
+        });
       }
-      await db.Option.create({
-        MaCauHoi: "C" + String(index).padStart(2, "0"),
-        MaLuaChon: String.fromCharCode("A".charCodeAt(0) + i - 1),
+    } else {
+      await db.AnswerSql.create({
         MaBaiThi: testId,
-        Dung: correct,
-        NoiDung: question[answerProperty],
+        Cau: index,
+        ChiTiet: question.answer,
+        BangMucTieu: question.table,
       });
     }
-    db.Test.update(
+    await db.Test.update(
       {
         SoLuongCau: index,
       },
@@ -225,7 +279,7 @@ const createNewQuestion = async (question, testId) => {
         },
       }
     );
-    return true;
+    return index;
   } catch (error) {
     console.error(error);
     return false;
@@ -308,4 +362,5 @@ module.exports = {
   updateQuestionById,
   getQuestionOfTestUser,
   getQuestionOfTestAdmin,
+  getOneQuestion,
 };

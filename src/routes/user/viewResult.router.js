@@ -15,6 +15,6 @@ router.get("/test", controllerResult.test);
 router.get("/test/:testId", controllerResult.testWithId);
 router.get("/test/:testId/:studentId", controllerResult.detailStudentAndTest);
 
-router.post("/submit", postSubmit);
+// router.post("/submit", postSubmit);
 // router.get("/:studentId/:testId", controllerResult2.detailStudentAndTest);
 module.exports = router;

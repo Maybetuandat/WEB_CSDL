@@ -31,11 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       TheLoai: DataTypes.STRING,
       TrangThai: DataTypes.STRING,
       img_url: DataTypes.STRING,
-      start: DataTypes.DATE,
-      end: DataTypes.DATE,
       TacGia: {
         type: DataTypes.STRING,
       },
+      used_schema: DataTypes.STRING,
+      used_schema2: DataTypes.STRING,
     },
     {
       // options

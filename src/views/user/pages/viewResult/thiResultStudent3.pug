@@ -1,0 +1,39 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Trắc nghiệm
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
+    link(rel="stylesheet", href="/css/game.css")
+    link(rel="stylesheet", href="/css/loading.css")
+    link(rel="icon", href="/static/images/logo.ico", type="image/x-icon")
+
+  body
+    #loading
+      img(src="/static/images/loading.gif", alt="Loading...")
+    .dialog-overlay#dialogOverlay
+    .dialog-content#dialogContent
+      h2.sent#content-dialog Cảm ơn bạn đã tham gia khảo sát
+      p.sent#question-dialog Câu trả lời của bạn đã được gửi đi.
+      .footer-dialog
+        button#btn-close(onclick="closeDialog()") Đóng
+        button#btn-continue Tiếp tục
+    .container
+      #container-subject
+        #subject 
+      #cauhoi
+      #action
+        p Thời gian làm bài:
+        #countdown.div_right
+        #trangthai
+script(data-data=JSON.stringify(data))
+script(src="/js/game4.js")
+script(src="/js/loading.js")
+script(
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+)
+

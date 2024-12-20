@@ -76,7 +76,7 @@ const getDetailThiWithIdStuAndIdTest = async (idStudent, idTest) => {
   const test = await getTestById(idTest); //thong tin bai thi
   let questionList;
   let result;
-  if (test.data.TheLoai == "tự luận") {
+  if (test.data.TheLoai == "sql" || test.data.TheLoai == "tự luận") {
     questionList = await getQuestionOfTest(idTest, test.data.TheLoai); //thong tin cac cau hoi
     result = await getSqlResult(idStudent, idTest); //thong tin ket qua
   } else {
@@ -134,11 +134,6 @@ const getDetailTestWithIdStuAndIdResult = async (idStudent, idResult) => {
 
     dataRes.student = student;
     dataRes.test = test;
-    if (test.data[0].start != null) {
-      dataRes.result = null;
-      dataRes.status = 404;
-      return dataRes;
-    }
     dataRes.result = result;
     dataRes.numberTotal = detailList._detail.length;
 

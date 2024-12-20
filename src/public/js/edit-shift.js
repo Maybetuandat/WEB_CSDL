@@ -88,8 +88,11 @@ async function createShiftSubmit() {
     .then((response) => response.json())
     .then((result) => {
       if (result.status == 200) {
-        alert("Cập nhật thành công!");
-        window.location.href = "/admin/shift";
+        alert("Lưu ca thi thành công!");
+        document.getElementById("macathi").value = result.data.MaCaThi;
+        document.getElementById("uploadButton").style.display = "inline-block";
+        document.getElementById("createShift").style.display = "none";
+        // window.location.href = "/admin/shift";
       } else {
         alert("Có lỗi xảy ra. Vui lòng thử lại.");
       }

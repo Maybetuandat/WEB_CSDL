@@ -14,7 +14,7 @@ mixin thiMixin(test)
                     .content-test-detail Bắt đầu: #{ngay}/#{thang}/#{nam}
                 .col.detail-test
                     .content-test-detail Số Lượng Câu: #{test.SoLuongCau}
-                    br
+                    .content-test-detail Thể loại: #{test.TheLoai}
                     .content-test-detail Thời Gian: #{test.ThoiGianThi} phút
                 .col-1.text-center
                     if test.TrangThai == "Đóng"

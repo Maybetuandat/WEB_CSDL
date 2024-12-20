@@ -133,6 +133,7 @@ const createNewShiftById = async (data) => {
     const shift = await db.Shift.create(data);
     if (shift) {
       dataRes.status = 200;
+      dataRes.data = shift;
     } else {
       dataRes.status = 404;
     }
@@ -163,11 +164,56 @@ const deleteShiftById = async (id) => {
     return data;
   }
 };
+
+const getShiftByTestId = async (mbt) => {
+  const currentTime = moment().tz("Asia/Ho_Chi_Minh").add(7, "hours").toDate();
+  try {
+    const shift = await db.Shift.findOne({
+      where: {
+        MaBaiThi: mbt,
+        start: {
+          [Op.lte]: currentTime,
+        },
+        end: {
+          [Op.gte]: currentTime,
+        },
+      },
+      raw: true,
+    });
+    return shift;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    return null;
+  }
+};
+
+const checkStudentInList = async (macathi, msv) => {
+  try {
+    const listStudent = await db.ListStudent.findOne({
+      where: {
+        MaCaThi: macathi,
+        MSV: msv,
+      },
+      raw: true,
+    });
+    if (listStudent) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Lỗi khi truy vấn dữ liệu:", error);
+    return null;
+  }
+};
+
 module.exports = {
   getCountShiftWithFindObject,
   deleteShiftById,
   getShiftById,
+  getShiftByTestId,
   getAllShift,
   updateShiftById,
   createNewShiftById,
+  checkStudentInList,
 };

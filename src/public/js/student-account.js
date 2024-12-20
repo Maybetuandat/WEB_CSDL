@@ -255,6 +255,131 @@ async function handleFile(event) {
   reader.readAsArrayBuffer(file);
 }
 
+let jsonData;
+async function handleFile2(event) {
+  const input = event.target;
+
+  if (input.files.length === 0) {
+    return;
+  }
+
+  const file = input.files[0];
+
+  const reader = new FileReader();
+
+  reader.onload = async function (e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+
+      const workbook = XLSX.read(data, { type: "array" });
+
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+
+      jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      if (jsonData.length === 0) {
+        return;
+      }
+
+      const mainContent = document.getElementById("list-acc");
+
+      if (!mainContent) {
+        console.error("Element with id 'list-acc' not found.");
+        return;
+      }
+
+      mainContent.innerHTML = "";
+
+      const table = document.createElement("table");
+      table.style.borderCollapse = "collapse";
+      table.style.width = "100%";
+
+      jsonData.forEach((row, rowIndex) => {
+        const tr = document.createElement("tr");
+
+        row.forEach((cell) => {
+          const cellElement = document.createElement("td");
+          cellElement.textContent = cell !== undefined ? cell : ""; // Hiển thị giá trị hoặc để trống
+          cellElement.style.border = "1px solid #ccc";
+          cellElement.style.padding = "8px";
+          tr.appendChild(cellElement);
+        });
+
+        table.appendChild(tr);
+      });
+
+      mainContent.appendChild(table);
+
+      document.getElementById("createListAcc").style.display = "inline-block";
+
+      // const firstColumnData = jsonData.map(row => row[0]).filter(cell => cell !== undefined);
+      // const fiveColumnsData = jsonData
+      //   .map((row) => ({
+      //     MSV: row[0],
+      //   }))
+      //   .filter((row) => row.MSV !== undefined);
+
+      // const chunkArray = (array, chunkSize) => {
+      //   const chunks = [];
+      //   for (let i = 0; i < array.length; i += chunkSize) {
+      //     chunks.push(array.slice(i, i + chunkSize));
+      //   }
+      //   return chunks;
+      // };
+
+      // const chunks = chunkArray(fiveColumnsData, 5);
+
+      // for (var i = 0; i < chunks.length; i++) {
+      //   await fetchListAccApi(chunks[i], i, chunks.length, document.getElementById("macathi").value);
+      // }
+      // reloadPage()
+    } catch (error) {
+      console.error("Error processing file:", error);
+    }
+  };
+
+  reader.onerror = function (error) {
+    console.error("FileReader error:", error);
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+async function createListAccc() {
+  const firstColumnData = jsonData
+    .map((row) => row[0])
+    .filter((cell) => cell !== undefined);
+  const fiveColumnsData = jsonData
+    .map((row) => ({
+      MSV: row[0],
+    }))
+    .filter((row) => row.MSV !== undefined);
+
+  const chunkArray = (array, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  };
+
+  const chunks = chunkArray(fiveColumnsData, 5);
+
+  let process = true;
+  for (var i = 0; i < chunks.length; i++) {
+    process = await fetchListAccApi(
+      chunks[i],
+      i,
+      chunks.length,
+      document.getElementById("macathi").value
+    );
+    if (process == false) break;
+  }
+  if (process) showAlert("Thêm tài khoản thành công!", "#cce5ff");
+  else showAlert("Đã xảy ra lỗi khi thêm tài khoản!");
+}
+
 function reloadPage() {
   window.location.href = "/admin/account";
 }
@@ -278,6 +403,31 @@ async function fetchNewAccApi(accList, step, n) {
     if (step === n - 1) reloadPage();
   } catch (error) {
     showAlert("Đã xảy ra lỗi khi thêm tài khoản!");
+    console.error("Error fetching new account API:", error);
+  }
+}
+
+async function fetchListAccApi(accList, step, n, macathi) {
+  try {
+    console.log("macathi: " + macathi);
+    const response = await fetch("/api/new-student-list-cathi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ accList, macathi }),
+    });
+
+    if (!response.ok) {
+      showAlert("Đã xảy ra lỗi khi thêm tài khoản!");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else {
+    }
+    return true;
+    // if (step === n - 1) reloadPage();
+  } catch (error) {
+    showAlert("Đã xảy ra lỗi khi thêm tài khoản!");
+    return false;
     console.error("Error fetching new account API:", error);
   }
 }

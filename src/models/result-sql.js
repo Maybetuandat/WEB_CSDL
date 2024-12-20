@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       Cau: DataTypes.INTEGER,
       ThoiGianNopBai: DataTypes.DATE,
       ChiTiet: DataTypes.STRING,
+      Dung: DataTypes.INTEGER,
     },
     {
       // options

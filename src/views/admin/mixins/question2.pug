@@ -1,5 +1,11 @@
-mixin question2(index, question, timesub, userAnswer)
+mixin question2(index, question, timesub, userAnswer, truefalse)
   .question(style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; background-color: #f9f9f9; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);")
     p(style="color: #333; font-weight: bold; font-size: 1.2em;") Câu #{index}: #{question}
     p(style="color: #555; font-style: italic; font-size: 0.95em; margin-top: 5px;") Bài làm: (nộp lúc #{timesub})
-    p(style="color: #007bff; font-size: 1em; margin-top: 10px;") #{userAnswer}
+    if truefalse === 1
+      p(style="color: green; font-style: italic; font-size: 0.95em; margin-top: 5px;") Kết quả: Đúng
+    else if truefalse === 0
+      p(style="color: red; font-style: italic; font-size: 0.95em; margin-top: 5px;") Kết quả: Sai
+    else
+      p(style="color: #555; font-style: italic; font-size: 0.95em; margin-top: 5px;") Kết quả: 
+    p(style="color: #007bff; font-size: 1em; margin-top: 10px;" id="useranswer") #{userAnswer}

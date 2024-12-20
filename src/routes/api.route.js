@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const { checkLoginUser } = require("../controllers/auth.controllers");
 
@@ -41,7 +44,9 @@ const {
   getAllStaticWithDate,
   getAllStaticWithIdResult,
 } = require("../controllers/result.controllers");
-
+const {
+  createNewStudentListShift,
+} = require("../controllers/admin/shift.controller");
 const {
   getStatisticsHandler,
 } = require("../controllers/statistic.controllers");
@@ -67,6 +72,43 @@ const increaseTimeout = (req, res, next) => {
   next();
 };
 
+const uploadDir = path.join(__dirname, "../../images/test");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Cấu hình multer để lưu file vào thư mục uploads/
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // Giới hạn kích thước file 5MB
+});
+
+// API tiếp nhận ảnh tải lên
+router.post(
+  "/upload-image",
+  isAdmin,
+  upload.fields([
+    { name: "image", maxCount: 1 }, // Định nghĩa trường "image"
+  ]),
+  (req, res) => {
+    console.log(req.body); // Hiển thị giá trị mbt và mch
+    if (!req.files || !req.files.image) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    res.status(200).json({
+      message: "File uploaded successfully",
+      filename: req.files.image[0].filename,
+    });
+  }
+);
+
 router.post("/login/:role", checkLoginUser);
 router.post("/createNewstudent", createNewStudentHandler);
 router.post("/new-test", isAdmin, increaseTimeout, postTestHandler);
@@ -75,6 +117,7 @@ router.post("/new-question", isAdmin, postQuestionHandler);
 router.delete("/delete-test/:id", isAdmin, deleteTestHandler);
 router.post("/new-student", postStudentHandler);
 router.post("/new-student-list", createNewStudentList);
+router.post("/new-student-list-cathi", createNewStudentListShift);
 router.delete("/delete-student/:id", isAdmin, deleteStudentHandler);
 router.put("/update-test/:id", isAdmin, updateTestHandler);
 router.get("/get-student/:id", getStudentByIdHandler);

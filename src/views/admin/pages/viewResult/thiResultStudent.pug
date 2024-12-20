@@ -52,7 +52,10 @@ block main
                   else if resultList[index].Diem === null
                     | chưa chấm
                   else
-                    | #{resultList[index].Diem}
+                    if test.TheLoai == "trắc nghiệm"
+                      | #{resultList[index].Diem}
+                    else if test.TheLoai == 'sql'
+                      | #{resultList[index].Diem}/#{test.SoLuongCau}
                 td
                   a.btn.btn-primary.btn-responsive( idStu = student.MSV btn-detail-thi-stu) Xem chi tiết
   input(type="hidden" data_to_excel_student=JSON.stringify(studentList))

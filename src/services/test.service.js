@@ -231,6 +231,8 @@ const createNewTest2 = async (test) => {
       TrangThai: test.examStatus,
       img_url: test.imageUrl,
       TacGia: "B21DCCN343",
+      used_schema: test.schemaRun,
+      used_schema2: test.schemaTestcase,
     });
 
     var mbt = newTest.dataValues.MaBaiThi;
@@ -608,6 +610,7 @@ const getThiWithFindObjectAndPage = async (find, pagination) => {
         ...find,
         TrangThai: "th",
       },
+      order: [["MaBaiThi", "DESC"]],
       limit: pagination.limitedItem,
       offset: pagination.limitedItem * (pagination.currentPage - 1),
       raw: true,

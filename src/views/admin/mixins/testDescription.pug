@@ -37,17 +37,32 @@ mixin test-description(metadata)
                         .col-md-6
                             form#option-form
                                 .form-group
-                                    label(for='examDescription') Mô tả:
-                                    textarea.form-control#examDescription(cols='40', rows='2')
-                                .form-group
                                     label(for='examName') Luyện tập/ Thực hành(th):
                                     if metadata
                                         input.form-control(type='text' id="examStatus" value=metadata.TrangThai required)
                                     else
                                         input.form-control(type='text' id="examStatus" required)
-                                
-                                
-                                
+                                .form-group
+                                    label(for='examDescription') Loại bài:
+                                    select.form-control#examDescription(onchange='toggleFields()')
+                                        option(value='', disabled=true, selected=true) Chưa chọn
+                                        option(value='trắc nghiệm') trắc nghiệm
+                                        option(value='sql') sql
+                                        option(value='tự luận') tự luận
+                                .form-group#schemaRunField(style='display:none;')
+                                    label(for='schemaRun') Schema run:
+                                    if metadata
+                                        input.form-control(type='text' id="schemaRun" value=metadata.TrangThai required)
+                                    else
+                                        input.form-control(type='text' id="schemaRun" required)
+
+                                .form-group#schemaTestcaseField(style='display:none;')
+                                    label(for='schemaTestcase') Schema testcase:
+                                    if metadata
+                                        input.form-control(type='text' id="schemaTestcase" value=metadata.TrangThai required)
+                                    else
+                                        input.form-control(type='text' id="schemaTestcase" required)
+                                              
             .form-group.d-flex.align-items-center
                 div.flex-grow-1
                 button.btn.ptit-color.text-white.btn-responsive(type='submit', onclick='Save2()' id="createExamBtn") Tạo bài thi

@@ -94,7 +94,7 @@ const getResultByIdThi = async (idTest, theloai) => {
   };
   try {
     let res = [];
-    if (theloai != "tự luận") {
+    if (theloai != "sql" && theloai != "tự luận") {
       res = await db.ResultTest.findAll({
         raw: true,
         where: {
@@ -107,6 +107,10 @@ const getResultByIdThi = async (idTest, theloai) => {
         attributes: [
           "MSV", // Lấy trường MSV
           [db.sequelize.fn("COUNT", db.sequelize.col("MSV")), "count"], // Đếm số lượng MSV
+          [
+            db.sequelize.literal("SUM(CASE WHEN Dung = 1 THEN 1 ELSE 0 END)"),
+            "Diem", // Đếm số lượng Dung = 1
+          ],
         ],
         where: {
           MaBaiThi: idTest, // Điều kiện lọc theo MaBaiThi
@@ -299,8 +303,8 @@ const createNewResult = async (msv, test, questionList) => {
         MSV: msv,
         MaBaiThi: test.mabaithi,
         Diem: tongdiem,
-        ThoiGianLamBai: test.start,
-        ThoiGianNopBai: test.finish,
+        // ThoiGianLamBai: test.start,
+        // ThoiGianNopBai: test.finish,
       },
       { transaction: t }
     );

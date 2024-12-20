@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       DeBai: DataTypes.STRING,
       SoThuTu: DataTypes.INTEGER,
       TheLoai: DataTypes.STRING,
+      HinhAnh: DataTypes.STRING,
     },
     {
       // options

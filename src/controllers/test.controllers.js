@@ -365,15 +365,17 @@ const postTestHandler2 = async (req, res) => {
 
 const postQuestionHandler = async (req, res) => {
   var reqBody = req.body;
+  console.log(reqBody);
   var test = reqBody.question;
   let mbt = reqBody.mbt;
-
+  console.log("test: ", test);
   var status = await createNewQuestion(test, mbt);
-  if (status) {
+  if (status != false) {
     res.status(200).json({
       code: 1,
       error: 200,
       message: "Tạo câu hỏi thành công!",
+      index: status,
     });
   } else {
     console.log("buc vcl");

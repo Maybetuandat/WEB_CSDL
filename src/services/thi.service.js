@@ -7,6 +7,7 @@ const moment = require("moment-timezone");
 require("dotenv").config();
 var request = require("request");
 const { test } = require("../controllers/user/result/result.controller");
+const { raw } = require("body-parser");
 
 const getThiResult = async (msv, mbt, time, dscau) => {
   var data = { status: null, data: null };
@@ -48,7 +49,7 @@ const getSqlResult = async (msv, mbt) => {
       },
       raw: true,
     });
-
+    // console.log("result: ", result);
     data.status = 200;
     data.data = result;
 
@@ -67,6 +68,17 @@ const getResultThiStuTest = async (msv, mbt) => {
     },
     attributes: ["ThoiGianLamBai", "ThoiGianNopBai"],
   });
+  if (tmp == null) {
+    tmp = await db.ResultSql.findAll({
+      where: {
+        MSV: msv,
+        MaBaiThi: mbt,
+        Dung: 1,
+      },
+      attributes: ["Dung"],
+    });
+    tmp = { tmp };
+  }
   return tmp;
 };
 
@@ -80,6 +92,52 @@ const getResultSqlStuTest = async (msv, mbt, mch) => {
     attributes: ["ThoiGianNopBai"],
   });
   return tmp;
+};
+
+const getSchema = async (mbt) => {
+  try {
+    let tmp = await db.Test.findOne({
+      where: {
+        MaBaiThi: mbt,
+      },
+      attributes: ["used_schema"],
+    });
+    return tmp.used_schema;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const getSchemaTc = async (mbt) => {
+  try {
+    let tmp = await db.Test.findOne({
+      where: {
+        MaBaiThi: mbt,
+      },
+      attributes: ["used_schema2"],
+    });
+    return tmp.used_schema2;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const getAnswerSql = async (mbt, cau) => {
+  try {
+    let answerSql = await db.AnswerSql.findOne({
+      where: {
+        MaBaiThi: mbt,
+        Cau: cau,
+      },
+      raw: true,
+    });
+    return answerSql;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 const updateDetail = async (msv, test, ans) => {
@@ -149,10 +207,36 @@ const updateDetailSql = async (msv, test) => {
   }
 };
 
+const updateResultSql = async (msv, test, dung) => {
+  console.log("dung: ", dung);
+  try {
+    let result = await db.ResultSql.update(
+      {
+        Dung: dung == true ? 1 : 0,
+      },
+      {
+        where: {
+          MSV: msv,
+          MaBaiThi: test.mabaithi,
+          Cau: test.macauhoi,
+        },
+      }
+    );
+
+    return result;
+  } catch (error) {
+    return null;
+  }
+};
+
 module.exports = {
   getThiResult,
   getSqlResult,
   getResultThiStuTest,
+  getSchema,
+  getSchemaTc,
+  getAnswerSql,
   updateDetail,
   updateDetailSql,
+  updateResultSql,
 };

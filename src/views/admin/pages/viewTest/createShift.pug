@@ -2,8 +2,11 @@ extends ../../layout/default.pug
 include ../../mixins/testDescription
 
 block main
-    h1 Tạo mới ca thi
+    h1 Tạo ca thi
     form#new-shift-form
+        div.form-group
+            label(for='macathi') Mã ca thi:
+            input.form-control(type='text' id='macathi' name='macathi' required readonly)
         div.form-group
             label(for='edit-ma') Bài thi:
             select.form-control(id='edit-ma', name='test', required)
@@ -16,5 +19,8 @@ block main
             label(for='edit-end') Kết thúc:
             input.form-control(type='datetime-local', id='edit-end', name='end', required)
         div.btn-new-student
-            button.btn.btn-primary(type='button', onclick='createShiftSubmit()') Tạo mới
-            button.btn.btn-secondary(type='button', onclick='shiftCancel()') Hủy
+            button.btn.btn-primary(type='button', id='createShift' onclick='createShiftSubmit()') Lưu ca thi
+            button.btn.btn-primary(type='button', id='uploadButton', style='display:none', onclick="document.getElementById('fileInput').click()") Nhập danh sách
+            input(type='file', id='fileInput', style='display:none', accept='.xls,.xlsx', onchange='handleFile2(event)')
+            button.btn.btn-primary(type='button', id='createListAcc' style='display:none' onclick='createListAccc()') Lưu danh sách
+    div#list-acc.mt-2

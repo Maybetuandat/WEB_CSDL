@@ -355,6 +355,21 @@ const studentListService = async (students) => {
   }
 };
 
+const studentListShiftService = async (students, macathi) => {
+  try {
+    const dataToInsert = students.map(({ MSV }) => ({ MSV, MaCaThi: macathi }));
+    console.log(dataToInsert);
+    await db.ListStudent.bulkCreate(dataToInsert, {
+      ignoreDuplicates: true, // Bỏ qua các bản ghi có khóa trùng
+    });
+
+    return 1; // Thành công
+  } catch (error) {
+    console.error("Error inserting student list:", error);
+    return 0; // Thất bại
+  }
+};
+
 module.exports = {
   getAllStudent,
   getStudentById,
@@ -369,6 +384,7 @@ module.exports = {
   getStudentByEmail,
   updatePassword,
   studentListService,
+  studentListShiftService,
   insertJwt,
   getJwtFromDb,
 };

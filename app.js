@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 const app = express();
@@ -9,12 +10,19 @@ const session = require("express-session");
 const viewEngine = require("./src/config/viewEngine.config");
 const mainRoutes = require("./src/routes/main.route");
 const apiRoutes = require("./src/routes/api.route");
+const imagesRoutes = require("./src/routes/images.route");
 
 const adminRoutes = require("./src/routes/admin/index.router");
 const userRoutes = require("./src/routes/user/index.router");
 const errorRoutes = require("./src/routes/pageError/index.router");
 const queryRoutes = require("./src/test/routes/index.router");
-const { connection, connection2 } = require("./src/config/connectDB");
+const {
+  connection,
+  // connection2,
+  // connection3,
+  // connection4,
+  // connection5,
+} = require("./src/config/connectDB");
 
 const bodyParserErrorHandler = require("express-body-parser-error-handler");
 
@@ -42,6 +50,7 @@ app.use(
 );
 //express-session
 app.use("/api", apiRoutes);
+app.use("/images", imagesRoutes);
 viewEngine(app);
 
 app.set("trust proxy", true);
@@ -50,7 +59,10 @@ const server = app.listen(port, "127.0.0.1", () => {
 });
 
 connection();
-connection2();
+// connection2();
+// connection3();
+// connection4();
+// connection5();
 
 adminRoutes(app);
 userRoutes(app);

@@ -195,13 +195,15 @@ thoat = () => {
 var distance = 1000 * data.test.ThoiGianThi * 60;
 // Cập nhật thời gian mỗi 1 giây
 var timer = setInterval(async () => {
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var hours = Math.floor(distance / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  hours = hours < 10 ? "0" + hours : hours;
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
   distance -= 1000;
-  document.getElementById("countdown").innerHTML = minutes + ":" + seconds;
+  document.getElementById("countdown").innerHTML =
+    hours + ":" + minutes + ":" + seconds;
 
   if (distance < -1000) {
     clearInterval(timer);

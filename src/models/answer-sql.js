@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       ChiTiet: DataTypes.STRING,
+      BangMucTieu: DataTypes.STRING,
     },
     {
       // options

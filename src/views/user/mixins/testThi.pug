@@ -15,13 +15,15 @@ mixin testMixin(test, result)
                     - var nam = testDate.getFullYear()
                     .content-test-detail Thời gian thi: #{test.ThoiGianThi} phút
                     .content-test-detail Số câu: #{test.SoLuongCau}
-                    .content-test-detail Tình trạng:
+                    .content-test-detail Tình trạng: 
                         if !result
                             |  Chưa làm bài
                         if result && result.ThoiGianLamBai && !result.ThoiGianNopBai
                             |  Chưa nộp bài
                         if result && result.ThoiGianNopBai
                             |  Đã nộp
+                        if result && result.tmp && test.TheLoai == 'sql'
+                            |  AC #{result.tmp.length}/#{test.SoLuongCau} 
 
                 .col.text-center.bt-test
                     //- a.btn.btn-primary.btn-enter-test(

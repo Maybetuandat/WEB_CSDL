@@ -53,12 +53,35 @@ for (let i = 0; i < data.questions.length; i++) {
   container_cauhoi.classList.add("container-cauhoi");
   container_hoitrl.appendChild(container_cauhoi);
 
+  if (data.questions[i].HinhAnh != null) {
+    let image_cauhoi = document.createElement("img");
+    let baseURL = window.location.origin + "/images/";
+    image_cauhoi.src = baseURL + data.questions[i].HinhAnh;
+    image_cauhoi.alt = "Hình ảnh câu hỏi";
+    image_cauhoi.style.maxWidth = "100%";
+    // image_cauhoi.height = 150;
+    image_cauhoi.className = "image-class";
+    image_cauhoi.loading = "lazy";
+    container_hoitrl.appendChild(image_cauhoi);
+  }
+
   for (let j = 0; j < data.questions[i].LuaChon.length; j++) {
     let container_choice = document.createElement("div");
     container_choice.classList.add("choice");
     container_choice.classList.add(j + 1);
     container_choice.textContent = data.questions[i].LuaChon[j].NoiDung;
     container_hoitrl.appendChild(container_choice);
+    if (data.questions[i].LuaChon[j].HinhAnh != null) {
+      let image_luachon = document.createElement("img");
+      let baseURL = window.location.origin + "/images/";
+      image_luachon.src = baseURL + data.questions[i].LuaChon[j].HinhAnh;
+      image_luachon.alt = "Hình ảnh lựa chọn";
+      image_luachon.style.maxWidth = "100%";
+      // image_cauhoi.height = 150;
+      image_luachon.className = "image-class";
+      image_luachon.loading = "lazy";
+      container_choice.appendChild(image_luachon);
+    }
   }
   cauhoi.appendChild(container_hoitrl);
 }
@@ -205,13 +228,15 @@ var timer = setInterval(async () => {
   var distance =
     1000 * data.test.ThoiGianThi * 60 - (adjustedTime.getTime() - startTime);
 
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var hours = Math.floor(distance / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  hours = hours < 10 ? "0" + hours : hours;
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
   distance -= 1000;
-  document.getElementById("countdown").innerHTML = minutes + ":" + seconds;
+  document.getElementById("countdown").innerHTML =
+    hours + ":" + minutes + ":" + seconds;
 
   if (distance < -1000) {
     clearInterval(timer);

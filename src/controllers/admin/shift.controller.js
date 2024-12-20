@@ -8,6 +8,8 @@ const {
   deleteShiftById,
 } = require("../../services/shift.service");
 
+const { studentListShiftService } = require("../../services/student.service");
+
 const { getAllTest } = require("../../services/test.service");
 
 const paginationHelper = require("../../helpers/paginationHelper");
@@ -200,9 +202,32 @@ const deleteShift = async (req, res) => {
 
   // nhớ là cần trả về res cho front end
 };
+
+const createNewStudentListShift = async (req, res) => {
+  console.log(req.body);
+  const students = req.body.accList;
+  const macathi = parseInt(req.body.macathi);
+
+  var status = await studentListShiftService(students, macathi);
+  if (status == 1) {
+    res.status(200).json({
+      code: 1,
+      status: 200,
+      message: "Tạo sinh viên thành công!",
+    });
+  } else if (status == 0) {
+    res.status(500).json({
+      code: 0,
+      status: 500,
+      message: "Tạo sinh viên thất bại!",
+    });
+  }
+};
+
 module.exports = {
   shiftListPaginate,
   createNewShift,
+  createNewStudentListShift,
   editShift,
   updateShift,
   createShift,

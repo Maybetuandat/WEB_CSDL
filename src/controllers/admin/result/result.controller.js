@@ -95,7 +95,10 @@ module.exports.detailStudentAndThi = async (req, res) => {
       .replace("T", " ")
       .replace("Z", "");
   });
-  if (result.test.data.TheLoai == "tự luận") {
+  if (
+    result.test.data.TheLoai == "sql" ||
+    result.test.data.TheLoai == "tự luận"
+  ) {
     res.render("admin/pages/viewResult/studentAndTestDetail2.pug", {
       titlePage: "Kết quả sinh viên",
       result: result.result.data,

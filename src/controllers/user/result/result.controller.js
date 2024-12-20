@@ -287,6 +287,7 @@ module.exports.detailStudentAndTest = async (req, res) => {
   );
 
   if (result && result.result) {
+    console.log(detail);
     res.render("user/pages/viewResult/studentAndTestDetail.pug", {
       titlePage: "Kết quả sinh viên",
       result: result.result.data[0],
