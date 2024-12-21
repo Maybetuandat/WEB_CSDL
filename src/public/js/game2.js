@@ -159,55 +159,74 @@ arrBlocks.forEach((block, index) => {
 });
 
 const process = async () => {
-  localStorage.setItem("answerofUser", JSON.stringify(ansUser));
+  try {
+    localStorage.setItem("answerofUser", JSON.stringify(ansUser));
 
-  const offsetHours = 7;
-  const currentTime = new Date();
-  const adjustedTime = new Date(
-    currentTime.getTime() + offsetHours * 60 * 60 * 1000
-  );
-  const ThoiGianNopBai = adjustedTime
-    .toISOString()
-    .slice(0, 19)
-    .replace("T", " ");
+    const offsetHours = 7;
+    const currentTime = new Date();
+    const adjustedTime = new Date(
+      currentTime.getTime() + offsetHours * 60 * 60 * 1000
+    );
+    const ThoiGianNopBai = adjustedTime
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
 
-  const metadata = [
-    {
-      start: ThoiGianLamBai,
-      finish: ThoiGianNopBai,
-      mabaithi: data.test.MaBaiThi,
-    },
-  ];
+    const metadata = [
+      {
+        start: ThoiGianLamBai,
+        finish: ThoiGianNopBai,
+        mabaithi: data.test.MaBaiThi,
+      },
+    ];
 
-  let numToCharMap = {
-    0: "E",
-    1: "A",
-    2: "B",
-    3: "C",
-    4: "D",
-  };
-  let convertToChar = (num) => numToCharMap[num];
-  let ansString = ansUser.map(convertToChar).join("");
-  const option = ansString.slice(0, data.questions.length);
+    const numToCharMap = {
+      0: "E",
+      1: "A",
+      2: "B",
+      3: "C",
+      4: "D",
+    };
+    const convertToChar = (num) => numToCharMap[num];
+    const ansString = ansUser.map(convertToChar).join("");
+    const option = ansString.slice(0, data.questions.length);
 
-  const databody = JSON.stringify({ metadata, option });
+    const databody = JSON.stringify({ metadata, option });
 
-  const btnNopBai = document.getElementById("btn-nopbai");
-  btnNopBai.textContent = "Đang gửi bài...";
-  const response = await fetch("/thi/submit", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: databody,
-  });
+    const btnNopBai = document.getElementById("btn-nopbai");
+    btnNopBai.textContent = "Đang gửi bài...";
 
-  if (!response.ok) {
+    let retries = 3; // Số lần thử tối đa
+    while (retries > 0) {
+      try {
+        const response = await fetch("/thi/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: databody,
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        // Thành công
+        localStorage.removeItem("answerofUser");
+        window.location.assign(`../thi`);
+        return;
+      } catch (error) {
+        retries -= 1;
+        if (retries === 0) {
+          throw error;
+        }
+      }
+    }
+  } catch (error) {
+    const btnNopBai = document.getElementById("btn-nopbai");
     btnNopBai.textContent = "Nộp bài";
-    throw new Error("Network response was not ok");
-  } else {
-    localStorage.removeItem("answerofUser");
-    window.location.assign(`../thi`);
+    console.error("Có lỗi xảy ra:", error);
+    alert("Không thể nộp bài. Vui lòng thử lại sau.");
   }
 };
 
