@@ -208,6 +208,9 @@ const process = async () => {
         });
 
         if (!response.ok) {
+          btnNopBai.textContent = "Nộp bài";
+          console.error("Có lỗi xảy ra:", error);
+          alert("Không thể nộp bài. Hãy thử lại!!");
           throw new Error("Network response was not ok");
         }
 
@@ -217,7 +220,10 @@ const process = async () => {
         return;
       } catch (error) {
         retries -= 1;
-        if (retries === 0) {
+        if (retries == 0) {
+          btnNopBai.textContent = "Nộp bài";
+          console.error("Có lỗi xảy ra:", error);
+          alert("Không thể nộp bài. Hãy thử lại!!");
           throw error;
         }
       }

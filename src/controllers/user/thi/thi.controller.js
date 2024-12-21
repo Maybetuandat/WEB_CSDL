@@ -102,11 +102,17 @@ module.exports.testWithId = async (req, res) => {
         }
       }
 
-      const data = {
-        test: test.data ? test.data : null,
-        questions: questions?.data || null,
-        time: result?.data?.ThoiGianLamBai || null,
-      };
+      const data = test.data
+        ? {
+            test: test.data,
+            questions: questions?.data || null,
+            time: result?.data?.ThoiGianLamBai || null,
+          }
+        : {
+            test: null,
+            questions: null,
+            time: null,
+          };
 
       return res.render("user/pages/viewResult/thiResultStudent.pug", { data });
     } else if (test.data && test.data.TheLoai === "sql") {
