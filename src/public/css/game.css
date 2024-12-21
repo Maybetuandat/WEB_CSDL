@@ -210,14 +210,16 @@ body {
   padding: 10px;
   border-radius: 5px;
   min-height: 50px;
-  justify-items: center;
+  /* justify-items: center;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   font-size: 15px;
   box-shadow: 3px 3px 3px #f3d4d4;
   transition: 0.4s;
   overflow-wrap: break-word;
   white-space: pre-line;
+  display: flex;
+  flex-direction: column;
 }
 
 .choice:hover {
