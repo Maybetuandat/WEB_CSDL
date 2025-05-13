@@ -79,7 +79,7 @@ const increaseTimeout = (req, res, next) => {
 
 const uploadDir = path.join(__dirname, "../../images/test");
 if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // Cấu hình multer để lưu file vào thư mục uploads/
